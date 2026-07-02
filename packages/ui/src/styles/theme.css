@@ -1,0 +1,203 @@
+/* NIKHIL_OS Theme tokens and base style configurations */
+
+:root {
+  /* HSL Color Palette */
+  --bg-obsidian: #050608;
+  --bg-obsidian-hsl: 220, 23%, 4%;
+
+  --panel-glass: rgba(13, 16, 23, 0.7);
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --panel-border-hover: rgba(0, 240, 255, 0.3);
+
+  --glow-green: #00ff66;
+  --glow-green-hsl: 144, 100%, 50%;
+
+  --glow-cyan: #00f0ff;
+  --glow-cyan-hsl: 184, 100%, 50%;
+
+  --glow-purple: #9d4edd;
+  --glow-purple-hsl: 273, 67%, 58%;
+
+  --color-danger: #ff3b30;
+  --color-warning: #ffcc00;
+  --color-success: #34c759;
+
+  --text-primary: #f8f9fa;
+  --text-secondary: #8e9aa8;
+  --text-muted: #5a6578;
+
+  /* Font Families */
+  --font-sans:
+    "Outfit", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  /* Spacing Scale */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition-slow: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+
+  /* Elevation */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-md:
+    0 8px 24px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --shadow-lg:
+    0 16px 48px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --shadow-glow-cyan: 0 0 15px rgba(0, 240, 255, 0.3);
+  --shadow-glow-green: 0 0 15px rgba(0, 255, 102, 0.3);
+}
+
+/* Base HTML & Body Resets */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-obsidian);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--glow-cyan);
+  box-shadow: 0 0 8px var(--glow-cyan);
+}
+
+/* Custom Selection Highlight */
+::selection {
+  background: rgba(0, 240, 255, 0.25);
+  color: var(--text-primary);
+  text-shadow: 0 0 5px var(--glow-cyan);
+}
+
+/* Utility Classes */
+.glass {
+  background: var(--panel-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--panel-border);
+  box-shadow: var(--shadow-md);
+}
+
+.glass-interactive {
+  composes: glass;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.glass-interactive:hover {
+  border-color: var(--panel-border-hover);
+  box-shadow: var(--shadow-lg), var(--shadow-glow-cyan);
+}
+
+.text-glow-green {
+  color: var(--glow-green);
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.6);
+}
+
+.text-glow-cyan {
+  color: var(--glow-cyan);
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+}
+
+.text-glow-purple {
+  color: var(--glow-purple);
+  text-shadow: 0 0 8px rgba(157, 78, 221, 0.6);
+}
+
+/* CRT Screen Effects */
+.crt-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.crt-effect::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background:
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+    linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.06),
+      rgba(0, 255, 0, 0.02),
+      rgba(0, 0, 255, 0.06)
+    );
+  z-index: 9999;
+  background-size:
+    100% 4px,
+    6px 100%;
+  pointer-events: none;
+}
+
+/* Animations */
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.blink-cursor::after {
+  content: "_";
+  animation: blink 1s step-start infinite;
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.scanline::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: rgba(0, 255, 102, 0.15);
+  animation: scanline 6s linear infinite;
+  z-index: 10;
+  pointer-events: none;
+}

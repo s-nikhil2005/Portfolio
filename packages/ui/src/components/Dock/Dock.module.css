@@ -1,0 +1,104 @@
+.container {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  pointer-events: none; /* Let clicks pass through outside the dock itself */
+}
+
+.dock {
+  pointer-events: auto; /* Re-enable clicks on the dock */
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 8px 16px;
+  background: var(--panel-glass, rgba(13, 16, 23, 0.4));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  height: 64px;
+}
+
+.dockItemWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+  transform-origin: bottom center;
+}
+
+/* Dock Magnification Scales */
+.scale1 {
+  transform: scale(1.3);
+}
+
+.scale2 {
+  transform: scale(1.15);
+}
+
+.iconButton {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: all var(--transition-fast, 0.15s) ease;
+}
+
+.iconButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(0, 240, 255, 0.3);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+.activeButton {
+  border-color: var(--glow-cyan) !important;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+  background: rgba(0, 240, 255, 0.1) !important;
+}
+
+.statusDot {
+  width: 4px;
+  height: 4px;
+  background-color: var(--glow-cyan, #00f0ff);
+  box-shadow: 0 0 5px var(--glow-cyan);
+  border-radius: 50%;
+  position: absolute;
+  bottom: -6px;
+}
+
+/* Tooltip styling */
+.tooltip {
+  position: absolute;
+  top: -45px;
+  background: rgba(10, 11, 14, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: all var(--transition-fast) ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.dockItemWrapper:hover .tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
