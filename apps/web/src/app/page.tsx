@@ -10,6 +10,7 @@ import {
   Button,
   Input,
 } from "@portfolio/ui";
+import { SceneCanvas } from "@/components/3d/SceneCanvas";
 
 export default function Home() {
   const [booted, setBooted] = React.useState(false);
@@ -265,6 +266,9 @@ export default function Home() {
           pointerEvents: "none",
         }}
       />
+
+      {/* 3D Experience Scene */}
+      <SceneCanvas />
 
       {/* Top OS System Bar */}
       <header
