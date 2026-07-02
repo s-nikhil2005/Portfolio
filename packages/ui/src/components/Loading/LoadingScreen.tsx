@@ -301,6 +301,7 @@ export const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
           {stage > 0 && (
             <div className={styles.logContainer}>
               {logs.map((log, idx) => {
+                if (!log) return null;
                 const isOk = log.startsWith("[  OK  ]");
                 const isAccess = log.includes("ACCESS GRANTED");
 
