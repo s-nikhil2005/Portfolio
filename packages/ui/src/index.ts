@@ -6,3 +6,4 @@ export * from "./components/Dock/Dock";
 export * from "./components/Terminal/TerminalWindow";
 export * from "./components/Palette/CommandPalette";
 export * from "./components/Timeline/Timeline";
+export * from "./components/Skills/SkillsGalaxy";

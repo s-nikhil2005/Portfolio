@@ -11,6 +11,7 @@ import {
   Input,
   Timeline,
   type TimelineItem,
+  SkillsGalaxy,
 } from "@portfolio/ui";
 import { SceneCanvas } from "@/components/3d/SceneCanvas";
 
@@ -1044,38 +1045,9 @@ export default function Home() {
           onFocus={focusWindow}
           zIndex={getZIndex("skills")}
           defaultPosition={{ x: 220, y: 180 }}
-          defaultSize={{ width: 560, height: 380 }}
+          defaultSize={{ width: 680, height: 420 }}
         >
-          <div style={{ padding: "24px", color: "var(--text-secondary)" }}>
-            <h3 style={{ color: "var(--text-primary)", marginBottom: "12px" }}>
-              Skills Inventory Matrix
-            </h3>
-            <p style={{ fontSize: "0.9rem", marginBottom: "16px" }}>
-              In Phase 9, this window will load an interactive 3D particle
-              galaxy node network showing related skills connected with glowing
-              lasers.
-            </p>
-            <div
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.85rem",
-                background: "rgba(0,0,0,0.2)",
-                padding: "16px",
-                borderRadius: "6px",
-              }}
-            >
-              <div>&gt; query_skills_index --all</div>
-              <div style={{ color: "var(--glow-cyan)" }}>
-                [LANGS]: TypeScript, JavaScript, Python, C++, Go
-              </div>
-              <div style={{ color: "var(--glow-green)" }}>
-                [FRAMEWORKS]: React, Next.js, Express, Node.js, Three.js
-              </div>
-              <div style={{ color: "var(--glow-purple)" }}>
-                [INFRA]: Docker, Redis, MongoDB, AWS, Turborepo
-              </div>
-            </div>
-          </div>
+          <SkillsGalaxy />
         </MacWindow>
 
         {/* App 5: Work Experience */}
