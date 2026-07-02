@@ -270,6 +270,179 @@ export default function Home() {
       {/* 3D Experience Scene */}
       <SceneCanvas />
 
+      {/* Wallpaper Hero Section (Left-aligned, behind windows) */}
+      <div
+        style={{
+          position: "absolute",
+          top: "12vh",
+          left: "6vw",
+          maxWidth: "460px",
+          zIndex: 2,
+          display: "flex",
+          flexDirection: "column",
+          gap: "20px",
+          pointerEvents: "auto",
+          userSelect: "none",
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          <div
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.85rem",
+              color: "var(--glow-cyan)",
+              textShadow: "0 0 8px rgba(0, 240, 255, 0.4)",
+              letterSpacing: "1.5px",
+              fontWeight: "600",
+            }}
+          >
+            [ HOSTNAME: NIKHIL_OS ]
+          </div>
+          <h1
+            style={{
+              fontSize: "3.5rem",
+              fontWeight: "800",
+              lineHeight: "1.05",
+              fontFamily: "var(--font-sans)",
+              color: "var(--text-primary)",
+              letterSpacing: "-1px",
+              textShadow: "0 2px 10px rgba(0, 0, 0, 0.5)",
+            }}
+            className="hero-name-reveal"
+          >
+            Nikhil Singh
+          </h1>
+          <h2
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.95rem",
+              color: "var(--glow-green)",
+              textShadow: "0 0 8px rgba(0, 255, 102, 0.4)",
+              marginTop: "4px",
+            }}
+          >
+            Full-Stack & Immersive Web Developer
+          </h2>
+        </div>
+
+        <p
+          style={{
+            fontFamily: "var(--font-sans)",
+            fontSize: "0.9rem",
+            lineHeight: "1.6",
+            color: "var(--text-secondary)",
+          }}
+        >
+          Building high-performance backend systems and immersive, responsive 3D
+          web interfaces. Type commands in the terminal or use the controls
+          below to discover my work.
+        </p>
+
+        {/* CTA Button Grid */}
+        <div
+          style={{
+            display: "flex",
+            gap: "12px",
+            flexWrap: "wrap",
+            marginTop: "8px",
+          }}
+        >
+          <Button
+            variant="primary"
+            size="md"
+            onClick={() => openApp("projects")}
+          >
+            View Projects
+          </Button>
+          <Button
+            variant="secondary"
+            size="md"
+            onClick={() => openApp("about")}
+          >
+            About.txt
+          </Button>
+          <Button
+            variant="terminal"
+            size="md"
+            onClick={() => openApp("terminal")}
+          >
+            bash_shell
+          </Button>
+        </div>
+
+        {/* Social Links */}
+        <div style={{ display: "flex", gap: "20px", marginTop: "12px" }}>
+          <a
+            href="https://github.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: "var(--text-secondary)",
+              fontSize: "0.85rem",
+              fontFamily: "var(--font-mono)",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.color = "var(--glow-cyan)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.color = "var(--text-secondary)")
+            }
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+            </svg>
+            GitHub
+          </a>
+          <a
+            href="https://linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: "var(--text-secondary)",
+              fontSize: "0.85rem",
+              fontFamily: "var(--font-mono)",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.color = "var(--glow-cyan)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.color = "var(--text-secondary)")
+            }
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+              <rect x="2" y="9" width="4" height="12" />
+              <circle cx="4" cy="4" r="2" />
+            </svg>
+            LinkedIn
+          </a>
+        </div>
+      </div>
+
       {/* Top OS System Bar */}
       <header
         style={{

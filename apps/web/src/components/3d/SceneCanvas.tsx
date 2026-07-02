@@ -4,6 +4,31 @@ import { OrbitControls } from "@react-three/drei";
 import { StarsBackground } from "./StarsBackground";
 import { FloatingLaptop } from "./FloatingLaptop";
 import { OrbitingTechIcons } from "./OrbitingTechIcons";
+import * as THREE from "three";
+import { useFrame } from "@react-three/fiber";
+
+const InteractiveGroup = ({ children }: { children: React.ReactNode }) => {
+  const ref = React.useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    const { x, y } = state.pointer; // Mouse position from -1 to 1
+    if (ref.current) {
+      // Smoothly rotate the scene based on cursor position
+      ref.current.rotation.y = THREE.MathUtils.lerp(
+        ref.current.rotation.y,
+        x * 0.18,
+        0.05,
+      );
+      ref.current.rotation.x = THREE.MathUtils.lerp(
+        ref.current.rotation.x,
+        -y * 0.12,
+        0.05,
+      );
+    }
+  });
+
+  return <group ref={ref}>{children}</group>;
+};
 
 export const SceneCanvas = () => {
   return (
@@ -42,8 +67,11 @@ export const SceneCanvas = () => {
 
         {/* Scene Objects */}
         <StarsBackground />
-        <FloatingLaptop />
-        <OrbitingTechIcons />
+
+        <InteractiveGroup>
+          <FloatingLaptop />
+          <OrbitingTechIcons />
+        </InteractiveGroup>
 
         {/* Recruiter-friendly Camera Controls */}
         <OrbitControls
