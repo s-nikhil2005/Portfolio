@@ -8,3 +8,4 @@ export * from "./components/Palette/CommandPalette";
 export * from "./components/Timeline/Timeline";
 export * from "./components/Skills/SkillsGalaxy";
 export * from "./components/Experience/WorkExperience";
+export * from "./components/Projects/ProjectShowcase";

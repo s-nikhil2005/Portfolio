@@ -13,6 +13,9 @@ import {
   type TimelineItem,
   SkillsGalaxy,
   WorkExperience,
+  ProjectShowcase,
+  CaseStudyModal,
+  type ProjectData,
 } from "@portfolio/ui";
 import { SceneCanvas } from "@/components/3d/SceneCanvas";
 
@@ -71,6 +74,8 @@ export default function Home() {
   const [selectedIconId, setSelectedIconId] = React.useState<string | null>(
     null,
   );
+  const [selectedProject, setSelectedProject] =
+    React.useState<ProjectData | null>(null);
 
   // Window Manager States
   const [openWindows, setOpenWindows] = React.useState<Record<string, boolean>>(
@@ -889,66 +894,16 @@ export default function Home() {
           onFocus={focusWindow}
           zIndex={getZIndex("projects")}
           defaultPosition={{ x: 180, y: 150 }}
-          defaultSize={{ width: 600, height: 400 }}
+          defaultSize={{ width: 620, height: 420 }}
         >
-          <div style={{ padding: "20px", color: "var(--text-secondary)" }}>
-            <h3 style={{ color: "var(--text-primary)", marginBottom: "12px" }}>
-              Nikhil&apos;s Showcase
-            </h3>
-            <p style={{ fontSize: "0.9rem", marginBottom: "20px" }}>
-              Double click on any package in Phase 11 to launch interactive
-              previews.
-            </p>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
-                gap: "16px",
-              }}
-            >
-              {["Voya_App.pkg", "Portfolio_v2.pkg", "Server_API.pkg"].map(
-                (pkg) => (
-                  <div
-                    key={pkg}
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap: "8px",
-                      padding: "12px",
-                      background: "rgba(255,255,255,0.02)",
-                      border: "1px solid rgba(255,255,255,0.04)",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <svg
-                      width="32"
-                      height="32"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="var(--glow-cyan)"
-                      strokeWidth="2"
-                    >
-                      <rect
-                        x="2"
-                        y="2"
-                        width="20"
-                        height="20"
-                        rx="2.18"
-                        ry="2.18"
-                      ></rect>
-                      <line x1="7" y1="2" x2="7" y2="22"></line>
-                      <line x1="17" y1="2" x2="17" y2="22"></line>
-                      <line x1="2" y1="12" x2="22" y2="12"></line>
-                    </svg>
-                    <span style={{ fontSize: "0.8rem", textAlign: "center" }}>
-                      {pkg}
-                    </span>
-                  </div>
-                ),
-              )}
-            </div>
+          <div
+            style={{
+              height: "100%",
+              overflowY: "auto",
+              padding: "12px",
+            }}
+          >
+            <ProjectShowcase onSelectProject={setSelectedProject} />
           </div>
         </MacWindow>
 
@@ -1328,6 +1283,12 @@ export default function Home() {
         isOpen={isPaletteOpen}
         onClose={() => setIsPaletteOpen(false)}
         commands={commandsList}
+      />
+
+      {/* Case Study Full-Screen Modal */}
+      <CaseStudyModal
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
       />
     </main>
   );
