@@ -12,6 +12,7 @@ import {
   Timeline,
   type TimelineItem,
   SkillsGalaxy,
+  WorkExperience,
 } from "@portfolio/ui";
 import { SceneCanvas } from "@/components/3d/SceneCanvas";
 
@@ -1058,52 +1059,38 @@ export default function Home() {
           onClose={closeWindow}
           onFocus={focusWindow}
           zIndex={getZIndex("experience")}
-          defaultPosition={{ x: 300, y: 220 }}
-          defaultSize={{ width: 580, height: 400 }}
+          defaultPosition={{ x: 300, y: 180 }}
+          defaultSize={{ width: 620, height: 440 }}
         >
-          <div style={{ padding: "24px", color: "var(--text-secondary)" }}>
-            <h3 style={{ color: "var(--text-primary)", marginBottom: "12px" }}>
-              Work Timeline
-            </h3>
-            <p style={{ fontSize: "0.9rem", marginBottom: "16px" }}>
-              In Phase 10, this window will render a vertical timeline listing
-              employment achievements, internships, and key highlights.
-            </p>
-            <div
-              style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem" }}
-            >
-              <div
+          <div
+            style={{
+              height: "100%",
+              overflowY: "auto",
+              padding: "24px",
+            }}
+          >
+            <div style={{ marginBottom: "20px" }}>
+              <p
                 style={{
-                  borderLeft: "2px solid var(--glow-cyan)",
-                  paddingLeft: "12px",
-                  marginBottom: "12px",
+                  color: "var(--glow-purple)",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.85rem",
+                  marginBottom: "4px",
                 }}
               >
-                <strong style={{ color: "var(--text-primary)" }}>
-                  Full Stack Developer @ Nikhil Labs (2024 - Present)
-                </strong>
-                <div
-                  style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}
-                >
-                  Designed core microservice structures and scaled traffic.
-                </div>
-              </div>
-              <div
+                // SYSTEM_LOG: WORK_HISTORY
+              </p>
+              <h3
                 style={{
-                  borderLeft: "2px solid var(--glow-green)",
-                  paddingLeft: "12px",
+                  color: "var(--text-primary)",
+                  fontSize: "1.3rem",
+                  fontWeight: "700",
                 }}
               >
-                <strong style={{ color: "var(--text-primary)" }}>
-                  Software Engineer Intern (2023 - 2024)
-                </strong>
-                <div
-                  style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}
-                >
-                  Built responsive custom dashboards.
-                </div>
-              </div>
+                Employment History
+              </h3>
             </div>
+            <WorkExperience />
           </div>
         </MacWindow>
 

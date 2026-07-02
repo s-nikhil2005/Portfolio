@@ -1,0 +1,151 @@
+.container {
+  position: relative;
+  width: 100%;
+  padding: 10px 0 20px 20px;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+.timelineTrack {
+  position: absolute;
+  top: 0;
+  left: 36px;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    var(--glow-cyan) 0%,
+    var(--glow-green) 50%,
+    var(--glow-purple) 100%
+  );
+  opacity: 0.8;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.25);
+}
+
+.cardsList {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  width: 100%;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.timelineAnchor {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justifycontent: center;
+}
+
+.logoCircle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-obsidian);
+  border: 2px solid var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justifycontent: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+}
+
+.card:hover .logoCircle {
+  transform: scale(1.1);
+  box-shadow: 0 0 12px currentColor;
+}
+
+.cardBody {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(5px);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.card:hover .cardBody {
+  border-color: var(--hover-border);
+  box-shadow:
+    0 4px 25px rgba(0, 0, 0, 0.35),
+    0 0 10px rgba(0, 0, 0, 0.1);
+  transform: translateX(4px);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.roleTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 2px 0;
+}
+
+.companyName {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.periodLabel {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  border: 1px solid currentColor;
+  padding: 2px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.01);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.achievementsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bulletItem {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.bulletSymbol {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+.bulletText {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+
+.card:hover .bulletText {
+  color: var(--text-primary);
+}
