@@ -9,3 +9,4 @@ export * from "./components/Timeline/Timeline";
 export * from "./components/Skills/SkillsGalaxy";
 export * from "./components/Experience/WorkExperience";
 export * from "./components/Projects/ProjectShowcase";
+export * from "./components/AIAssistant/AIAssistantWindow";

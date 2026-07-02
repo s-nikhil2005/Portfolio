@@ -48,3 +48,22 @@ main {
     transform: translateX(0);
   }
 }
+
+/* Theme Overrides */
+body.theme-purple {
+  --glow-cyan: #9d4edd;
+  --panel-border-hover: rgba(157, 78, 221, 0.3);
+  --shadow-glow-cyan: 0 0 15px rgba(157, 78, 221, 0.3);
+}
+
+body.theme-green {
+  --glow-cyan: #00ff66;
+  --panel-border-hover: rgba(0, 255, 102, 0.3);
+  --shadow-glow-cyan: 0 0 15px rgba(0, 255, 102, 0.3);
+}
+
+body.theme-cyan {
+  --glow-cyan: #00f0ff;
+  --panel-border-hover: rgba(0, 240, 255, 0.3);
+  --shadow-glow-cyan: 0 0 15px rgba(0, 240, 255, 0.3);
+}

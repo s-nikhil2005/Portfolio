@@ -15,6 +15,7 @@ import {
   WorkExperience,
   ProjectShowcase,
   CaseStudyModal,
+  AIAssistantWindow,
   type ProjectData,
 } from "@portfolio/ui";
 import { SceneCanvas } from "@/components/3d/SceneCanvas";
@@ -86,6 +87,7 @@ export default function Home() {
       skills: false,
       experience: false,
       contact: false,
+      ai: false,
     },
   );
 
@@ -96,7 +98,22 @@ export default function Home() {
     "projects",
     "about",
     "terminal",
+    "ai",
   ]);
+
+  // Contact Form State
+  const [contactName, setContactName] = React.useState("");
+  const [contactEmail, setContactEmail] = React.useState("");
+  const [contactMessage, setContactMessage] = React.useState("");
+  const [contactStatus, setContactStatus] = React.useState<
+    "idle" | "sending" | "success" | "error"
+  >("idle");
+  const [contactResponse, setContactResponse] = React.useState("");
+
+  // Theme state
+  const [activeTheme, setActiveTheme] = React.useState<
+    "cyan" | "green" | "purple"
+  >("cyan");
 
   // Update Clock Time
   React.useEffect(() => {
@@ -156,6 +173,57 @@ export default function Home() {
     return windowOrder.indexOf(id) + 10;
   };
 
+  const handleDownloadResume = async () => {
+    try {
+      await fetch("http://localhost:3001/api/admin/track-download", {
+        method: "POST",
+      });
+    } catch (e) {
+      console.error("Failed to track download:", e);
+    }
+    alert("Downloading Nikhil_Singh_Resume.pdf...");
+  };
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!contactName || !contactEmail || !contactMessage) {
+      setContactStatus("error");
+      setContactResponse("All inputs are required.");
+      return;
+    }
+
+    setContactStatus("sending");
+    setContactResponse("");
+
+    try {
+      const res = await fetch("http://localhost:3001/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: contactName,
+          email: contactEmail,
+          message: contactMessage,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to submit mail payload.");
+      }
+
+      setContactStatus("success");
+      setContactResponse("Transmission received and logged successfully!");
+      setContactName("");
+      setContactEmail("");
+      setContactMessage("");
+    } catch (err: any) {
+      setContactStatus("error");
+      setContactResponse(err.message || "Failed to dispatch message.");
+    }
+  };
+
   // Terminal commands interpreter
   const handleTerminalCommand = (cmd: string) => {
     setTerminalLogs((prev) => [...prev, { text: cmd, type: "input" }]);
@@ -169,7 +237,7 @@ export default function Home() {
         setTerminalLogs((prev) => [
           ...prev,
           {
-            text: "Available commands:\n  help        Display this help menu\n  whoami      Information about Nikhil\n  ls          List files/apps on this terminal\n  open <app>  Open a window (terminal, projects, about, skills, experience, contact)\n  clear       Clear console log history",
+            text: "Available commands:\n  help        Display this help menu\n  whoami      Information about Nikhil\n  about       Open About Me window\n  projects    Open Projects directory\n  skills      Open Skills Galaxy\n  experience  Open Timeline window\n  contact     Open Secure Mail window\n  ai          Open AI Chat Assistant window\n  resume      Download Nikhil's resume\n  github      Navigate to Github code repo\n  linkedin    Navigate to LinkedIn profile\n  theme       Toggle theme color schema\n  music       Emit procedural sound chime\n  ls          List files/apps on this terminal\n  pwd         Print working directory\n  clear       Clear console log history",
             type: "output",
           },
         ]);
@@ -178,7 +246,7 @@ export default function Home() {
         setTerminalLogs((prev) => [
           ...prev,
           {
-            text: "Nikhil Singh — Full Stack Developer & 3D Interactive Portfolio OS architect.\nSkills: React, Next.js, Node.js, Three.js, TypeScript.",
+            text: "Nikhil Singh — Full Stack Developer & 3D Interactive Portfolio OS architect.\nSkills: React, Next.js, Node.js, Three.js, TypeScript, Go.",
             type: "output",
           },
         ]);
@@ -187,7 +255,16 @@ export default function Home() {
         setTerminalLogs((prev) => [
           ...prev,
           {
-            text: "Files & Applications:\n  about_me.txt\n  contact_nikhil.lnk\n  experience_timeline.sys\n  projects.pkg\n  skills_galaxy.d3\n  terminal.app",
+            text: "Files & Applications:\n  about_me.txt\n  contact_nikhil.lnk\n  experience_timeline.sys\n  projects.pkg\n  skills_galaxy.d3\n  ai_assistant.app\n  terminal.app",
+            type: "output",
+          },
+        ]);
+        break;
+      case "pwd":
+        setTerminalLogs((prev) => [
+          ...prev,
+          {
+            text: "/home/nikhil-os/guest",
             type: "output",
           },
         ]);
@@ -195,6 +272,124 @@ export default function Home() {
       case "clear":
         setTerminalLogs([]);
         break;
+      case "about":
+        openApp("about");
+        setTerminalLogs((prev) => [
+          ...prev,
+          { text: "Opening About Me...", type: "system" },
+        ]);
+        break;
+      case "projects":
+        openApp("projects");
+        setTerminalLogs((prev) => [
+          ...prev,
+          { text: "Opening Projects Showcase...", type: "system" },
+        ]);
+        break;
+      case "skills":
+        openApp("skills");
+        setTerminalLogs((prev) => [
+          ...prev,
+          { text: "Opening Skills Galaxy...", type: "system" },
+        ]);
+        break;
+      case "experience":
+        openApp("experience");
+        setTerminalLogs((prev) => [
+          ...prev,
+          { text: "Opening Timeline...", type: "system" },
+        ]);
+        break;
+      case "contact":
+        openApp("contact");
+        setTerminalLogs((prev) => [
+          ...prev,
+          { text: "Opening Secure Mail...", type: "system" },
+        ]);
+        break;
+      case "ai":
+        openApp("ai");
+        setTerminalLogs((prev) => [
+          ...prev,
+          { text: "Opening AI Assistant chat...", type: "system" },
+        ]);
+        break;
+      case "github":
+        window.open("https://github.com/nikhil-singh", "_blank");
+        setTerminalLogs((prev) => [
+          ...prev,
+          { text: "Opening GitHub in new tab...", type: "system" },
+        ]);
+        break;
+      case "linkedin":
+        window.open("https://linkedin.com/in/nikhil-singh", "_blank");
+        setTerminalLogs((prev) => [
+          ...prev,
+          { text: "Opening LinkedIn in new tab...", type: "system" },
+        ]);
+        break;
+      case "resume":
+        handleDownloadResume();
+        setTerminalLogs((prev) => [
+          ...prev,
+          { text: "Initiating resume download...", type: "system" },
+        ]);
+        break;
+      case "theme": {
+        const nextTheme =
+          activeTheme === "cyan"
+            ? "green"
+            : activeTheme === "green"
+              ? "purple"
+              : "cyan";
+        setActiveTheme(nextTheme);
+        document.body.className = `theme-${nextTheme}`;
+        setTerminalLogs((prev) => [
+          ...prev,
+          {
+            text: `Theme toggled. Active accent: [ ${nextTheme.toUpperCase()} ]`,
+            type: "output",
+          },
+        ]);
+        break;
+      }
+      case "music": {
+        try {
+          const ctx = new (
+            window.AudioContext || (window as any).webkitAudioContext
+          )();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(440, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(
+            880,
+            ctx.currentTime + 0.15,
+          );
+          gain.gain.setValueAtTime(0.06, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.3);
+          setTerminalLogs((prev) => [
+            ...prev,
+            {
+              text: "Synthesized retro music chime emitted successfully.",
+              type: "output",
+            },
+          ]);
+        } catch (e) {
+          setTerminalLogs((prev) => [
+            ...prev,
+            {
+              text: "Error: AudioContext interface blocked by browser permissions.",
+              type: "error",
+            },
+          ]);
+        }
+        break;
+      }
       case "open":
         if (
           arg === "terminal" ||
@@ -202,7 +397,8 @@ export default function Home() {
           arg === "about" ||
           arg === "skills" ||
           arg === "experience" ||
-          arg === "contact"
+          arg === "contact" ||
+          arg === "ai"
         ) {
           openApp(arg);
           setTerminalLogs((prev) => [
@@ -213,7 +409,7 @@ export default function Home() {
           setTerminalLogs((prev) => [
             ...prev,
             {
-              text: `Error: App '${arg}' not found. Try: terminal, projects, about, skills, experience, contact.`,
+              text: `Error: App '${arg}' not found. Try: terminal, projects, about, skills, experience, contact, ai.`,
               type: "error",
             },
           ]);
@@ -275,6 +471,13 @@ export default function Home() {
       action: () => openApp("contact"),
     },
     {
+      id: "ai-chat",
+      label: "Open AI Assistant Chat",
+      category: "Applications",
+      shortcut: "⌥I",
+      action: () => openApp("ai"),
+    },
+    {
       id: "clear-term",
       label: "Clear Terminal Logs",
       category: "System",
@@ -292,6 +495,7 @@ export default function Home() {
           skills: false,
           experience: false,
           contact: false,
+          ai: false,
         }),
     },
   ];
@@ -390,6 +594,26 @@ export default function Home() {
         >
           <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
           <polyline points="22,6 12,13 2,6" />
+        </svg>
+      ),
+    },
+    {
+      id: "ai",
+      label: "AI Assistant",
+      isOpen: openWindows.ai,
+      onClick: openApp,
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10S2 17.523 2 12A10 10 0 0 1 12 2z" />
+          <path d="M12 8v4" />
+          <path d="M12 16h.01" />
         </svg>
       ),
     },
@@ -710,6 +934,7 @@ export default function Home() {
                       skills: false,
                       experience: false,
                       contact: false,
+                      ai: false,
                     });
                     setActiveDropdown(null);
                   }}
@@ -776,6 +1001,7 @@ export default function Home() {
                   { id: "skills", label: "Skills Galaxy" },
                   { id: "experience", label: "Timeline.sys" },
                   { id: "contact", label: "Secure Mail" },
+                  { id: "ai", label: "AI Assistant" },
                 ].map((app) => (
                   <div
                     key={app.id}
@@ -984,7 +1210,7 @@ export default function Home() {
               <Button
                 variant="primary"
                 size="sm"
-                onClick={() => alert("Downloading Nikhil_Singh_Resume.pdf...")}
+                onClick={handleDownloadResume}
               >
                 Download Resume
               </Button>
@@ -1073,15 +1299,69 @@ export default function Home() {
             >
               Send an email directly through the portfolio API.
             </p>
-            <div
+            <form
+              onSubmit={handleContactSubmit}
               style={{ display: "flex", flexDirection: "column", gap: "10px" }}
             >
-              <Input placeholder="Your Name" />
-              <Input placeholder="Your Email" type="email" />
-              <Input placeholder="Write your message..." />
-              <Button variant="primary">Send Transmission</Button>
-            </div>
+              <Input
+                placeholder="Your Name"
+                value={contactName}
+                onChange={(e) => setContactName(e.target.value)}
+                required
+              />
+              <Input
+                placeholder="Your Email"
+                type="email"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+                required
+              />
+              <Input
+                placeholder="Write your message..."
+                value={contactMessage}
+                onChange={(e) => setContactMessage(e.target.value)}
+                required
+              />
+              <Button
+                variant="primary"
+                type="submit"
+                disabled={contactStatus === "sending"}
+              >
+                {contactStatus === "sending"
+                  ? "Sending..."
+                  : "Send Transmission"}
+              </Button>
+              {contactResponse && (
+                <div
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.75rem",
+                    color:
+                      contactStatus === "error"
+                        ? "var(--color-danger)"
+                        : "var(--glow-green)",
+                    marginTop: "4px",
+                  }}
+                >
+                  &gt; {contactResponse}
+                </div>
+              )}
+            </form>
           </div>
+        </MacWindow>
+
+        {/* App 7: AI Assistant Panel */}
+        <MacWindow
+          id="ai"
+          title="AI Assistant — ai_assistant.app"
+          isOpen={openWindows.ai}
+          onClose={closeWindow}
+          onFocus={focusWindow}
+          zIndex={getZIndex("ai")}
+          defaultPosition={{ x: 260, y: 160 }}
+          defaultSize={{ width: 560, height: 460 }}
+        >
+          <AIAssistantWindow />
         </MacWindow>
       </div>
 
@@ -1202,6 +1482,24 @@ export default function Home() {
               >
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                 <polyline points="22,6 12,13 2,6" />
+              </svg>
+            ),
+          },
+          {
+            id: "ai",
+            label: "ai_assistant.app",
+            icon: (
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="var(--glow-green)"
+                strokeWidth="2"
+              >
+                <path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10S2 17.523 2 12A10 10 0 0 1 12 2z" />
+                <path d="M12 8v4" />
+                <path d="M12 16h.01" />
               </svg>
             ),
           },
