@@ -9,8 +9,53 @@ import {
   CommandPalette,
   Button,
   Input,
+  Timeline,
+  type TimelineItem,
 } from "@portfolio/ui";
 import { SceneCanvas } from "@/components/3d/SceneCanvas";
+
+const aboutTimelineData: TimelineItem[] = [
+  {
+    id: "school",
+    title: "Secondary Education",
+    period: "2016 - 2018",
+    description:
+      "Completed secondary school, specializing in Mathematics and Computer Science basics. First learned logic and HTML/CSS/JS.",
+    iconText: "SCH",
+  },
+  {
+    id: "college",
+    title: "University - Computer Science Engineering",
+    period: "2018 - 2022",
+    description:
+      "Earned Bachelor's in CS. Explored data structures, system design, and database engineering. Built multi-threaded simulations.",
+    iconText: "UNI",
+  },
+  {
+    id: "learning",
+    title: "Full Stack Specialization & Mentorship",
+    period: "2022 - 2023",
+    description:
+      "Deep dive into web performance, cloud scaling (Docker/AWS), and modern framework internals. Contributed to microservice utilities.",
+    iconText: "DEV",
+  },
+  {
+    id: "projects",
+    title: "Client Platforms & Interactive Projects",
+    period: "2023 - Present",
+    description:
+      "Built high-performance, real-time products (Voya, Next-generation SaaS trackers, web APIs). Began incorporating 3D visuals using R3F.",
+    iconText: "PRJ",
+  },
+  {
+    id: "future",
+    title: "Future Vision: Distributed 3D Web",
+    period: "2026 & Beyond",
+    description:
+      "Focusing on decentralized web rendering, high-availability architecture, and standardizing low-latency interactive canvas widgets.",
+    iconText: "FTR",
+  },
+];
 
 export default function Home() {
   const [booted, setBooted] = React.useState(false);
@@ -914,32 +959,79 @@ export default function Home() {
           onFocus={focusWindow}
           zIndex={getZIndex("about")}
           defaultPosition={{ x: 260, y: 120 }}
-          defaultSize={{ width: 540, height: 380 }}
+          defaultSize={{ width: 560, height: 420 }}
         >
           <div
             style={{
+              height: "100%",
+              overflowY: "auto",
               padding: "24px",
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.85rem",
-              lineHeight: "1.6",
+              display: "flex",
+              flexDirection: "column",
+              gap: "24px",
             }}
           >
-            <p style={{ color: "var(--glow-green)" }}>// ABOUT ME</p>
-            <p>Name: Nikhil Singh</p>
-            <p>Role: Full Stack Engineer</p>
-            <p>Motto: Building high performance immersive web experiences.</p>
-            <br />
-            <p style={{ color: "var(--text-muted)" }}>
-              Double click on Dock icon or search Ctrl+K to explore skills.
-            </p>
-            <br />
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => alert("Resume downloading...")}
+            <div>
+              <p
+                style={{
+                  color: "var(--glow-green)",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.85rem",
+                  marginBottom: "4px",
+                }}
+              >
+                // ABOUT ME
+              </p>
+              <h3
+                style={{
+                  color: "var(--text-primary)",
+                  fontSize: "1.3rem",
+                  fontWeight: "700",
+                }}
+              >
+                Nikhil Singh
+              </h3>
+              <p
+                style={{
+                  color: "var(--text-secondary)",
+                  fontSize: "0.85rem",
+                  marginTop: "2px",
+                }}
+              >
+                Full-Stack Engineer building immersive 3D web systems.
+              </p>
+            </div>
+
+            {/* Scroll-animated vertical timeline */}
+            <Timeline items={aboutTimelineData} />
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                borderTop: "1px solid rgba(255,255,255,0.05)",
+                paddingTop: "16px",
+                marginTop: "8px",
+              }}
             >
-              Download Resume
-            </Button>
+              <span
+                style={{
+                  fontSize: "0.75rem",
+                  color: "var(--text-muted)",
+                  fontFamily: "var(--font-mono)",
+                }}
+              >
+                Total: 5 entries found.
+              </span>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => alert("Downloading Nikhil_Singh_Resume.pdf...")}
+              >
+                Download Resume
+              </Button>
+            </div>
           </div>
         </MacWindow>
 

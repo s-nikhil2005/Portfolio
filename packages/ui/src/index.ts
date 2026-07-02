@@ -5,3 +5,4 @@ export * from "./components/Window/MacWindow";
 export * from "./components/Dock/Dock";
 export * from "./components/Terminal/TerminalWindow";
 export * from "./components/Palette/CommandPalette";
+export * from "./components/Timeline/Timeline";

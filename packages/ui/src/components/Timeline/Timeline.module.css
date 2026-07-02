@@ -1,0 +1,125 @@
+.timeline {
+  position: relative;
+  width: 100%;
+  padding: 10px 0 20px 20px;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+}
+
+/* Vertical line track */
+.track {
+  position: absolute;
+  top: 0;
+  left: 36px;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    var(--glow-cyan) 0%,
+    var(--glow-green) 50%,
+    var(--glow-purple) 100%
+  );
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+.nodesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.node {
+  position: relative;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+    transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.node.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.iconWrapper {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justifycontent: center;
+}
+
+.icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bg-obsidian);
+  border: 2px solid var(--glow-cyan);
+  display: flex;
+  align-items: center;
+  justifycontent: center;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--glow-cyan);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.node.visible .icon {
+  border-color: var(--glow-green);
+  color: var(--glow-green);
+  box-shadow: 0 0 8px rgba(0, 255, 102, 0.3);
+}
+
+.card {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(4px);
+  transition: border-color 0.3s ease;
+}
+
+.card:hover {
+  border-color: rgba(0, 240, 255, 0.2);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.period {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--glow-cyan);
+  background: rgba(0, 240, 255, 0.05);
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 240, 255, 0.15);
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.desc {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
