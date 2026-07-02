@@ -19,6 +19,9 @@ import {
   type ProjectData,
 } from "@portfolio/ui";
 import { SceneCanvas } from "@/components/3d/SceneCanvas";
+import { CursorGlow } from "@/components/animation/CursorGlow";
+import { Magnetic } from "@/components/animation/Magnetic";
+import { SmoothScroll } from "@/components/animation/SmoothScroll";
 
 const aboutTimelineData: TimelineItem[] = [
   {
@@ -638,6 +641,9 @@ export default function Home() {
         overflow: "hidden",
       }}
     >
+      {/* Background Cursor Glow Trail */}
+      <CursorGlow />
+
       {/* Background Grid Pattern */}
       <div
         style={{
@@ -1122,15 +1128,9 @@ export default function Home() {
           defaultPosition={{ x: 180, y: 150 }}
           defaultSize={{ width: 620, height: 420 }}
         >
-          <div
-            style={{
-              height: "100%",
-              overflowY: "auto",
-              padding: "12px",
-            }}
-          >
+          <SmoothScroll style={{ padding: "12px" }}>
             <ProjectShowcase onSelectProject={setSelectedProject} />
-          </div>
+          </SmoothScroll>
         </MacWindow>
 
         {/* App 3: About Me Bio */}
@@ -1144,78 +1144,73 @@ export default function Home() {
           defaultPosition={{ x: 260, y: 120 }}
           defaultSize={{ width: 560, height: 420 }}
         >
-          <div
-            style={{
-              height: "100%",
-              overflowY: "auto",
-              padding: "24px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "24px",
-            }}
-          >
-            <div>
-              <p
-                style={{
-                  color: "var(--glow-green)",
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.85rem",
-                  marginBottom: "4px",
-                }}
-              >
-                // ABOUT ME
-              </p>
-              <h3
-                style={{
-                  color: "var(--text-primary)",
-                  fontSize: "1.3rem",
-                  fontWeight: "700",
-                }}
-              >
-                Nikhil Singh
-              </h3>
-              <p
-                style={{
-                  color: "var(--text-secondary)",
-                  fontSize: "0.85rem",
-                  marginTop: "2px",
-                }}
-              >
-                Full-Stack Engineer building immersive 3D web systems.
-              </p>
-            </div>
-
-            {/* Scroll-animated vertical timeline */}
-            <Timeline items={aboutTimelineData} />
-
+          <SmoothScroll style={{ padding: "24px" }}>
             <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                borderTop: "1px solid rgba(255,255,255,0.05)",
-                paddingTop: "16px",
-                marginTop: "8px",
-              }}
+              style={{ display: "flex", flexDirection: "column", gap: "24px" }}
             >
-              <span
+              <div>
+                <p
+                  style={{
+                    color: "var(--glow-green)",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.85rem",
+                    marginBottom: "4px",
+                  }}
+                >
+                  // ABOUT ME
+                </p>
+                <h3
+                  style={{
+                    color: "var(--text-primary)",
+                    fontSize: "1.3rem",
+                    fontWeight: "700",
+                  }}
+                >
+                  Nikhil Singh
+                </h3>
+                <p
+                  style={{
+                    color: "var(--text-secondary)",
+                    fontSize: "0.85rem",
+                    marginTop: "2px",
+                  }}
+                >
+                  Full-Stack Engineer building immersive 3D web systems.
+                </p>
+              </div>
+
+              {/* Scroll-animated vertical timeline */}
+              <Timeline items={aboutTimelineData} />
+
+              <div
                 style={{
-                  fontSize: "0.75rem",
-                  color: "var(--text-muted)",
-                  fontFamily: "var(--font-mono)",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  borderTop: "1px solid rgba(255,255,255,0.05)",
+                  paddingTop: "16px",
+                  marginTop: "8px",
                 }}
               >
-                Total: 5 entries found.
-              </span>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={handleDownloadResume}
-              >
-                Download Resume
-              </Button>
+                <span
+                  style={{
+                    fontSize: "0.75rem",
+                    color: "var(--text-muted)",
+                    fontFamily: "var(--font-mono)",
+                  }}
+                >
+                  Total: 5 entries found.
+                </span>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={handleDownloadResume}
+                >
+                  Download Resume
+                </Button>
+              </div>
             </div>
-          </div>
+          </SmoothScroll>
         </MacWindow>
 
         {/* App 4: Skills Matrix */}
@@ -1243,36 +1238,34 @@ export default function Home() {
           defaultPosition={{ x: 300, y: 180 }}
           defaultSize={{ width: 620, height: 440 }}
         >
-          <div
-            style={{
-              height: "100%",
-              overflowY: "auto",
-              padding: "24px",
-            }}
-          >
-            <div style={{ marginBottom: "20px" }}>
-              <p
-                style={{
-                  color: "var(--glow-purple)",
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.85rem",
-                  marginBottom: "4px",
-                }}
-              >
-                // SYSTEM_LOG: WORK_HISTORY
-              </p>
-              <h3
-                style={{
-                  color: "var(--text-primary)",
-                  fontSize: "1.3rem",
-                  fontWeight: "700",
-                }}
-              >
-                Employment History
-              </h3>
+          <SmoothScroll style={{ padding: "24px" }}>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+            >
+              <div>
+                <p
+                  style={{
+                    color: "var(--glow-purple)",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.85rem",
+                    marginBottom: "4px",
+                  }}
+                >
+                  // SYSTEM_LOG: WORK_HISTORY
+                </p>
+                <h3
+                  style={{
+                    color: "var(--text-primary)",
+                    fontSize: "1.3rem",
+                    fontWeight: "700",
+                  }}
+                >
+                  Employment History
+                </h3>
+              </div>
+              <WorkExperience />
             </div>
-            <WorkExperience />
-          </div>
+          </SmoothScroll>
         </MacWindow>
 
         {/* App 6: Contact Panel */}
@@ -1506,66 +1499,67 @@ export default function Home() {
         ].map((icon) => {
           const isSelected = selectedIconId === icon.id;
           return (
-            <div
-              key={icon.id}
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedIconId(icon.id);
-              }}
-              onDoubleClick={() => openApp(icon.id)}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: "8px",
-                width: "80px",
-                padding: "8px 4px",
-                borderRadius: "6px",
-                border: isSelected
-                  ? "1px solid rgba(0, 240, 255, 0.25)"
-                  : "1px solid transparent",
-                background: isSelected
-                  ? "rgba(0, 240, 255, 0.08)"
-                  : "transparent",
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-              }}
-            >
+            <Magnetic key={icon.id} range={55}>
               <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedIconId(icon.id);
+                }}
+                onDoubleClick={() => openApp(icon.id)}
                 style={{
-                  width: "44px",
-                  height: "44px",
                   display: "flex",
+                  flexDirection: "column",
                   alignItems: "center",
-                  justifyContent: "center",
-                  background: "rgba(10, 11, 14, 0.4)",
-                  border: "1px solid rgba(255, 255, 255, 0.05)",
-                  borderRadius: "10px",
-                  boxShadow: isSelected
-                    ? "0 0 10px rgba(0, 240, 255, 0.25)"
-                    : "none",
+                  gap: "8px",
+                  width: "80px",
+                  padding: "8px 4px",
+                  borderRadius: "6px",
+                  border: isSelected
+                    ? "1px solid rgba(0, 240, 255, 0.25)"
+                    : "1px solid transparent",
+                  background: isSelected
+                    ? "rgba(0, 240, 255, 0.08)"
+                    : "transparent",
+                  cursor: "pointer",
+                  transition: "all 0.15s ease",
                 }}
               >
-                {icon.icon}
+                <div
+                  style={{
+                    width: "44px",
+                    height: "44px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "rgba(10, 11, 14, 0.4)",
+                    border: "1px solid rgba(255, 255, 255, 0.05)",
+                    borderRadius: "10px",
+                    boxShadow: isSelected
+                      ? "0 0 10px rgba(0, 240, 255, 0.25)"
+                      : "none",
+                  }}
+                >
+                  {icon.icon}
+                </div>
+                <span
+                  style={{
+                    fontSize: "0.72rem",
+                    color: isSelected
+                      ? "var(--text-primary)"
+                      : "var(--text-secondary)",
+                    textAlign: "center",
+                    textShadow: "0 1px 2px rgba(0,0,0,0.8)",
+                    fontFamily: "var(--font-mono)",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    width: "100%",
+                  }}
+                >
+                  {icon.label}
+                </span>
               </div>
-              <span
-                style={{
-                  fontSize: "0.72rem",
-                  color: isSelected
-                    ? "var(--text-primary)"
-                    : "var(--text-secondary)",
-                  textAlign: "center",
-                  textShadow: "0 1px 2px rgba(0,0,0,0.8)",
-                  fontFamily: "var(--font-mono)",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  width: "100%",
-                }}
-              >
-                {icon.label}
-              </span>
-            </div>
+            </Magnetic>
           );
         })}
       </div>
