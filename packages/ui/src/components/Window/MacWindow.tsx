@@ -40,8 +40,6 @@ export const MacWindow = ({
   const positionStart = React.useRef({ x: 0, y: 0 });
   const sizeStart = React.useRef({ width: 0, height: 0 });
 
-  if (!isOpen || isMinimized) return null;
-
   // Drag logic
   const handleMouseDown = (e: React.MouseEvent) => {
     if (isMaximized) return;
@@ -124,6 +122,8 @@ export const MacWindow = ({
         height: `${size.height}px`,
         zIndex,
       };
+
+  if (!isOpen || isMinimized) return null;
 
   return (
     <div
