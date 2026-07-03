@@ -20,6 +20,7 @@ import {
   SystemInfo,
   JourneyTimeline,
   TechStack,
+  ProfileOverview,
 } from "@portfolio/ui";
 import { SceneCanvas } from "@/components/3d/SceneCanvas";
 import { CursorGlow } from "@/components/animation/CursorGlow";
@@ -101,7 +102,7 @@ export default function Home() {
     if (isScrolling.current) return;
 
     if (e.deltaY > 15) {
-      if (activeSlide < 3) {
+      if (activeSlide < 2) {
         isScrolling.current = true;
         setActiveSlide((prev) => prev + 1);
         setTimeout(() => {
@@ -139,7 +140,7 @@ export default function Home() {
     if (isScrolling.current) return;
 
     if (diff > 50) {
-      if (activeSlide < 3) {
+      if (activeSlide < 2) {
         isScrolling.current = true;
         setActiveSlide((prev) => prev + 1);
         setTimeout(() => {
@@ -353,7 +354,7 @@ export default function Home() {
         break;
       case "about":
       case "profile":
-        setActiveSlide(1);
+        setActiveSlide(0);
         setTerminalLogs((prev) => [
           ...prev,
           { text: "Scrolling to profile workspace...", type: "system" },
@@ -472,7 +473,7 @@ export default function Home() {
       }
       case "open": {
         if (arg === "profile" || arg === "about") {
-          setActiveSlide(1);
+          setActiveSlide(0);
           setTerminalLogs((prev) => [
             ...prev,
             { text: "Scrolling to profile workspace...", type: "system" },
@@ -533,7 +534,7 @@ export default function Home() {
       label: "Open Profile.app",
       category: "Applications",
       shortcut: "⌥A",
-      action: () => setActiveSlide(1),
+      action: () => setActiveSlide(0),
     },
     {
       id: "skls",
@@ -629,7 +630,7 @@ export default function Home() {
       id: "about",
       label: "Profile.app",
       isOpen: false,
-      onClick: () => setActiveSlide((prev) => (prev === 0 ? 1 : 0)),
+      onClick: () => setActiveSlide(0),
       icon: (
         <svg
           width="24"
@@ -745,7 +746,6 @@ export default function Home() {
       {/* 3D Experience Scene */}
       <SceneCanvas activeSlide={activeSlide} />
 
-      {/* Wallpaper Hero Section (Left-aligned, behind windows) */}
       {/* Sliding Background Workspace Panels */}
       <div
         onWheel={handleWheel}
@@ -755,195 +755,42 @@ export default function Home() {
           position: "absolute",
           top: 0,
           left: 0,
-          width: "400vw",
+          width: "300vw",
           height: "100vh",
           display: "flex",
-          transform: `translateX(-${activeSlide * 25}%)`,
+          transform: `translateX(-${activeSlide * 33.333}%)`,
           transition: "transform 0.85s cubic-bezier(0.25, 1, 0.5, 1)",
           zIndex: 2,
         }}
       >
-        {/* Slide 0: Desktop Workspace Welcome */}
+        {/* Slide 0: Profile Overview Workspace */}
         <div
           style={{
             width: "100vw",
             height: "100vh",
             position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
             boxSizing: "border-box",
+            padding: "80px 6vw",
           }}
         >
-          {/* Wallpaper Hero Section (Left-aligned, behind windows) */}
           <div
             style={{
-              position: "absolute",
-              top: "12vh",
-              left: "6vw",
-              maxWidth: "460px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
-              pointerEvents: "auto",
-              userSelect: "none",
+              width: "100%",
+              maxWidth: "1000px",
+              height: "100%",
+              maxHeight: "650px",
+              background: "rgba(10, 11, 14, 0.4)",
+              border: "1px solid rgba(255, 255, 255, 0.06)",
+              borderRadius: "20px",
+              backdropFilter: "blur(20px)",
+              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.5)",
+              overflow: "hidden",
             }}
           >
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "8px" }}
-            >
-              <div
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.85rem",
-                  color: "var(--glow-cyan)",
-                  textShadow: "0 0 8px rgba(0, 240, 255, 0.4)",
-                  letterSpacing: "1.5px",
-                  fontWeight: "600",
-                }}
-              >
-                [ HOSTNAME: NIKHIL_OS ]
-              </div>
-              <h1
-                style={{
-                  fontSize: "3.5rem",
-                  fontWeight: "800",
-                  lineHeight: "1.05",
-                  fontFamily: "var(--font-sans)",
-                  color: "var(--text-primary)",
-                  letterSpacing: "-1px",
-                  textShadow: "0 2px 10px rgba(0, 0, 0, 0.5)",
-                }}
-                className="hero-name-reveal"
-              >
-                Nikhil Singh
-              </h1>
-              <h2
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.95rem",
-                  color: "var(--glow-green)",
-                  textShadow: "0 0 8px rgba(0, 255, 102, 0.4)",
-                  marginTop: "4px",
-                }}
-              >
-                Full-Stack & Immersive Web Developer
-              </h2>
-            </div>
-
-            <p
-              style={{
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.9rem",
-                lineHeight: "1.6",
-                color: "var(--text-secondary)",
-              }}
-            >
-              Building high-performance backend systems and immersive,
-              responsive 3D web interfaces. Type commands in the terminal or use
-              the controls below to discover my work.
-            </p>
-
-            {/* CTA Button Grid */}
-            <div
-              style={{
-                display: "flex",
-                gap: "12px",
-                flexWrap: "wrap",
-                marginTop: "8px",
-              }}
-            >
-              <Button
-                variant="primary"
-                size="md"
-                onClick={() => openApp("projects")}
-              >
-                View Projects
-              </Button>
-              <Button
-                variant="secondary"
-                size="md"
-                onClick={() => setActiveSlide(1)}
-              >
-                Profile.app
-              </Button>
-              <Button
-                variant="terminal"
-                size="md"
-                onClick={() => openApp("terminal")}
-              >
-                bash_shell
-              </Button>
-            </div>
-
-            {/* Social Links */}
-            <div style={{ display: "flex", gap: "20px", marginTop: "12px" }}>
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  color: "var(--text-secondary)",
-                  fontSize: "0.85rem",
-                  fontFamily: "var(--font-mono)",
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  transition: "color 0.2s",
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.color = "var(--glow-cyan)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = "var(--text-secondary)")
-                }
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-                </svg>
-                GitHub
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  color: "var(--text-secondary)",
-                  fontSize: "0.85rem",
-                  fontFamily: "var(--font-mono)",
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  transition: "color 0.2s",
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.color = "var(--glow-cyan)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = "var(--text-secondary)")
-                }
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                  <rect x="2" y="9" width="4" height="12" />
-                  <circle cx="4" cy="4" r="2" />
-                </svg>
-                LinkedIn
-              </a>
-            </div>
+            <ProfileOverview onDownloadResume={handleDownloadResume} />
           </div>
         </div>
 
@@ -1008,74 +855,6 @@ export default function Home() {
             <JourneyTimeline />
           </div>
         </div>
-
-        {/* Slide 3: Tech Stack Workspace */}
-        <div
-          style={{
-            width: "100vw",
-            height: "100vh",
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            boxSizing: "border-box",
-            padding: "80px 6vw",
-          }}
-        >
-          <div
-            style={{
-              width: "100%",
-              maxWidth: "1000px",
-              height: "100%",
-              maxHeight: "650px",
-              background: "rgba(10, 11, 14, 0.4)",
-              border: "1px solid rgba(255, 255, 255, 0.06)",
-              borderRadius: "20px",
-              backdropFilter: "blur(20px)",
-              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.5)",
-              overflow: "hidden",
-            }}
-          >
-            <TechStack />
-          </div>
-        </div>
-      </div>
-
-      {/* Slide Indicators dot pagination */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "100px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          display: "flex",
-          gap: "12px",
-          zIndex: 99,
-        }}
-      >
-        {[0, 1, 2, 3].map((pageIdx) => {
-          const isActive = activeSlide === pageIdx;
-          return (
-            <button
-              key={pageIdx}
-              onClick={() => setActiveSlide(pageIdx)}
-              style={{
-                width: "12px",
-                height: "12px",
-                borderRadius: "50%",
-                border: `2px solid ${
-                  isActive ? "var(--glow-cyan)" : "rgba(255,255,255,0.2)"
-                }`,
-                background: isActive ? "var(--glow-cyan)" : "transparent",
-                cursor: "pointer",
-                transition: "all 0.25s ease",
-                boxShadow: isActive ? "0 0 10px var(--glow-cyan)" : "none",
-                padding: 0,
-              }}
-              title={`Go to section ${pageIdx + 1}`}
-            />
-          );
-        })}
       </div>
 
       {/* Top OS System Bar */}
@@ -1256,7 +1035,7 @@ export default function Home() {
                     key={app.id}
                     onClick={() => {
                       if (app.id === "about") {
-                        setActiveSlide(1);
+                        setActiveSlide(0);
                       } else {
                         openApp(app.id);
                       }
