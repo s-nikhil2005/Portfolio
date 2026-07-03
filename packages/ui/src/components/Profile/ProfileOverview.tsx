@@ -175,106 +175,247 @@ const GlassCard = ({
   );
 };
 
-// Orbiting Tech Node component
+// Orbiting Tech Node component with hover tooltip details
 const OrbitingNode = ({
   name,
+  icon,
+  expLevel,
+  projects,
   radius,
   speed,
   phase,
   color,
 }: {
   name: string;
+  icon: React.ReactNode;
+  expLevel: string;
+  projects: string;
   radius: number;
   speed: number;
   phase: number;
   color: string;
 }) => {
   const ref = React.useRef<THREE.Group>(null);
+  const [hovered, setHovered] = React.useState(false);
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
-    if (ref.current) {
+    if (ref.current && !hovered) {
       const angle = t * speed + phase;
       ref.current.position.x = Math.sin(angle) * radius;
       ref.current.position.z = Math.cos(angle) * radius;
-      ref.current.position.y = Math.sin(t * 1.5 + phase) * 0.25;
+      ref.current.position.y = Math.sin(t * 1.2 + phase) * 0.18;
     }
   });
 
   return (
     <group ref={ref}>
       <mesh>
-        <sphereGeometry args={[0.08, 16, 16]} />
-        <meshBasicMaterial color={color} />
+        <sphereGeometry args={[0.03, 8, 8]} />
+        <meshBasicMaterial color={color} transparent opacity={0.1} />
       </mesh>
-      <pointLight distance={1.0} intensity={0.5} color={color} />
-      <Html distanceFactor={4.5} position={[0, 0.25, 0]} center>
+      <Html distanceFactor={4.5} center>
         <div
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
           style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: "9px",
-            fontWeight: "bold",
-            color: color,
-            background: "rgba(10, 11, 14, 0.9)",
-            border: `1px solid ${color}44`,
-            borderRadius: "4px",
-            padding: "2px 6px",
-            whiteSpace: "nowrap",
-            boxShadow: `0 0 10px ${color}22`,
-            pointerEvents: "none",
+            position: "relative",
+            cursor: "pointer",
+            transform: hovered ? "scale(1.18)" : "scale(1)",
+            transition: "transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: hovered ? 1000 : 1,
           }}
         >
-          {name}
+          {/* Circular icon container */}
+          <div
+            style={{
+              width: "36px",
+              height: "36px",
+              borderRadius: "50%",
+              background: hovered
+                ? "rgba(10, 11, 14, 0.96)"
+                : "rgba(10, 11, 14, 0.65)",
+              border: hovered
+                ? `1.5px solid ${color}`
+                : "1px solid rgba(255, 255, 255, 0.12)",
+              boxShadow: hovered
+                ? `0 0 15px ${color}aa`
+                : "0 2px 8px rgba(0,0,0,0.3)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: hovered ? color : "#f8f9fa",
+              transition: "all 0.3s ease",
+            }}
+          >
+            {icon}
+          </div>
+
+          {/* Hover details tooltip */}
+          {hovered && (
+            <div
+              style={{
+                position: "absolute",
+                bottom: "46px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: "200px",
+                padding: "10px 14px",
+                background: "rgba(10, 11, 14, 0.96)",
+                border: `1px solid ${color}`,
+                borderRadius: "8px",
+                boxShadow: `0 8px 24px rgba(0,0,0,0.6), 0 0 15px ${color}22`,
+                textAlign: "left",
+                fontFamily: "var(--font-mono)",
+                pointerEvents: "none",
+                display: "flex",
+                flexDirection: "column",
+                gap: "4px",
+              }}
+            >
+              <div
+                style={{
+                  color: "#ffffff",
+                  fontWeight: "bold",
+                  fontSize: "0.82rem",
+                }}
+              >
+                {name}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontSize: "0.68rem",
+                  color: "var(--text-secondary)",
+                  marginTop: "2px",
+                }}
+              >
+                <span>EXP LEVEL:</span>
+                <span style={{ color: color, fontWeight: "bold" }}>
+                  {expLevel}
+                </span>
+              </div>
+              <div
+                style={{
+                  fontSize: "0.65rem",
+                  color: "var(--text-muted)",
+                  borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+                  paddingTop: "4px",
+                  marginTop: "4px",
+                }}
+              >
+                {projects}
+              </div>
+            </div>
+          )}
         </div>
       </Html>
     </group>
   );
 };
 
-// Wireframe Outer Core Dodecahedron
-const OuterCore = () => {
-  const ref = React.useRef<THREE.Mesh>(null);
-  useFrame(() => {
-    if (ref.current) {
-      ref.current.rotation.x += 0.005;
-      ref.current.rotation.y += 0.008;
+// Floating Holographic Avatar image
+const HolographicAvatar = () => {
+  const groupRef = React.useRef<THREE.Group>(null);
+  const ringRef = React.useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    const { x, y } = state.pointer;
+    if (groupRef.current) {
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(
+        groupRef.current.rotation.y,
+        x * 0.25,
+        0.08,
+      );
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(
+        groupRef.current.rotation.x,
+        -y * 0.2,
+        0.08,
+      );
+    }
+    if (ringRef.current) {
+      ringRef.current.rotation.z += 0.004;
     }
   });
+
   return (
-    <mesh ref={ref}>
-      <dodecahedronGeometry args={[0.85, 1]} />
-      <meshBasicMaterial color="#ffffff" wireframe transparent opacity={0.12} />
-    </mesh>
+    <group ref={groupRef}>
+      <Float speed={2.2} rotationIntensity={0.3} floatIntensity={0.8}>
+        <Html transform distanceFactor={4.5} sprite={false}>
+          <div
+            style={{
+              width: "180px",
+              height: "180px",
+              borderRadius: "50%",
+              overflow: "hidden",
+              border: "2px solid rgba(0, 240, 255, 0.6)",
+              boxShadow:
+                "0 0 35px rgba(0, 240, 255, 0.45), inset 0 0 20px rgba(0, 240, 255, 0.2)",
+              background: "rgba(10, 11, 14, 0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              position: "relative",
+            }}
+          >
+            <img
+              src="/profile.jpg"
+              alt="Nikhil Singh Holographic Avatar"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                opacity: 0.95,
+                mixBlendMode: "lighten",
+              }}
+            />
+            {/* Cyber scanlines overlay */}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                background:
+                  "linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 240, 255, 0.12) 50%)",
+                backgroundSize: "100% 4px",
+                pointerEvents: "none",
+              }}
+            />
+          </div>
+        </Html>
+
+        {/* Rotating holographic ring behind avatar */}
+        <mesh position={[0, 0, -0.35]} ref={ringRef}>
+          <ringGeometry args={[1.05, 1.15, 64]} />
+          <meshBasicMaterial
+            color="#00f0ff"
+            side={THREE.DoubleSide}
+            transparent
+            opacity={0.25}
+          />
+        </mesh>
+      </Float>
+    </group>
   );
 };
 
-// Floating Neon Orbit Ring
-const NeonRing = () => {
-  const ref = React.useRef<THREE.Mesh>(null);
-  useFrame(() => {
-    if (ref.current) {
-      ref.current.rotation.z += 0.006;
-    }
-  });
-  return (
-    <mesh ref={ref} rotation={[Math.PI / 3.5, 0, 0]}>
-      <torusGeometry args={[1.3, 0.02, 8, 48]} />
-      <meshBasicMaterial color="#00ff66" transparent opacity={0.35} />
-    </mesh>
-  );
-};
-
-// Star particles in background
+// Subtle background particles
 const Particles = () => {
   const pointsRef = React.useRef<THREE.Points>(null);
   useFrame((state) => {
     if (pointsRef.current) {
-      pointsRef.current.rotation.y = state.clock.getElapsedTime() * 0.015;
+      pointsRef.current.rotation.y = state.clock.getElapsedTime() * 0.01;
     }
   });
   const positions = React.useMemo(() => {
     const arr = [];
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 40; i++) {
       arr.push(
         (Math.random() - 0.5) * 6,
         (Math.random() - 0.5) * 6,
@@ -289,71 +430,238 @@ const Particles = () => {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <pointsMaterial size={0.035} color="#00f0ff" transparent opacity={0.5} />
+      <pointsMaterial size={0.025} color="#00f0ff" transparent opacity={0.35} />
     </points>
-  );
-};
-
-// Floating background tetrahedrons/cubes
-const FloatingShapes = () => {
-  return (
-    <group>
-      <Float speed={1.5} floatIntensity={0.6}>
-        <mesh position={[-2.0, 1.2, -1]} rotation={[1, 1, 1]}>
-          <tetrahedronGeometry args={[0.22]} />
-          <meshBasicMaterial
-            color="#7928ca"
-            wireframe
-            transparent
-            opacity={0.25}
-          />
-        </mesh>
-      </Float>
-      <Float speed={1.8} floatIntensity={0.5}>
-        <mesh position={[2.2, -1.0, -1]} rotation={[2, 0.5, 1]}>
-          <boxGeometry args={[0.18, 0.18, 0.18]} />
-          <meshBasicMaterial
-            color="#0070f3"
-            wireframe
-            transparent
-            opacity={0.25}
-          />
-        </mesh>
-      </Float>
-    </group>
   );
 };
 
 // Main 3D Canvas Scene
 const AvatarScene = () => {
   const techNodes = [
-    { name: "React", radius: 2.3, speed: 0.35, phase: 0, color: "#00d8ff" },
+    {
+      name: "React",
+      expLevel: "3+ Years",
+      projects: "Voya Canvas, Portfolio Engine",
+      radius: 2.3,
+      speed: 0.28,
+      phase: 0,
+      color: "#00d8ff",
+      icon: (
+        <svg
+          width="18"
+          height="18"
+          viewBox="-11.5 -10.23174 23 20.46348"
+          fill="none"
+          stroke="currentColor"
+        >
+          <circle r="2.05" fill="currentColor" />
+          <ellipse rx="11" ry="4.2" stroke="currentColor" strokeWidth="1" />
+          <ellipse
+            rx="11"
+            ry="4.2"
+            transform="rotate(60)"
+            stroke="currentColor"
+            strokeWidth="1"
+          />
+          <ellipse
+            rx="11"
+            ry="4.2"
+            transform="rotate(120)"
+            stroke="currentColor"
+            strokeWidth="1"
+          />
+        </svg>
+      ),
+    },
     {
       name: "Node.js",
-      radius: 2.4,
-      speed: -0.28,
-      phase: 1.2,
+      expLevel: "3+ Years",
+      projects: "Microservices backend routes",
+      radius: 2.5,
+      speed: -0.22,
+      phase: 0.6,
       color: "#43c6ac",
+      icon: (
+        <span
+          style={{
+            fontSize: "0.68rem",
+            fontWeight: "900",
+            color: "#43c6ac",
+            fontFamily: "var(--font-mono)",
+          }}
+        >
+          Node
+        </span>
+      ),
     },
-    { name: "MongoDB", radius: 2.5, speed: 0.3, phase: 2.4, color: "#47a248" },
     {
       name: "Express",
+      expLevel: "3 Years",
+      projects: "API microservice gateways",
       radius: 2.2,
-      speed: -0.32,
-      phase: 3.6,
+      speed: 0.25,
+      phase: 1.2,
       color: "#ffffff",
+      icon: (
+        <span
+          style={{
+            fontSize: "0.68rem",
+            fontWeight: "900",
+            color: "#ffffff",
+            fontFamily: "var(--font-mono)",
+          }}
+        >
+          Exp
+        </span>
+      ),
+    },
+    {
+      name: "MongoDB",
+      expLevel: "2.5 Years",
+      projects: "Database replicas sharding",
+      radius: 2.4,
+      speed: -0.26,
+      phase: 1.8,
+      color: "#47a248",
+      icon: (
+        <span
+          style={{
+            fontSize: "0.68rem",
+            fontWeight: "900",
+            color: "#47a248",
+            fontFamily: "var(--font-mono)",
+          }}
+        >
+          MDB
+        </span>
+      ),
     },
     {
       name: "TypeScript",
+      expLevel: "2 Years",
+      projects: "Shared package model types",
       radius: 2.6,
-      speed: 0.25,
-      phase: 4.8,
+      speed: 0.2,
+      phase: 2.4,
       color: "#3178c6",
+      icon: (
+        <span
+          style={{
+            fontSize: "0.75rem",
+            fontWeight: "900",
+            color: "#3178c6",
+            fontFamily: "var(--font-mono)",
+          }}
+        >
+          TS
+        </span>
+      ),
     },
-    { name: "Docker", radius: 2.3, speed: -0.34, phase: 0.6, color: "#2496ed" },
-    { name: "AWS", radius: 2.7, speed: 0.22, phase: 1.8, color: "#ff9900" },
-    { name: "Git", radius: 2.1, speed: -0.36, phase: 3.0, color: "#f05032" },
-    { name: "Linux", radius: 2.5, speed: 0.27, phase: 4.2, color: "#fcc624" },
+    {
+      name: "Next.js",
+      expLevel: "2 Years",
+      projects: "SSR visual components & layouts",
+      radius: 2.3,
+      speed: -0.24,
+      phase: 3.0,
+      color: "#ffffff",
+      icon: (
+        <span
+          style={{
+            fontSize: "0.75rem",
+            fontWeight: "900",
+            color: "#ffffff",
+            fontFamily: "var(--font-mono)",
+          }}
+        >
+          Next
+        </span>
+      ),
+    },
+    {
+      name: "Docker",
+      expLevel: "1.5 Years",
+      projects: "Containerized environments configuration",
+      radius: 2.7,
+      speed: 0.18,
+      phase: 3.6,
+      color: "#2496ed",
+      icon: (
+        <span
+          style={{
+            fontSize: "0.68rem",
+            fontWeight: "900",
+            color: "#2496ed",
+            fontFamily: "var(--font-mono)",
+          }}
+        >
+          DK
+        </span>
+      ),
+    },
+    {
+      name: "AWS",
+      expLevel: "1 Year",
+      projects: "Deployment scripts hosting",
+      radius: 2.2,
+      speed: -0.3,
+      phase: 4.2,
+      color: "#ff9900",
+      icon: (
+        <span
+          style={{
+            fontSize: "0.68rem",
+            fontWeight: "900",
+            color: "#ff9900",
+            fontFamily: "var(--font-mono)",
+          }}
+        >
+          AWS
+        </span>
+      ),
+    },
+    {
+      name: "Git",
+      expLevel: "3+ Years",
+      projects: "Version controls monorepo pipeline",
+      radius: 2.5,
+      speed: 0.22,
+      phase: 4.8,
+      color: "#f05032",
+      icon: (
+        <span
+          style={{
+            fontSize: "0.68rem",
+            fontWeight: "900",
+            color: "#f05032",
+            fontFamily: "var(--font-mono)",
+          }}
+        >
+          Git
+        </span>
+      ),
+    },
+    {
+      name: "Linux",
+      expLevel: "2 Years",
+      projects: "CLI script automations environments",
+      radius: 2.4,
+      speed: -0.25,
+      phase: 5.4,
+      color: "#fcc624",
+      icon: (
+        <span
+          style={{
+            fontSize: "0.68rem",
+            fontWeight: "900",
+            color: "#fcc624",
+            fontFamily: "var(--font-mono)",
+          }}
+        >
+          Tux
+        </span>
+      ),
+    },
   ];
 
   return (
@@ -361,32 +669,27 @@ const AvatarScene = () => {
       camera={{ position: [0, 0, 5.5] }}
       style={{ width: "100%", height: "100%" }}
     >
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[2, 5, 2]} intensity={1.2} />
-      <pointLight position={[-3, -3, -3]} intensity={0.5} />
+      <ambientLight intensity={0.7} />
+      <directionalLight position={[1, 3, 2]} intensity={1.0} />
+      <pointLight position={[-2, -2, -2]} intensity={0.4} />
 
+      {/* Very faint digital grid helper */}
       <gridHelper
-        args={[10, 12, "rgba(0, 240, 255, 0.2)", "rgba(255,255,255,0.015)"]}
+        args={[10, 10, "rgba(0, 240, 255, 0.05)", "rgba(255,255,255,0.005)"]}
         position={[0, -2.2, 0]}
       />
       <Particles />
-      <FloatingShapes />
 
-      <Float speed={2} rotationIntensity={1.2} floatIntensity={1.0}>
-        {/* Glowing holographic developer core */}
-        <mesh>
-          <sphereGeometry args={[0.55, 32, 32]} />
-          <meshBasicMaterial color="#00f0ff" transparent opacity={0.65} />
-        </mesh>
-        <pointLight distance={3} intensity={1.5} color="#00f0ff" />
-        <OuterCore />
-        <NeonRing />
-      </Float>
+      {/* Main Holographic Avatar image core */}
+      <HolographicAvatar />
 
       {techNodes.map((node, idx) => (
         <OrbitingNode
           key={idx}
           name={node.name}
+          icon={node.icon}
+          expLevel={node.expLevel}
+          projects={node.projects}
           radius={node.radius}
           speed={node.speed}
           phase={node.phase}
