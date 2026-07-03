@@ -102,7 +102,7 @@ export default function Home() {
     if (isScrolling.current) return;
 
     if (e.deltaY > 15) {
-      if (activeSlide < 2) {
+      if (activeSlide < 3) {
         isScrolling.current = true;
         setActiveSlide((prev) => prev + 1);
         setTimeout(() => {
@@ -140,7 +140,7 @@ export default function Home() {
     if (isScrolling.current) return;
 
     if (diff > 50) {
-      if (activeSlide < 2) {
+      if (activeSlide < 3) {
         isScrolling.current = true;
         setActiveSlide((prev) => prev + 1);
         setTimeout(() => {
@@ -368,10 +368,10 @@ export default function Home() {
         ]);
         break;
       case "skills":
-        openApp("skills");
+        setActiveSlide(3);
         setTerminalLogs((prev) => [
           ...prev,
-          { text: "Opening Skills Galaxy...", type: "system" },
+          { text: "Scrolling to skills galaxy...", type: "system" },
         ]);
         break;
       case "experience":
@@ -478,10 +478,15 @@ export default function Home() {
             ...prev,
             { text: "Scrolling to profile workspace...", type: "system" },
           ]);
+        } else if (arg === "skills") {
+          setActiveSlide(3);
+          setTerminalLogs((prev) => [
+            ...prev,
+            { text: "Scrolling to skills galaxy...", type: "system" },
+          ]);
         } else if (
           arg === "terminal" ||
           arg === "projects" ||
-          arg === "skills" ||
           arg === "experience" ||
           arg === "contact" ||
           arg === "ai"
@@ -541,7 +546,7 @@ export default function Home() {
       label: "Open Skills Matrix",
       category: "Applications",
       shortcut: "⌥S",
-      action: () => openApp("skills"),
+      action: () => setActiveSlide(3),
     },
     {
       id: "exp",
@@ -611,8 +616,8 @@ export default function Home() {
     {
       id: "skills",
       label: "Skills Galaxy",
-      isOpen: openWindows.skills,
-      onClick: openApp,
+      isOpen: false,
+      onClick: () => setActiveSlide(3),
       icon: (
         <svg
           width="24"
@@ -755,10 +760,10 @@ export default function Home() {
           position: "absolute",
           top: 0,
           left: 0,
-          width: "300vw",
+          width: "400vw",
           height: "100vh",
           display: "flex",
-          transform: `translateX(-${activeSlide * 33.333}%)`,
+          transform: `translateX(-${activeSlide * 25}%)`,
           transition: "transform 0.85s cubic-bezier(0.25, 1, 0.5, 1)",
           zIndex: 2,
         }}
@@ -814,6 +819,24 @@ export default function Home() {
         >
           <div style={{ width: "100%", maxWidth: "1200px" }}>
             <JourneyTimeline />
+          </div>
+        </div>
+
+        {/* Slide 3: Skills Galaxy Workspace */}
+        <div
+          style={{
+            width: "100vw",
+            height: "100vh",
+            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxSizing: "border-box",
+            padding: "12vh 6vw 100px 6vw",
+          }}
+        >
+          <div style={{ width: "100%", maxWidth: "1200px" }}>
+            <SkillsGalaxy />
           </div>
         </div>
       </div>
@@ -997,6 +1020,8 @@ export default function Home() {
                     onClick={() => {
                       if (app.id === "about") {
                         setActiveSlide(0);
+                      } else if (app.id === "skills") {
+                        setActiveSlide(3);
                       } else {
                         openApp(app.id);
                       }
@@ -1118,20 +1143,6 @@ export default function Home() {
           <SmoothScroll style={{ padding: "12px" }}>
             <ProjectShowcase onSelectProject={setSelectedProject} />
           </SmoothScroll>
-        </MacWindow>
-
-        {/* App 4: Skills Matrix */}
-        <MacWindow
-          id="skills"
-          title="Skills Matrix — skills_galaxy.d3"
-          isOpen={openWindows.skills}
-          onClose={closeWindow}
-          onFocus={focusWindow}
-          zIndex={getZIndex("skills")}
-          defaultPosition={{ x: 220, y: 180 }}
-          defaultSize={{ width: 680, height: 420 }}
-        >
-          <SkillsGalaxy />
         </MacWindow>
 
         {/* App 5: Work Experience */}
@@ -1273,7 +1284,7 @@ export default function Home() {
             const appId = windowOrder[i];
             if (openWindows[appId]) return appId;
           }
-          return "about";
+          return activeSlide === 3 ? "skills" : "about";
         })()}
       />
 
