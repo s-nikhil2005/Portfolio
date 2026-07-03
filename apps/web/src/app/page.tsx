@@ -609,43 +609,6 @@ export default function Home() {
       ),
     },
     {
-      id: "projects",
-      label: "Projects Folder",
-      isOpen: openWindows.projects,
-      onClick: openApp,
-      icon: (
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-        </svg>
-      ),
-    },
-    {
-      id: "terminal",
-      label: "Terminal Shell",
-      isOpen: openWindows.terminal,
-      onClick: openApp,
-      icon: (
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <polyline points="4 17 10 11 4 5" />
-          <line x1="12" y1="19" x2="20" y2="19" />
-        </svg>
-      ),
-    },
-    {
       id: "skills",
       label: "Skills Galaxy",
       isOpen: openWindows.skills,
@@ -666,6 +629,24 @@ export default function Home() {
       ),
     },
     {
+      id: "projects",
+      label: "Projects Folder",
+      isOpen: openWindows.projects,
+      onClick: openApp,
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+        </svg>
+      ),
+    },
+    {
       id: "contact",
       label: "Send Mail",
       isOpen: openWindows.contact,
@@ -681,6 +662,25 @@ export default function Home() {
         >
           <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
           <polyline points="22,6 12,13 2,6" />
+        </svg>
+      ),
+    },
+    {
+      id: "terminal",
+      label: "Terminal Shell",
+      isOpen: openWindows.terminal,
+      onClick: openApp,
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <polyline points="4 17 10 11 4 5" />
+          <line x1="12" y1="19" x2="20" y2="19" />
         </svg>
       ),
     },
@@ -773,23 +773,10 @@ export default function Home() {
             justifyContent: "center",
             alignItems: "center",
             boxSizing: "border-box",
-            padding: "80px 6vw",
+            padding: "12vh 6vw 100px 6vw",
           }}
         >
-          <div
-            style={{
-              width: "100%",
-              maxWidth: "1000px",
-              height: "100%",
-              maxHeight: "650px",
-              background: "rgba(10, 11, 14, 0.4)",
-              border: "1px solid rgba(255, 255, 255, 0.06)",
-              borderRadius: "20px",
-              backdropFilter: "blur(20px)",
-              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.5)",
-              overflow: "hidden",
-            }}
-          >
+          <div style={{ width: "100%", maxWidth: "1200px" }}>
             <ProfileOverview onDownloadResume={handleDownloadResume} />
           </div>
         </div>
@@ -804,23 +791,10 @@ export default function Home() {
             justifyContent: "center",
             alignItems: "center",
             boxSizing: "border-box",
-            padding: "80px 6vw",
+            padding: "12vh 6vw 100px 6vw",
           }}
         >
-          <div
-            style={{
-              width: "100%",
-              maxWidth: "1000px",
-              height: "100%",
-              maxHeight: "650px",
-              background: "rgba(10, 11, 14, 0.4)",
-              border: "1px solid rgba(255, 255, 255, 0.06)",
-              borderRadius: "20px",
-              backdropFilter: "blur(20px)",
-              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.5)",
-              overflow: "hidden",
-            }}
-          >
+          <div style={{ width: "100%", maxWidth: "1200px" }}>
             <SystemInfo />
           </div>
         </div>
@@ -835,23 +809,10 @@ export default function Home() {
             justifyContent: "center",
             alignItems: "center",
             boxSizing: "border-box",
-            padding: "80px 6vw",
+            padding: "12vh 6vw 100px 6vw",
           }}
         >
-          <div
-            style={{
-              width: "100%",
-              maxWidth: "1000px",
-              height: "100%",
-              maxHeight: "650px",
-              background: "rgba(10, 11, 14, 0.4)",
-              border: "1px solid rgba(255, 255, 255, 0.06)",
-              borderRadius: "20px",
-              backdropFilter: "blur(20px)",
-              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.5)",
-              overflow: "hidden",
-            }}
-          >
+          <div style={{ width: "100%", maxWidth: "1200px" }}>
             <JourneyTimeline />
           </div>
         </div>
