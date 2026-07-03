@@ -361,17 +361,17 @@ export default function Home() {
         ]);
         break;
       case "projects":
-        openApp("projects");
+        setActiveSlide(4);
         setTerminalLogs((prev) => [
           ...prev,
-          { text: "Opening Projects Showcase...", type: "system" },
+          { text: "Scrolling to projects showcase...", type: "system" },
         ]);
         break;
       case "skills":
-        openApp("skills");
+        setActiveSlide(3);
         setTerminalLogs((prev) => [
           ...prev,
-          { text: "Opening Skills Galaxy...", type: "system" },
+          { text: "Scrolling to skills galaxy...", type: "system" },
         ]);
         break;
       case "experience":
@@ -382,10 +382,10 @@ export default function Home() {
         ]);
         break;
       case "contact":
-        openApp("contact");
+        setActiveSlide(5);
         setTerminalLogs((prev) => [
           ...prev,
-          { text: "Opening Secure Mail...", type: "system" },
+          { text: "Scrolling to secure mail panel...", type: "system" },
         ]);
         break;
       case "ai":
@@ -478,14 +478,25 @@ export default function Home() {
             ...prev,
             { text: "Scrolling to profile workspace...", type: "system" },
           ]);
-        } else if (
-          arg === "terminal" ||
-          arg === "projects" ||
-          arg === "skills" ||
-          arg === "experience" ||
-          arg === "contact" ||
-          arg === "ai"
-        ) {
+        } else if (arg === "skills") {
+          setActiveSlide(3);
+          setTerminalLogs((prev) => [
+            ...prev,
+            { text: "Scrolling to skills galaxy...", type: "system" },
+          ]);
+        } else if (arg === "projects") {
+          setActiveSlide(4);
+          setTerminalLogs((prev) => [
+            ...prev,
+            { text: "Scrolling to projects showcase...", type: "system" },
+          ]);
+        } else if (arg === "contact") {
+          setActiveSlide(5);
+          setTerminalLogs((prev) => [
+            ...prev,
+            { text: "Scrolling to secure mail panel...", type: "system" },
+          ]);
+        } else if (arg === "terminal" || arg === "experience" || arg === "ai") {
           openApp(arg);
           setTerminalLogs((prev) => [
             ...prev,
@@ -527,7 +538,7 @@ export default function Home() {
       label: "Open Projects showcase",
       category: "Applications",
       shortcut: "⌥P",
-      action: () => openApp("projects"),
+      action: () => setActiveSlide(4),
     },
     {
       id: "abt",
@@ -541,7 +552,7 @@ export default function Home() {
       label: "Open Skills Matrix",
       category: "Applications",
       shortcut: "⌥S",
-      action: () => openApp("skills"),
+      action: () => setActiveSlide(3),
     },
     {
       id: "exp",
@@ -555,7 +566,7 @@ export default function Home() {
       label: "Open Contact details Form",
       category: "Applications",
       shortcut: "⌥C",
-      action: () => openApp("contact"),
+      action: () => setActiveSlide(5),
     },
     {
       id: "ai-chat",
@@ -611,8 +622,8 @@ export default function Home() {
     {
       id: "skills",
       label: "Skills Galaxy",
-      isOpen: openWindows.skills,
-      onClick: openApp,
+      isOpen: false,
+      onClick: () => setActiveSlide(3),
       icon: (
         <svg
           width="24"
@@ -631,8 +642,8 @@ export default function Home() {
     {
       id: "projects",
       label: "Projects Folder",
-      isOpen: openWindows.projects,
-      onClick: openApp,
+      isOpen: false,
+      onClick: () => setActiveSlide(4),
       icon: (
         <svg
           width="24"
@@ -649,8 +660,8 @@ export default function Home() {
     {
       id: "contact",
       label: "Send Mail",
-      isOpen: openWindows.contact,
-      onClick: openApp,
+      isOpen: false,
+      onClick: () => setActiveSlide(5),
       icon: (
         <svg
           width="24"
@@ -755,10 +766,10 @@ export default function Home() {
           position: "absolute",
           top: 0,
           left: 0,
-          width: "300vw",
+          width: "500vw",
           height: "100vh",
           display: "flex",
-          transform: `translateX(-${Math.min(activeSlide, 2) * 33.333}%)`,
+          transform: `translateX(-${(activeSlide <= 2 ? activeSlide : activeSlide === 3 ? 2 : activeSlide - 1) * 20}%)`,
           transition: "transform 0.85s cubic-bezier(0.25, 1, 0.5, 1)",
           zIndex: 2,
         }}
@@ -823,6 +834,123 @@ export default function Home() {
             }}
           >
             <JourneyTimeline />
+          </div>
+        </div>
+
+        {/* Slide 4: Projects Showcase Workspace */}
+        <div
+          style={{
+            width: "100vw",
+            height: "100vh",
+            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxSizing: "border-box",
+            padding: "12vh 6vw 100px 6vw",
+          }}
+        >
+          <div style={{ width: "100%", maxWidth: "1200px", height: "80vh" }}>
+            <SmoothScroll style={{ padding: "12px", height: "100%" }}>
+              <ProjectShowcase onSelectProject={setSelectedProject} />
+            </SmoothScroll>
+          </div>
+        </div>
+
+        {/* Slide 5: Contact Secure Mail Workspace */}
+        <div
+          style={{
+            width: "100vw",
+            height: "100vh",
+            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxSizing: "border-box",
+            padding: "12vh 6vw 100px 6vw",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "600px",
+              padding: "40px",
+              background: "rgba(10, 11, 14, 0.45)",
+              backdropFilter: "blur(20px)",
+              border: "1px solid rgba(255, 255, 255, 0.06)",
+              borderRadius: "16px",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
+            }}
+          >
+            <h3
+              style={{
+                color: "var(--text-primary)",
+                fontSize: "1.8rem",
+                fontWeight: "700",
+                marginBottom: "12px",
+              }}
+            >
+              Send Secure Message
+            </h3>
+            <p
+              style={{
+                fontSize: "0.95rem",
+                color: "var(--text-secondary)",
+                marginBottom: "24px",
+                lineHeight: "1.5",
+              }}
+            >
+              Send an email directly through the portfolio API. I'll get back to
+              you shortly.
+            </p>
+            <form
+              onSubmit={handleContactSubmit}
+              style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+            >
+              <Input
+                placeholder="Your Name"
+                value={contactName}
+                onChange={(e) => setContactName(e.target.value)}
+                required
+              />
+              <Input
+                placeholder="Your Email"
+                type="email"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+                required
+              />
+              <Input
+                placeholder="Write your message..."
+                value={contactMessage}
+                onChange={(e) => setContactMessage(e.target.value)}
+                required
+              />
+              <Button
+                variant="primary"
+                type="submit"
+                disabled={contactStatus === "sending"}
+              >
+                {contactStatus === "sending"
+                  ? "Sending..."
+                  : "Send Transmission"}
+              </Button>
+              {contactResponse && (
+                <div
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.75rem",
+                    color:
+                      contactStatus === "error"
+                        ? "var(--color-danger)"
+                        : "var(--glow-green)",
+                    marginTop: "4px",
+                  }}
+                >
+                  &gt; {contactResponse}
+                </div>
+              )}
+            </form>
           </div>
         </div>
       </div>
@@ -1035,6 +1163,12 @@ export default function Home() {
                     onClick={() => {
                       if (app.id === "about") {
                         setActiveSlide(0);
+                      } else if (app.id === "skills") {
+                        setActiveSlide(3);
+                      } else if (app.id === "projects") {
+                        setActiveSlide(4);
+                      } else if (app.id === "contact") {
+                        setActiveSlide(5);
                       } else {
                         openApp(app.id);
                       }
@@ -1142,36 +1276,6 @@ export default function Home() {
           />
         </MacWindow>
 
-        {/* App 2: Projects Directory */}
-        <MacWindow
-          id="projects"
-          title="File Browser — Projects"
-          isOpen={openWindows.projects}
-          onClose={closeWindow}
-          onFocus={focusWindow}
-          zIndex={getZIndex("projects")}
-          defaultPosition={{ x: 180, y: 150 }}
-          defaultSize={{ width: 620, height: 420 }}
-        >
-          <SmoothScroll style={{ padding: "12px" }}>
-            <ProjectShowcase onSelectProject={setSelectedProject} />
-          </SmoothScroll>
-        </MacWindow>
-
-        {/* App 4: Skills Matrix */}
-        <MacWindow
-          id="skills"
-          title="Skills Matrix — skills_galaxy.d3"
-          isOpen={openWindows.skills}
-          onClose={closeWindow}
-          onFocus={focusWindow}
-          zIndex={getZIndex("skills")}
-          defaultPosition={{ x: 220, y: 180 }}
-          defaultSize={{ width: 680, height: 420 }}
-        >
-          <SkillsGalaxy />
-        </MacWindow>
-
         {/* App 5: Work Experience */}
         <MacWindow
           id="experience"
@@ -1211,81 +1315,6 @@ export default function Home() {
               <WorkExperience />
             </div>
           </SmoothScroll>
-        </MacWindow>
-
-        {/* App 6: Contact Panel */}
-        <MacWindow
-          id="contact"
-          title="Secure Mail — contact_nikhil.lnk"
-          isOpen={openWindows.contact}
-          onClose={closeWindow}
-          onFocus={focusWindow}
-          zIndex={getZIndex("contact")}
-          defaultPosition={{ x: 340, y: 140 }}
-          defaultSize={{ width: 500, height: 360 }}
-        >
-          <div style={{ padding: "24px" }}>
-            <h3 style={{ color: "var(--text-primary)", marginBottom: "12px" }}>
-              Send Secure Message
-            </h3>
-            <p
-              style={{
-                fontSize: "0.9rem",
-                color: "var(--text-secondary)",
-                marginBottom: "16px",
-              }}
-            >
-              Send an email directly through the portfolio API.
-            </p>
-            <form
-              onSubmit={handleContactSubmit}
-              style={{ display: "flex", flexDirection: "column", gap: "10px" }}
-            >
-              <Input
-                placeholder="Your Name"
-                value={contactName}
-                onChange={(e) => setContactName(e.target.value)}
-                required
-              />
-              <Input
-                placeholder="Your Email"
-                type="email"
-                value={contactEmail}
-                onChange={(e) => setContactEmail(e.target.value)}
-                required
-              />
-              <Input
-                placeholder="Write your message..."
-                value={contactMessage}
-                onChange={(e) => setContactMessage(e.target.value)}
-                required
-              />
-              <Button
-                variant="primary"
-                type="submit"
-                disabled={contactStatus === "sending"}
-              >
-                {contactStatus === "sending"
-                  ? "Sending..."
-                  : "Send Transmission"}
-              </Button>
-              {contactResponse && (
-                <div
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.75rem",
-                    color:
-                      contactStatus === "error"
-                        ? "var(--color-danger)"
-                        : "var(--glow-green)",
-                    marginTop: "4px",
-                  }}
-                >
-                  &gt; {contactResponse}
-                </div>
-              )}
-            </form>
-          </div>
         </MacWindow>
 
         {/* App 7: AI Assistant Panel */}
