@@ -787,9 +787,10 @@ export default function Home() {
             padding: "12vh 6vw 100px 6vw",
           }}
         >
-          <div style={{ width: "100%", maxWidth: "1200px" }}>
-            <ProfileOverview onDownloadResume={handleDownloadResume} />
-          </div>
+          <ProfileOverview
+            onDownloadResume={handleDownloadResume}
+            onEmailClick={() => setActiveSlide(5)}
+          />
         </div>
 
         {/* Slide 1: System Info Workspace */}
