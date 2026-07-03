@@ -87,7 +87,6 @@ export default function Home() {
 
   // Background Slide States
   const [activeSlide, setActiveSlide] = React.useState(0);
-  const [selectedSkillNodeId, setSelectedSkillNodeId] = React.useState("core");
   const isScrolling = React.useRef(false);
 
   const handleWheel = (e: React.WheelEvent) => {
@@ -369,10 +368,10 @@ export default function Home() {
         ]);
         break;
       case "skills":
-        setActiveSlide(3);
+        openApp("skills");
         setTerminalLogs((prev) => [
           ...prev,
-          { text: "Scrolling to skills galaxy...", type: "system" },
+          { text: "Opening Skills Galaxy...", type: "system" },
         ]);
         break;
       case "experience":
@@ -479,15 +478,10 @@ export default function Home() {
             ...prev,
             { text: "Scrolling to profile workspace...", type: "system" },
           ]);
-        } else if (arg === "skills") {
-          setActiveSlide(3);
-          setTerminalLogs((prev) => [
-            ...prev,
-            { text: "Scrolling to skills galaxy...", type: "system" },
-          ]);
         } else if (
           arg === "terminal" ||
           arg === "projects" ||
+          arg === "skills" ||
           arg === "experience" ||
           arg === "contact" ||
           arg === "ai"
@@ -547,7 +541,7 @@ export default function Home() {
       label: "Open Skills Matrix",
       category: "Applications",
       shortcut: "⌥S",
-      action: () => setActiveSlide(3),
+      action: () => openApp("skills"),
     },
     {
       id: "exp",
@@ -617,8 +611,8 @@ export default function Home() {
     {
       id: "skills",
       label: "Skills Galaxy",
-      isOpen: false,
-      onClick: () => setActiveSlide(3),
+      isOpen: openWindows.skills,
+      onClick: openApp,
       icon: (
         <svg
           width="24"
@@ -750,11 +744,7 @@ export default function Home() {
       />
 
       {/* 3D Experience Scene */}
-      <SceneCanvas
-        activeSlide={activeSlide}
-        selectedSkillNodeId={selectedSkillNodeId}
-        onSelectSkillNode={setSelectedSkillNodeId}
-      />
+      <SceneCanvas activeSlide={activeSlide} />
 
       {/* Sliding Background Workspace Panels */}
       <div
@@ -765,10 +755,10 @@ export default function Home() {
           position: "absolute",
           top: 0,
           left: 0,
-          width: "400vw",
+          width: "300vw",
           height: "100vh",
           display: "flex",
-          transform: `translateX(-${activeSlide * 25}%)`,
+          transform: `translateX(-${Math.min(activeSlide, 2) * 33.333}%)`,
           transition: "transform 0.85s cubic-bezier(0.25, 1, 0.5, 1)",
           zIndex: 2,
         }}
@@ -822,30 +812,47 @@ export default function Home() {
             padding: "12vh 6vw 100px 6vw",
           }}
         >
-          <div style={{ width: "100%", maxWidth: "1200px" }}>
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "1200px",
+              opacity: activeSlide === 3 ? 0 : 1,
+              transform: activeSlide === 3 ? "scale(1.08)" : "scale(1)",
+              transition:
+                "opacity 0.8s ease, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)",
+            }}
+          >
             <JourneyTimeline />
           </div>
         </div>
+      </div>
 
-        {/* Slide 3: Skills Galaxy Workspace */}
-        <div
-          style={{
-            width: "100vw",
-            height: "100vh",
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            boxSizing: "border-box",
-            padding: "12vh 6vw 100px 6vw",
-          }}
-        >
-          <div style={{ width: "100%", maxWidth: "1200px" }}>
-            <SkillsGalaxy
-              selectedNodeId={selectedSkillNodeId}
-              onSelectNode={setSelectedSkillNodeId}
-            />
-          </div>
+      {/* Slide 3: Skills Galaxy Custom Zoom Overlay */}
+      <div
+        onWheel={handleWheel}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          boxSizing: "border-box",
+          padding: "12vh 6vw 100px 6vw",
+          opacity: activeSlide === 3 ? 1 : 0,
+          transform: activeSlide === 3 ? "scale(1)" : "scale(0.92)",
+          pointerEvents: activeSlide === 3 ? "auto" : "none",
+          transition:
+            "opacity 0.85s ease, transform 0.85s cubic-bezier(0.25, 1, 0.5, 1)",
+          zIndex: activeSlide === 3 ? 3 : 0,
+        }}
+      >
+        <div style={{ width: "100%", maxWidth: "1200px" }}>
+          <SkillsGalaxy />
         </div>
       </div>
 
@@ -1028,8 +1035,6 @@ export default function Home() {
                     onClick={() => {
                       if (app.id === "about") {
                         setActiveSlide(0);
-                      } else if (app.id === "skills") {
-                        setActiveSlide(3);
                       } else {
                         openApp(app.id);
                       }
@@ -1151,6 +1156,20 @@ export default function Home() {
           <SmoothScroll style={{ padding: "12px" }}>
             <ProjectShowcase onSelectProject={setSelectedProject} />
           </SmoothScroll>
+        </MacWindow>
+
+        {/* App 4: Skills Matrix */}
+        <MacWindow
+          id="skills"
+          title="Skills Matrix — skills_galaxy.d3"
+          isOpen={openWindows.skills}
+          onClose={closeWindow}
+          onFocus={focusWindow}
+          zIndex={getZIndex("skills")}
+          defaultPosition={{ x: 220, y: 180 }}
+          defaultSize={{ width: 680, height: 420 }}
+        >
+          <SkillsGalaxy />
         </MacWindow>
 
         {/* App 5: Work Experience */}
@@ -1292,7 +1311,7 @@ export default function Home() {
             const appId = windowOrder[i];
             if (openWindows[appId]) return appId;
           }
-          return activeSlide === 3 ? "skills" : "about";
+          return "about";
         })()}
       />
 

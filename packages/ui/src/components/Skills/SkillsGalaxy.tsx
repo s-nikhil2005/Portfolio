@@ -1,7 +1,7 @@
 import * as React from "react";
 import styles from "./SkillsGalaxy.module.css";
 
-export interface SkillNode {
+interface SkillNode {
   id: string;
   label: string;
   x: number;
@@ -16,7 +16,7 @@ export interface SkillNode {
   };
 }
 
-export const skillsNodes: SkillNode[] = [
+const skillsNodes: SkillNode[] = [
   // Core Node
   {
     id: "core",
@@ -244,115 +244,132 @@ export const skillsNodes: SkillNode[] = [
   },
 ];
 
-export const SkillsGalaxy = ({
-  selectedNodeId,
-  onSelectNode,
-}: {
-  selectedNodeId: string;
-  onSelectNode: (id: string) => void;
-}) => {
-  const selectedNode =
-    skillsNodes.find((n) => n.id === selectedNodeId) || skillsNodes[0];
+export const SkillsGalaxy = () => {
+  const [selectedNode, setSelectedNode] = React.useState<SkillNode>(
+    skillsNodes[0],
+  );
+  const [hoveredNode, setHoveredNode] = React.useState<string | null>(null);
+
+  // Helper to draw connection lines between nodes
+  const getParentCoordinates = (node: SkillNode) => {
+    if (!node.parent) return null;
+    const parentNode = skillsNodes.find((n) => n.id === node.parent);
+    if (!parentNode) return null;
+    return { x1: node.x, y1: node.y, x2: parentNode.x, y2: parentNode.y };
+  };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        height: "100%",
-        width: "100%",
-        gap: "40px",
-        userSelect: "none",
-        fontFamily: "var(--font-sans)",
-      }}
-    >
-      {/* Floating Left Instruction Panel */}
-      <div
-        style={{
-          flex: 1.2,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          gap: "16px",
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: "0.72rem",
-            color: "var(--glow-cyan)",
-            letterSpacing: "2px",
-          }}
-        >
-          // SKILLS_GALAXY_EXPLORER
-        </span>
-        <h3
-          style={{
-            fontSize: "2.2rem",
-            fontWeight: "800",
-            color: "#fff",
-            margin: 0,
-            lineHeight: "1.1",
-            fontFamily: "var(--font-sans)",
-          }}
-        >
-          Skills Galaxy
-        </h3>
-        <p
-          style={{
-            fontSize: "0.95rem",
-            color: "var(--text-secondary)",
-            margin: 0,
-            lineHeight: "1.6",
-          }}
-        >
-          An interactive 3D network node map of core tech stacks, languages,
-          frameworks, and infrastructure environments.
-        </p>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-            fontSize: "0.85rem",
-            color: "var(--text-secondary)",
-            fontFamily: "var(--font-mono)",
-            background: "rgba(255, 255, 255, 0.02)",
-            border: "1px solid rgba(255, 255, 255, 0.05)",
-            padding: "16px",
-            borderRadius: "12px",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ color: "var(--glow-cyan)" }}>●</span> Drag space to
-            rotate galaxy
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ color: "var(--glow-green)" }}>●</span> Scroll to zoom
-            in/out
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ color: "#ff9500" }}>●</span> Click any 3D node to
-            inspect logs
-          </div>
-        </div>
+    <div className={styles.container}>
+      {/* SVG Canvas for the Graph Connections */}
+      <div className={styles.canvasWrapper}>
+        <svg className={styles.svgCanvas} viewBox="0 0 500 340">
+          <defs>
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+
+          {/* Connection Lines */}
+          {skillsNodes.map((node) => {
+            const line = getParentCoordinates(node);
+            if (!line) return null;
+
+            const isHighlit =
+              hoveredNode === node.id ||
+              hoveredNode === node.parent ||
+              selectedNode.id === node.id ||
+              selectedNode.id === node.parent;
+
+            return (
+              <line
+                key={`line-${node.id}`}
+                x1={line.x1}
+                y1={line.y1}
+                x2={line.x2}
+                y2={line.y2}
+                className={`${styles.connectionLine} ${isHighlit ? styles.glowingLine : ""}`}
+                style={{ stroke: node.color } as React.CSSProperties}
+              />
+            );
+          })}
+
+          {/* SVG Nodes */}
+          {skillsNodes.map((node) => {
+            const isCore = node.category === "core";
+            const isCat = node.category === "category";
+            const radius = isCore ? 20 : isCat ? 12 : 7;
+            const isSelected = selectedNode.id === node.id;
+            const isHovered = hoveredNode === node.id;
+
+            return (
+              <g
+                key={node.id}
+                className={styles.nodeGroup}
+                onClick={() => setSelectedNode(node)}
+                onMouseEnter={() => setHoveredNode(node.id)}
+                onMouseLeave={() => setHoveredNode(null)}
+                style={{ cursor: "pointer" }}
+              >
+                {/* Outer Glow Ring */}
+                {(isSelected || isHovered) && (
+                  <circle
+                    cx={node.x}
+                    cy={node.y}
+                    r={radius + (isCore ? 6 : 4)}
+                    fill="none"
+                    stroke={node.color}
+                    strokeWidth="1.5"
+                    filter="url(#glow)"
+                    style={{ opacity: 0.8 }}
+                  />
+                )}
+
+                {/* Node Circle */}
+                <circle
+                  cx={node.x}
+                  cy={node.y}
+                  r={radius}
+                  fill="var(--bg-obsidian)"
+                  stroke={node.color}
+                  strokeWidth={isCore ? 3 : isSelected ? 2 : 1.5}
+                />
+
+                {/* Core Inner Dot */}
+                {isCore && (
+                  <circle
+                    cx={node.x}
+                    cy={node.y}
+                    r="8"
+                    fill="var(--glow-cyan)"
+                    filter="url(#glow)"
+                  />
+                )}
+
+                {/* Text Labels */}
+                <text
+                  x={node.x}
+                  y={node.y + (isCore ? 32 : isCat ? 24 : 18)}
+                  textAnchor="middle"
+                  className={`${styles.label} ${isCore ? styles.coreLabel : isCat ? styles.catLabel : ""}`}
+                  style={{
+                    fill:
+                      isSelected || isHovered
+                        ? "#ffffff"
+                        : "var(--text-secondary)",
+                    fontFamily: "var(--font-mono)",
+                  }}
+                >
+                  {node.label}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
       </div>
 
       {/* Info Sidebar Card details panel */}
-      <div
-        style={{
-          flex: 1,
-          padding: "30px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          gap: "20px",
-          background: "rgba(10, 11, 14, 0.45)",
-          backdropFilter: "blur(20px)",
-          border: "1px solid rgba(255, 255, 255, 0.06)",
-          borderRadius: "16px",
-          boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
-        }}
-      >
+      <div className={styles.sidebar}>
         <div className={styles.metaRow}>
           <span
             className={styles.metaBadge}
@@ -366,26 +383,12 @@ export const SkillsGalaxy = ({
           <span className={styles.metaTime}>{selectedNode.details.exp}</span>
         </div>
         <h4
-          style={{
-            color: selectedNode.color,
-            fontSize: "1.8rem",
-            fontWeight: "700",
-            margin: 0,
-            fontFamily: "var(--font-mono)",
-          }}
+          className={styles.sidebarTitle}
+          style={{ color: selectedNode.color }}
         >
           {selectedNode.label}
         </h4>
-        <p
-          style={{
-            fontSize: "0.95rem",
-            color: "var(--text-secondary)",
-            margin: 0,
-            lineHeight: "1.6",
-          }}
-        >
-          {selectedNode.details.description}
-        </p>
+        <p className={styles.sidebarDesc}>{selectedNode.details.description}</p>
 
         <div className={styles.helperText}>
           &gt; select_node --target {selectedNode.id}
