@@ -87,6 +87,7 @@ export default function Home() {
 
   // Background Slide States
   const [activeSlide, setActiveSlide] = React.useState(0);
+  const [selectedSkillNodeId, setSelectedSkillNodeId] = React.useState("core");
   const isScrolling = React.useRef(false);
 
   const handleWheel = (e: React.WheelEvent) => {
@@ -749,7 +750,11 @@ export default function Home() {
       />
 
       {/* 3D Experience Scene */}
-      <SceneCanvas activeSlide={activeSlide} />
+      <SceneCanvas
+        activeSlide={activeSlide}
+        selectedSkillNodeId={selectedSkillNodeId}
+        onSelectSkillNode={setSelectedSkillNodeId}
+      />
 
       {/* Sliding Background Workspace Panels */}
       <div
@@ -836,7 +841,10 @@ export default function Home() {
           }}
         >
           <div style={{ width: "100%", maxWidth: "1200px" }}>
-            <SkillsGalaxy />
+            <SkillsGalaxy
+              selectedNodeId={selectedSkillNodeId}
+              onSelectNode={setSelectedSkillNodeId}
+            />
           </div>
         </div>
       </div>
