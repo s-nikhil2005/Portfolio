@@ -590,10 +590,10 @@ export default function Home() {
   // SVG Icons for the Dock launcher
   const dockItems = [
     {
-      id: "terminal",
-      label: "Terminal Shell",
-      isOpen: openWindows.terminal,
-      onClick: openApp,
+      id: "about",
+      label: "Profile.app",
+      isOpen: false,
+      onClick: () => setActiveSlide(0),
       icon: (
         <svg
           width="24"
@@ -603,8 +603,8 @@ export default function Home() {
           stroke="currentColor"
           strokeWidth="2"
         >
-          <polyline points="4 17 10 11 4 5" />
-          <line x1="12" y1="19" x2="20" y2="19" />
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
         </svg>
       ),
     },
@@ -627,10 +627,10 @@ export default function Home() {
       ),
     },
     {
-      id: "about",
-      label: "Profile.app",
-      isOpen: false,
-      onClick: () => setActiveSlide(0),
+      id: "terminal",
+      label: "Terminal Shell",
+      isOpen: openWindows.terminal,
+      onClick: openApp,
       icon: (
         <svg
           width="24"
@@ -640,8 +640,8 @@ export default function Home() {
           stroke="currentColor"
           strokeWidth="2"
         >
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
+          <polyline points="4 17 10 11 4 5" />
+          <line x1="12" y1="19" x2="20" y2="19" />
         </svg>
       ),
     },
@@ -1307,7 +1307,13 @@ export default function Home() {
       {/* Dock System Launcher */}
       <Dock
         items={dockItems}
-        activeAppId={windowOrder[windowOrder.length - 1]}
+        activeAppId={(() => {
+          for (let i = windowOrder.length - 1; i >= 0; i--) {
+            const appId = windowOrder[i];
+            if (openWindows[appId]) return appId;
+          }
+          return "about";
+        })()}
       />
 
       {/* Global Command Palette */}
