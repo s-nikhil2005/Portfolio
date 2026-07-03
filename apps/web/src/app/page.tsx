@@ -102,7 +102,7 @@ export default function Home() {
     if (isScrolling.current) return;
 
     if (e.deltaY > 15) {
-      if (activeSlide < 3) {
+      if (activeSlide < 5) {
         isScrolling.current = true;
         setActiveSlide((prev) => prev + 1);
         setTimeout(() => {
@@ -140,7 +140,7 @@ export default function Home() {
     if (isScrolling.current) return;
 
     if (diff > 50) {
-      if (activeSlide < 3) {
+      if (activeSlide < 5) {
         isScrolling.current = true;
         setActiveSlide((prev) => prev + 1);
         setTimeout(() => {
@@ -1340,7 +1340,10 @@ export default function Home() {
             const appId = windowOrder[i];
             if (openWindows[appId]) return appId;
           }
-          return activeSlide === 3 ? "skills" : "about";
+          if (activeSlide === 3) return "skills";
+          if (activeSlide === 4) return "projects";
+          if (activeSlide === 5) return "contact";
+          return "about";
         })()}
       />
 
