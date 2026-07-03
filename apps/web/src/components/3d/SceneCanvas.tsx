@@ -30,7 +30,56 @@ const InteractiveGroup = ({ children }: { children: React.ReactNode }) => {
   return <group ref={ref}>{children}</group>;
 };
 
-export const SceneCanvas = () => {
+const CameraController = ({ activeSlide }: { activeSlide: number }) => {
+  useFrame((state) => {
+    let targetX = 0;
+    let targetY = 1.8;
+    let targetZ = 6.5;
+
+    switch (activeSlide) {
+      case 0:
+        targetX = 0;
+        targetY = 1.8;
+        targetZ = 6.5;
+        break;
+      case 1:
+        targetX = 1.8;
+        targetY = 1.6;
+        targetZ = 7.0;
+        break;
+      case 2:
+        targetX = -1.8;
+        targetY = 2.0;
+        targetZ = 6.8;
+        break;
+      case 3:
+        targetX = 0;
+        targetY = -1.0;
+        targetZ = 8.0;
+        break;
+    }
+
+    state.camera.position.x = THREE.MathUtils.lerp(
+      state.camera.position.x,
+      targetX,
+      0.05,
+    );
+    state.camera.position.y = THREE.MathUtils.lerp(
+      state.camera.position.y,
+      targetY,
+      0.05,
+    );
+    state.camera.position.z = THREE.MathUtils.lerp(
+      state.camera.position.z,
+      targetZ,
+      0.05,
+    );
+  });
+
+  return null;
+};
+
+export const SceneCanvas = ({ activeSlide }: { activeSlide: number }) => {
   return (
     <div
       style={{
@@ -72,6 +121,8 @@ export const SceneCanvas = () => {
           <FloatingLaptop />
           <OrbitingTechIcons />
         </InteractiveGroup>
+
+        <CameraController activeSlide={activeSlide} />
 
         {/* Recruiter-friendly Camera Controls */}
         <OrbitControls

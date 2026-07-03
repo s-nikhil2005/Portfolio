@@ -11,3 +11,7 @@ export * from "./components/Experience/WorkExperience";
 export * from "./components/Projects/ProjectShowcase";
 export * from "./components/AIAssistant/AIAssistantWindow";
 export * from "./components/Profile/ProfileApp";
+export * from "./components/Profile/ProfileOverview";
+export * from "./components/Profile/SystemInfo";
+export * from "./components/Profile/JourneyTimeline";
+export * from "./components/Profile/TechStack";
