@@ -17,6 +17,7 @@ import {
   CaseStudyModal,
   AIAssistantWindow,
   type ProjectData,
+  ProfileApp,
 } from "@portfolio/ui";
 import { SceneCanvas } from "@/components/3d/SceneCanvas";
 import { CursorGlow } from "@/components/animation/CursorGlow";
@@ -240,7 +241,7 @@ export default function Home() {
         setTerminalLogs((prev) => [
           ...prev,
           {
-            text: "Available commands:\n  help        Display this help menu\n  whoami      Information about Nikhil\n  about       Open About Me window\n  projects    Open Projects directory\n  skills      Open Skills Galaxy\n  experience  Open Timeline window\n  contact     Open Secure Mail window\n  ai          Open AI Chat Assistant window\n  resume      Download Nikhil's resume\n  github      Navigate to Github code repo\n  linkedin    Navigate to LinkedIn profile\n  theme       Toggle theme color schema\n  music       Emit procedural sound chime\n  ls          List files/apps on this terminal\n  pwd         Print working directory\n  clear       Clear console log history",
+            text: "Available commands:\n  help        Display this help menu\n  whoami      Information about Nikhil\n  profile     Open Profile.app window\n  projects    Open Projects directory\n  skills      Open Skills Galaxy\n  experience  Open Timeline window\n  contact     Open Secure Mail window\n  ai          Open AI Chat Assistant window\n  resume      Download Nikhil's resume\n  github      Navigate to Github code repo\n  linkedin    Navigate to LinkedIn profile\n  theme       Toggle theme color schema\n  music       Emit procedural sound chime\n  ls          List files/apps on this terminal\n  pwd         Print working directory\n  clear       Clear console log history",
             type: "output",
           },
         ]);
@@ -258,7 +259,7 @@ export default function Home() {
         setTerminalLogs((prev) => [
           ...prev,
           {
-            text: "Files & Applications:\n  about_me.txt\n  contact_nikhil.lnk\n  experience_timeline.sys\n  projects.pkg\n  skills_galaxy.d3\n  ai_assistant.app\n  terminal.app",
+            text: "Files & Applications:\n  profile.app\n  contact_nikhil.lnk\n  experience_timeline.sys\n  projects.pkg\n  skills_galaxy.d3\n  ai_assistant.app\n  terminal.app",
             type: "output",
           },
         ]);
@@ -276,10 +277,11 @@ export default function Home() {
         setTerminalLogs([]);
         break;
       case "about":
+      case "profile":
         openApp("about");
         setTerminalLogs((prev) => [
           ...prev,
-          { text: "Opening About Me...", type: "system" },
+          { text: "Opening Profile.app...", type: "system" },
         ]);
         break;
       case "projects":
@@ -393,17 +395,18 @@ export default function Home() {
         }
         break;
       }
-      case "open":
+      case "open": {
+        const targetApp = arg === "profile" ? "about" : arg;
         if (
-          arg === "terminal" ||
-          arg === "projects" ||
-          arg === "about" ||
-          arg === "skills" ||
-          arg === "experience" ||
-          arg === "contact" ||
-          arg === "ai"
+          targetApp === "terminal" ||
+          targetApp === "projects" ||
+          targetApp === "about" ||
+          targetApp === "skills" ||
+          targetApp === "experience" ||
+          targetApp === "contact" ||
+          targetApp === "ai"
         ) {
-          openApp(arg);
+          openApp(targetApp);
           setTerminalLogs((prev) => [
             ...prev,
             { text: `Opening application: ${arg}...`, type: "system" },
@@ -412,12 +415,13 @@ export default function Home() {
           setTerminalLogs((prev) => [
             ...prev,
             {
-              text: `Error: App '${arg}' not found. Try: terminal, projects, about, skills, experience, contact, ai.`,
+              text: `Error: App '${arg}' not found. Try: terminal, projects, profile, skills, experience, contact, ai.`,
               type: "error",
             },
           ]);
         }
         break;
+      }
       default:
         setTerminalLogs((prev) => [
           ...prev,
@@ -447,7 +451,7 @@ export default function Home() {
     },
     {
       id: "abt",
-      label: "Open About Me info",
+      label: "Open Profile.app",
       category: "Applications",
       shortcut: "⌥A",
       action: () => openApp("about"),
@@ -544,7 +548,7 @@ export default function Home() {
     },
     {
       id: "about",
-      label: "About Me profile",
+      label: "Profile.app",
       isOpen: openWindows.about,
       onClick: openApp,
       icon: (
@@ -751,7 +755,7 @@ export default function Home() {
             size="md"
             onClick={() => openApp("about")}
           >
-            About.txt
+            Profile.app
           </Button>
           <Button
             variant="terminal"
@@ -1003,7 +1007,7 @@ export default function Home() {
                 {[
                   { id: "terminal", label: "Terminal Shell" },
                   { id: "projects", label: "Projects Directory" },
-                  { id: "about", label: "About.txt Editor" },
+                  { id: "about", label: "Profile.app" },
                   { id: "skills", label: "Skills Galaxy" },
                   { id: "experience", label: "Timeline.sys" },
                   { id: "contact", label: "Secure Mail" },
@@ -1133,84 +1137,18 @@ export default function Home() {
           </SmoothScroll>
         </MacWindow>
 
-        {/* App 3: About Me Bio */}
+        {/* App 3: Profile.app */}
         <MacWindow
           id="about"
-          title="Text Editor — about_me.txt"
+          title="Profile.app"
           isOpen={openWindows.about}
           onClose={closeWindow}
           onFocus={focusWindow}
           zIndex={getZIndex("about")}
-          defaultPosition={{ x: 260, y: 120 }}
-          defaultSize={{ width: 560, height: 420 }}
+          defaultPosition={{ x: 120, y: 60 }}
+          defaultSize={{ width: 960, height: 600 }}
         >
-          <SmoothScroll style={{ padding: "24px" }}>
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "24px" }}
-            >
-              <div>
-                <p
-                  style={{
-                    color: "var(--glow-green)",
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.85rem",
-                    marginBottom: "4px",
-                  }}
-                >
-                  // ABOUT ME
-                </p>
-                <h3
-                  style={{
-                    color: "var(--text-primary)",
-                    fontSize: "1.3rem",
-                    fontWeight: "700",
-                  }}
-                >
-                  Nikhil Singh
-                </h3>
-                <p
-                  style={{
-                    color: "var(--text-secondary)",
-                    fontSize: "0.85rem",
-                    marginTop: "2px",
-                  }}
-                >
-                  Full-Stack Engineer building immersive 3D web systems.
-                </p>
-              </div>
-
-              {/* Scroll-animated vertical timeline */}
-              <Timeline items={aboutTimelineData} />
-
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  borderTop: "1px solid rgba(255,255,255,0.05)",
-                  paddingTop: "16px",
-                  marginTop: "8px",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: "0.75rem",
-                    color: "var(--text-muted)",
-                    fontFamily: "var(--font-mono)",
-                  }}
-                >
-                  Total: 5 entries found.
-                </span>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={handleDownloadResume}
-                >
-                  Download Resume
-                </Button>
-              </div>
-            </div>
-          </SmoothScroll>
+          <ProfileApp onDownloadResume={handleDownloadResume} />
         </MacWindow>
 
         {/* App 4: Skills Matrix */}
