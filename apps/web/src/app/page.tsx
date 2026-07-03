@@ -852,7 +852,7 @@ export default function Home() {
         }}
       >
         <div style={{ width: "100%", maxWidth: "1200px" }}>
-          <SkillsGalaxy />
+          <SkillsGalaxy isActive={activeSlide === 3} />
         </div>
       </div>
 
@@ -1311,7 +1311,7 @@ export default function Home() {
             const appId = windowOrder[i];
             if (openWindows[appId]) return appId;
           }
-          return "about";
+          return activeSlide === 3 ? "skills" : "about";
         })()}
       />
 

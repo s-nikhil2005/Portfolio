@@ -244,7 +244,7 @@ const skillsNodes: SkillNode[] = [
   },
 ];
 
-export const SkillsGalaxy = () => {
+export const SkillsGalaxy = ({ isActive = false }: { isActive?: boolean }) => {
   const [selectedNode, setSelectedNode] = React.useState<SkillNode>(
     skillsNodes[0],
   );
@@ -281,6 +281,9 @@ export const SkillsGalaxy = () => {
               selectedNode.id === node.id ||
               selectedNode.id === node.parent;
 
+            const isCore = node.category === "core";
+            const isCat = node.category === "category";
+
             return (
               <line
                 key={`line-${node.id}`}
@@ -288,8 +291,13 @@ export const SkillsGalaxy = () => {
                 y1={line.y1}
                 x2={line.x2}
                 y2={line.y2}
-                className={`${styles.connectionLine} ${isHighlit ? styles.glowingLine : ""}`}
-                style={{ stroke: node.color } as React.CSSProperties}
+                className={`${styles.connectionLine} ${isHighlit ? styles.glowingLine : ""} ${isActive ? styles.growLine : ""}`}
+                style={
+                  {
+                    stroke: node.color,
+                    animationDelay: isCore ? "0s" : isCat ? "0.15s" : "0.35s",
+                  } as React.CSSProperties
+                }
               />
             );
           })}
@@ -305,11 +313,17 @@ export const SkillsGalaxy = () => {
             return (
               <g
                 key={node.id}
-                className={styles.nodeGroup}
+                className={`${styles.nodeGroup} ${isActive ? styles.bloomNode : ""}`}
                 onClick={() => setSelectedNode(node)}
                 onMouseEnter={() => setHoveredNode(node.id)}
                 onMouseLeave={() => setHoveredNode(null)}
-                style={{ cursor: "pointer" }}
+                style={
+                  {
+                    cursor: "pointer",
+                    transformOrigin: `${node.x}px ${node.y}px`,
+                    animationDelay: isCore ? "0s" : isCat ? "0.2s" : "0.45s",
+                  } as React.CSSProperties
+                }
               >
                 {/* Outer Glow Ring */}
                 {(isSelected || isHovered) && (
