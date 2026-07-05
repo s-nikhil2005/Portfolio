@@ -57,6 +57,16 @@ const CameraController = ({ activeSlide }: { activeSlide: number }) => {
         targetY = -1.0;
         targetZ = 8.0;
         break;
+      case 4:
+        targetX = -2.2;
+        targetY = 1.2;
+        targetZ = 7.5;
+        break;
+      case 5:
+        targetX = 2.2;
+        targetY = 1.4;
+        targetZ = 7.2;
+        break;
     }
 
     state.camera.position.x = THREE.MathUtils.lerp(

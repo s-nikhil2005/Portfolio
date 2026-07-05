@@ -17,7 +17,7 @@ export interface ProjectData {
   performance: string;
 }
 
-const projectsList: ProjectData[] = [
+export const projectsList: ProjectData[] = [
   {
     id: "voya",
     pkgName: "Voya_App.pkg",

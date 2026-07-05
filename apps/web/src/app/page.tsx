@@ -17,6 +17,7 @@ import {
   CaseStudyModal,
   AIAssistantWindow,
   type ProjectData,
+  projectsList,
   SystemInfo,
   JourneyTimeline,
   TechStack,
@@ -26,6 +27,7 @@ import { SceneCanvas } from "@/components/3d/SceneCanvas";
 import { CursorGlow } from "@/components/animation/CursorGlow";
 import { Magnetic } from "@/components/animation/Magnetic";
 import { SmoothScroll } from "@/components/animation/SmoothScroll";
+import { MobileOS } from "@/components/MobileOS";
 
 const aboutTimelineData: TimelineItem[] = [
   {
@@ -85,11 +87,34 @@ export default function Home() {
   const [selectedProject, setSelectedProject] =
     React.useState<ProjectData | null>(null);
 
-  // Background Slide States
+  // Device & Background Slide States
+  const [isMobile, setIsMobile] = React.useState(false);
+  const [isTransitioning, setIsTransitioning] = React.useState(false);
   const [activeSlide, setActiveSlide] = React.useState(0);
   const isScrolling = React.useRef(false);
 
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const goToSlide = (idx: number) => {
+    if (idx < 0 || idx > 5) return;
+    setActiveSlide(idx);
+    setIsTransitioning(true);
+    isScrolling.current = true;
+    setTimeout(() => {
+      setIsTransitioning(false);
+      isScrolling.current = false;
+    }, 850);
+  };
+
   const handleWheel = (e: React.WheelEvent) => {
+    if (isMobile) return;
     const target = e.target as HTMLElement;
     // Don't slide if scroll occurs inside any draggable window
     if (
@@ -103,29 +128,23 @@ export default function Home() {
 
     if (e.deltaY > 15) {
       if (activeSlide < 5) {
-        isScrolling.current = true;
-        setActiveSlide((prev) => prev + 1);
-        setTimeout(() => {
-          isScrolling.current = false;
-        }, 850);
+        goToSlide(activeSlide + 1);
       }
     } else if (e.deltaY < -15) {
       if (activeSlide > 0) {
-        isScrolling.current = true;
-        setActiveSlide((prev) => prev - 1);
-        setTimeout(() => {
-          isScrolling.current = false;
-        }, 850);
+        goToSlide(activeSlide - 1);
       }
     }
   };
 
   const touchStart = React.useRef(0);
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (isMobile) return;
     touchStart.current = e.touches[0].clientY;
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
+    if (isMobile) return;
     const target = e.target as HTMLElement;
     if (
       target.closest(".mac-window-content") ||
@@ -141,19 +160,11 @@ export default function Home() {
 
     if (diff > 50) {
       if (activeSlide < 5) {
-        isScrolling.current = true;
-        setActiveSlide((prev) => prev + 1);
-        setTimeout(() => {
-          isScrolling.current = false;
-        }, 850);
+        goToSlide(activeSlide + 1);
       }
     } else if (diff < -50) {
       if (activeSlide > 0) {
-        isScrolling.current = true;
-        setActiveSlide((prev) => prev - 1);
-        setTimeout(() => {
-          isScrolling.current = false;
-        }, 850);
+        goToSlide(activeSlide - 1);
       }
     }
   };
@@ -352,37 +363,43 @@ export default function Home() {
       case "clear":
         setTerminalLogs([]);
         break;
-      case "about":
       case "profile":
-        setActiveSlide(0);
+        goToSlide(0);
         setTerminalLogs((prev) => [
           ...prev,
           { text: "Scrolling to profile workspace...", type: "system" },
         ]);
         break;
+      case "about":
+        goToSlide(1);
+        setTerminalLogs((prev) => [
+          ...prev,
+          { text: "Scrolling to about dashboard workspace...", type: "system" },
+        ]);
+        break;
       case "projects":
-        setActiveSlide(4);
+        goToSlide(2);
         setTerminalLogs((prev) => [
           ...prev,
           { text: "Scrolling to projects showcase...", type: "system" },
         ]);
         break;
       case "skills":
-        setActiveSlide(3);
+        goToSlide(3);
         setTerminalLogs((prev) => [
           ...prev,
           { text: "Scrolling to skills galaxy...", type: "system" },
         ]);
         break;
       case "experience":
-        openApp("experience");
+        goToSlide(4);
         setTerminalLogs((prev) => [
           ...prev,
-          { text: "Opening Timeline...", type: "system" },
+          { text: "Scrolling to employment timeline...", type: "system" },
         ]);
         break;
       case "contact":
-        setActiveSlide(5);
+        goToSlide(5);
         setTerminalLogs((prev) => [
           ...prev,
           { text: "Scrolling to secure mail panel...", type: "system" },
@@ -472,26 +489,41 @@ export default function Home() {
         break;
       }
       case "open": {
-        if (arg === "profile" || arg === "about") {
-          setActiveSlide(0);
+        if (arg === "profile") {
+          goToSlide(0);
           setTerminalLogs((prev) => [
             ...prev,
             { text: "Scrolling to profile workspace...", type: "system" },
           ]);
-        } else if (arg === "skills") {
-          setActiveSlide(3);
+        } else if (arg === "about") {
+          goToSlide(1);
           setTerminalLogs((prev) => [
             ...prev,
-            { text: "Scrolling to skills galaxy...", type: "system" },
+            {
+              text: "Scrolling to about dashboard workspace...",
+              type: "system",
+            },
           ]);
         } else if (arg === "projects") {
-          setActiveSlide(4);
+          goToSlide(2);
           setTerminalLogs((prev) => [
             ...prev,
             { text: "Scrolling to projects showcase...", type: "system" },
           ]);
+        } else if (arg === "skills") {
+          goToSlide(3);
+          setTerminalLogs((prev) => [
+            ...prev,
+            { text: "Scrolling to skills galaxy...", type: "system" },
+          ]);
+        } else if (arg === "experience") {
+          goToSlide(4);
+          setTerminalLogs((prev) => [
+            ...prev,
+            { text: "Scrolling to employment timeline...", type: "system" },
+          ]);
         } else if (arg === "contact") {
-          setActiveSlide(5);
+          goToSlide(5);
           setTerminalLogs((prev) => [
             ...prev,
             { text: "Scrolling to secure mail panel...", type: "system" },
@@ -538,35 +570,42 @@ export default function Home() {
       label: "Open Projects showcase",
       category: "Applications",
       shortcut: "⌥P",
-      action: () => setActiveSlide(4),
+      action: () => goToSlide(2),
+    },
+    {
+      id: "prof",
+      label: "Open Profile.app (Hero)",
+      category: "Applications",
+      shortcut: "⌥H",
+      action: () => goToSlide(0),
     },
     {
       id: "abt",
-      label: "Open Profile.app",
+      label: "Open About Dashboard Workspace",
       category: "Applications",
       shortcut: "⌥A",
-      action: () => setActiveSlide(0),
+      action: () => goToSlide(1),
     },
     {
       id: "skls",
       label: "Open Skills Matrix",
       category: "Applications",
       shortcut: "⌥S",
-      action: () => setActiveSlide(3),
+      action: () => goToSlide(3),
     },
     {
       id: "exp",
       label: "Open Work Experience Timeline",
       category: "Applications",
       shortcut: "⌥E",
-      action: () => openApp("experience"),
+      action: () => goToSlide(4),
     },
     {
       id: "cntct",
       label: "Open Contact details Form",
       category: "Applications",
       shortcut: "⌥C",
-      action: () => setActiveSlide(5),
+      action: () => goToSlide(5),
     },
     {
       id: "ai-chat",
@@ -604,7 +643,7 @@ export default function Home() {
       id: "about",
       label: "Profile.app",
       isOpen: false,
-      onClick: () => setActiveSlide(0),
+      onClick: () => goToSlide(0),
       icon: (
         <svg
           width="24"
@@ -620,10 +659,48 @@ export default function Home() {
       ),
     },
     {
+      id: "about_sec",
+      label: "About.sys",
+      isOpen: false,
+      onClick: () => goToSlide(1),
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </svg>
+      ),
+    },
+    {
+      id: "projects",
+      label: "Projects Folder",
+      isOpen: false,
+      onClick: () => goToSlide(2),
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+        </svg>
+      ),
+    },
+    {
       id: "skills",
       label: "Skills Galaxy",
       isOpen: false,
-      onClick: () => setActiveSlide(3),
+      onClick: () => goToSlide(3),
       icon: (
         <svg
           width="24"
@@ -640,10 +717,10 @@ export default function Home() {
       ),
     },
     {
-      id: "projects",
-      label: "Projects Folder",
+      id: "experience",
+      label: "Timeline.sys",
       isOpen: false,
-      onClick: () => setActiveSlide(4),
+      onClick: () => goToSlide(4),
       icon: (
         <svg
           width="24"
@@ -653,7 +730,8 @@ export default function Home() {
           stroke="currentColor"
           strokeWidth="2"
         >
-          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
         </svg>
       ),
     },
@@ -661,7 +739,7 @@ export default function Home() {
       id: "contact",
       label: "Send Mail",
       isOpen: false,
-      onClick: () => setActiveSlide(5),
+      onClick: () => goToSlide(5),
       icon: (
         <svg
           width="24"
@@ -721,6 +799,61 @@ export default function Home() {
     return <LoadingScreen onComplete={() => setBooted(true)} />;
   }
 
+  if (isMobile) {
+    return (
+      <div style={{ background: "#050608", minHeight: "100vh" }}>
+        <MobileOS
+          onDownloadResume={handleDownloadResume}
+          onSelectProject={setSelectedProject}
+          projectsList={projectsList}
+          contactName={contactName}
+          setContactName={setContactName}
+          contactEmail={contactEmail}
+          setContactEmail={setContactEmail}
+          contactMessage={contactMessage}
+          setContactMessage={setContactMessage}
+          contactStatus={contactStatus}
+          contactResponse={contactResponse}
+          handleContactSubmit={handleContactSubmit}
+          activeTheme={activeTheme}
+          setActiveTheme={setActiveTheme}
+        />
+        {/* Case Study Full-Screen Modal */}
+        <CaseStudyModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      </div>
+    );
+  }
+
+  const getSlideStyle = (idx: number): React.CSSProperties => {
+    const isActive = activeSlide === idx;
+    const isPast = idx < activeSlide;
+    const rotateAngle = isActive ? 0 : isPast ? -5 : 5;
+    const scaleFactor = isActive ? 1 : 0.94;
+    const opacityFactor = isActive ? 1 : 0.15;
+
+    return {
+      width: "100vw",
+      height: "100vh",
+      position: "relative",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      boxSizing: "border-box",
+      padding: "12vh 6vw 100px 6vw",
+      opacity: opacityFactor,
+      transform: `scale(${scaleFactor}) rotateY(${rotateAngle}deg)`,
+      filter: isTransitioning ? "blur(3px)" : "none",
+      transition:
+        "transform 0.85s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.85s cubic-bezier(0.25, 1, 0.5, 1), filter 0.3s ease",
+      perspective: "1200px",
+      transformStyle: "preserve-3d",
+      pointerEvents: isActive ? "auto" : "none",
+    };
+  };
+
   return (
     <main
       onClick={() => {
@@ -766,91 +899,60 @@ export default function Home() {
           position: "absolute",
           top: 0,
           left: 0,
-          width: "500vw",
+          width: "600vw",
           height: "100vh",
           display: "flex",
-          transform: `translateX(-${(activeSlide <= 2 ? activeSlide : activeSlide === 3 ? 2 : activeSlide - 1) * 20}%)`,
+          transform: `translate3d(-${activeSlide * 16.666}%, 0, 0)`,
           transition: "transform 0.85s cubic-bezier(0.25, 1, 0.5, 1)",
           zIndex: 2,
         }}
       >
         {/* Slide 0: Profile Overview Workspace */}
-        <div
-          style={{
-            width: "100vw",
-            height: "100vh",
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            boxSizing: "border-box",
-            padding: "12vh 6vw 100px 6vw",
-          }}
-        >
+        <div style={getSlideStyle(0)}>
           <ProfileOverview
             onDownloadResume={handleDownloadResume}
-            onEmailClick={() => setActiveSlide(5)}
+            onEmailClick={() => goToSlide(5)}
           />
         </div>
 
-        {/* Slide 1: System Info Workspace */}
-        <div
-          style={{
-            width: "100vw",
-            height: "100vh",
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            boxSizing: "border-box",
-            padding: "12vh 6vw 100px 6vw",
-          }}
-        >
-          <div style={{ width: "100%", maxWidth: "1200px" }}>
-            <SystemInfo />
-          </div>
-        </div>
-
-        {/* Slide 2: Journey Timeline Workspace */}
-        <div
-          style={{
-            width: "100vw",
-            height: "100vh",
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            boxSizing: "border-box",
-            padding: "12vh 6vw 100px 6vw",
-          }}
-        >
+        {/* Slide 1: About Workspace (Split view: SystemInfo + JourneyTimeline) */}
+        <div style={getSlideStyle(1)}>
           <div
             style={{
+              display: "flex",
+              gap: "40px",
               width: "100%",
-              maxWidth: "1200px",
-              opacity: activeSlide === 3 ? 0 : 1,
-              transform: activeSlide === 3 ? "scale(1.08)" : "scale(1)",
-              transition:
-                "opacity 0.8s ease, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)",
+              height: "80vh",
+              overflow: "hidden",
             }}
           >
-            <JourneyTimeline />
+            <div
+              style={{
+                flex: 0.8,
+                display: "flex",
+                flexDirection: "column",
+                gap: "20px",
+              }}
+            >
+              <SystemInfo />
+            </div>
+            <div
+              style={{
+                flex: 1.2,
+                display: "flex",
+                flexDirection: "column",
+                gap: "20px",
+                overflowY: "auto",
+                paddingRight: "10px",
+              }}
+            >
+              <JourneyTimeline />
+            </div>
           </div>
         </div>
 
-        {/* Slide 4: Projects Showcase Workspace */}
-        <div
-          style={{
-            width: "100vw",
-            height: "100vh",
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            boxSizing: "border-box",
-            padding: "12vh 6vw 100px 6vw",
-          }}
-        >
+        {/* Slide 2: Projects Workspace */}
+        <div style={getSlideStyle(2)}>
           <div style={{ width: "100%", maxWidth: "1200px", height: "80vh" }}>
             <SmoothScroll style={{ padding: "12px", height: "100%" }}>
               <ProjectShowcase onSelectProject={setSelectedProject} />
@@ -858,19 +960,53 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Slide 5: Contact Secure Mail Workspace */}
-        <div
-          style={{
-            width: "100vw",
-            height: "100vh",
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            boxSizing: "border-box",
-            padding: "12vh 6vw 100px 6vw",
-          }}
-        >
+        {/* Slide 3: Skills Workspace */}
+        <div style={getSlideStyle(3)}>
+          <div style={{ width: "100%", maxWidth: "1200px" }}>
+            <SkillsGalaxy isActive={activeSlide === 3} />
+          </div>
+        </div>
+
+        {/* Slide 4: Experience Workspace */}
+        <div style={getSlideStyle(4)}>
+          <div style={{ width: "100%", maxWidth: "1200px", height: "80vh" }}>
+            <SmoothScroll style={{ padding: "24px", height: "100%" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "20px",
+                }}
+              >
+                <div>
+                  <p
+                    style={{
+                      color: "var(--glow-purple)",
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "0.85rem",
+                      marginBottom: "4px",
+                    }}
+                  >
+                    // SYSTEM_LOG: WORK_HISTORY
+                  </p>
+                  <h3
+                    style={{
+                      color: "var(--text-primary)",
+                      fontSize: "1.3rem",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Employment History
+                  </h3>
+                </div>
+                <WorkExperience />
+              </div>
+            </SmoothScroll>
+          </div>
+        </div>
+
+        {/* Slide 5: Contact Workspace */}
+        <div style={getSlideStyle(5)}>
           <div
             style={{
               width: "100%",
@@ -953,35 +1089,6 @@ export default function Home() {
               )}
             </form>
           </div>
-        </div>
-      </div>
-
-      {/* Slide 3: Skills Galaxy Custom Zoom Overlay */}
-      <div
-        onWheel={handleWheel}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          boxSizing: "border-box",
-          padding: "12vh 6vw 100px 6vw",
-          opacity: activeSlide === 3 ? 1 : 0,
-          transform: activeSlide === 3 ? "scale(1)" : "scale(0.92)",
-          pointerEvents: activeSlide === 3 ? "auto" : "none",
-          transition:
-            "opacity 0.85s ease, transform 0.85s cubic-bezier(0.25, 1, 0.5, 1)",
-          zIndex: activeSlide === 3 ? 3 : 0,
-        }}
-      >
-        <div style={{ width: "100%", maxWidth: "1200px" }}>
-          <SkillsGalaxy isActive={activeSlide === 3} />
         </div>
       </div>
 
@@ -1152,8 +1259,9 @@ export default function Home() {
               >
                 {[
                   { id: "terminal", label: "Terminal Shell" },
-                  { id: "projects", label: "Projects Directory" },
                   { id: "about", label: "Profile.app" },
+                  { id: "about_sec", label: "About.sys" },
+                  { id: "projects", label: "Projects Folder" },
                   { id: "skills", label: "Skills Galaxy" },
                   { id: "experience", label: "Timeline.sys" },
                   { id: "contact", label: "Secure Mail" },
@@ -1163,13 +1271,17 @@ export default function Home() {
                     key={app.id}
                     onClick={() => {
                       if (app.id === "about") {
-                        setActiveSlide(0);
-                      } else if (app.id === "skills") {
-                        setActiveSlide(3);
+                        goToSlide(0);
+                      } else if (app.id === "about_sec") {
+                        goToSlide(1);
                       } else if (app.id === "projects") {
-                        setActiveSlide(4);
+                        goToSlide(2);
+                      } else if (app.id === "skills") {
+                        goToSlide(3);
+                      } else if (app.id === "experience") {
+                        goToSlide(4);
                       } else if (app.id === "contact") {
-                        setActiveSlide(5);
+                        goToSlide(5);
                       } else {
                         openApp(app.id);
                       }
@@ -1341,8 +1453,10 @@ export default function Home() {
             const appId = windowOrder[i];
             if (openWindows[appId]) return appId;
           }
+          if (activeSlide === 1) return "about_sec";
+          if (activeSlide === 2) return "projects";
           if (activeSlide === 3) return "skills";
-          if (activeSlide === 4) return "projects";
+          if (activeSlide === 4) return "experience";
           if (activeSlide === 5) return "contact";
           return "about";
         })()}

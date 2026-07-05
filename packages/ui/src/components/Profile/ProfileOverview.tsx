@@ -802,6 +802,22 @@ export const ProfileOverview = ({
           }
         }
 
+        .mobile-avatar-container {
+          display: none;
+          width: 140px;
+          height: 140px;
+          border-radius: 50%;
+          overflow: hidden;
+          border: 2px solid rgba(0, 240, 255, 0.6);
+          box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+          margin: 10px auto 18px auto;
+        }
+        .mobile-avatar-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
         /* Mobile Viewport Spacings */
         @media (max-width: 768px) {
           .hero-container {
@@ -823,9 +839,10 @@ export const ProfileOverview = ({
             justify-content: center;
           }
           .hero-right {
-            order: 7; /* Move 3D scene below everything else */
-            height: 320px;
-            min-width: 100%;
+            display: none; /* Hide 3D Canvas completely on mobile */
+          }
+          .mobile-avatar-container {
+            display: block;
           }
         }
       `}</style>
@@ -866,6 +883,15 @@ export const ProfileOverview = ({
             >
               STATUS : ACTIVE_NODE
             </span>
+          </div>
+
+          {/* Mobile Avatar (Visible only on mobile) */}
+          <div className="mobile-avatar-container">
+            <img
+              src="/profile.jpg"
+              alt="Nikhil Singh Profile"
+              className="mobile-avatar-img"
+            />
           </div>
 
           {/* Main Heading */}
