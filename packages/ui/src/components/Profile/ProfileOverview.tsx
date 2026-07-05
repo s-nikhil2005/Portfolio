@@ -353,7 +353,11 @@ export const OSMascot = ({ introStage }: { introStage: string }) => {
     if (groupRef.current) {
       // Gentle floating up and down bobbing
       groupRef.current.position.y = Math.sin(t * 1.5) * 0.12;
-      groupRef.current.scale.setScalar(currentScale.current);
+
+      const aspect = state.viewport.aspect;
+      const responsiveScale =
+        aspect < 1 ? currentScale.current * 1.4 : currentScale.current;
+      groupRef.current.scale.setScalar(responsiveScale);
 
       // Mouse reactive tilt and rotation toward cursor
       groupRef.current.rotation.y = THREE.MathUtils.lerp(
@@ -864,25 +868,24 @@ export const ProfileOverview = ({
         @media (max-width: 768px) {
           .hero-container {
             flex-direction: column-reverse;
-            align-items: center;
+            align-items: flex-start;
             gap: 20px;
-            overflow-y: auto;
             padding: 16px !important;
           }
           .hero-left {
             max-width: 100%;
-            align-items: center;
-            text-align: center;
+            align-items: flex-start;
+            text-align: left;
           }
           .cards-grid {
             grid-template-columns: 1fr;
           }
           .buttons-row {
-            justify-content: center;
+            justify-content: flex-start;
           }
           .hero-right {
             display: flex;
-            height: 250px;
+            height: 320px;
             width: 100%;
             min-width: unset;
             margin-bottom: 20px;

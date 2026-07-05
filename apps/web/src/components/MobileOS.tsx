@@ -722,7 +722,7 @@ export const MobileOS = ({
           style={{
             width: "100%",
             maxWidth: "560px",
-            margin: "0 auto 24px auto",
+            margin: "0 0 24px 0",
           }}
         >
           <SystemInfo />
@@ -741,7 +741,7 @@ export const MobileOS = ({
 
         <div
           className="timeline-accordion-container"
-          style={{ width: "100%", maxWidth: "560px", margin: "0 auto" }}
+          style={{ width: "100%", maxWidth: "560px", margin: "0" }}
         >
           {timelineItems.map((item, idx) => {
             const isExpanded = timelineExpanded === idx;
@@ -849,7 +849,7 @@ export const MobileOS = ({
             position: "relative",
             width: "100%",
             maxWidth: "480px",
-            margin: "0 auto",
+            margin: "0",
           }}
         >
           {projectsList.map((project, idx) => {
@@ -1061,7 +1061,7 @@ export const MobileOS = ({
       <section id="mobile-skills" className="mobile-section">
         <h2 className="mobile-section-title">Skills Inventory</h2>
 
-        <div style={{ width: "100%", maxWidth: "560px", margin: "0 auto" }}>
+        <div style={{ width: "100%", maxWidth: "560px", margin: "0" }}>
           <SkillsGalaxy isActive={true} />
         </div>
       </section>
@@ -1076,7 +1076,7 @@ export const MobileOS = ({
             color: "var(--text-muted)",
             width: "100%",
             maxWidth: "560px",
-            margin: "0 auto 20px auto",
+            margin: "0 0 20px 0",
           }}
         >
           // SYSTEM_EMPLOYMENT_LOGS
@@ -1087,7 +1087,7 @@ export const MobileOS = ({
             borderLeft: "1px solid rgba(255, 255, 255, 0.08)",
             width: "100%",
             maxWidth: "560px",
-            margin: "0 auto",
+            margin: "0",
           }}
         >
           <WorkExperience />
@@ -1108,7 +1108,7 @@ export const MobileOS = ({
             padding: "20px",
             width: "100%",
             maxWidth: "480px",
-            margin: "0 auto",
+            margin: "0",
           }}
         >
           <form
