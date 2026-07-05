@@ -17,8 +17,7 @@ import {
   AIAssistantWindow,
   type ProjectData,
   projectsList,
-  SystemInfo,
-  JourneyTimeline,
+  AboutOSProfile,
   TechStack,
   ProfileOverview,
 } from "@portfolio/ui";
@@ -928,39 +927,17 @@ export default function Home() {
           />
         </div>
 
-        {/* Slide 1: About Workspace (Split view: SystemInfo + JourneyTimeline) */}
+        {/* Slide 1: About Workspace (Futuristic OS Profile Redesign) */}
         <div style={getSlideStyle(1)}>
           <div
             style={{
-              display: "flex",
-              gap: "40px",
               width: "100%",
               height: "80vh",
-              overflow: "hidden",
+              overflowY: "auto",
+              paddingRight: "12px",
             }}
           >
-            <div
-              style={{
-                flex: 0.8,
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-              }}
-            >
-              <SystemInfo />
-            </div>
-            <div
-              style={{
-                flex: 1.2,
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-                overflowY: "auto",
-                paddingRight: "10px",
-              }}
-            >
-              <JourneyTimeline />
-            </div>
+            <AboutOSProfile />
           </div>
         </div>
 

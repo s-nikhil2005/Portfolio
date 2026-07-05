@@ -9,6 +9,7 @@ import {
   ProfileOverview,
   SystemInfo,
   SkillsGalaxy,
+  AboutOSProfile,
 } from "@portfolio/ui";
 import { Canvas } from "@react-three/fiber";
 
@@ -708,128 +709,10 @@ export const MobileOS = ({
       </section>
 
       {/* 2. Mobile About Section (Accordion Timeline) */}
+      {/* 2. Mobile About Section (Futuristic OS Profile Redesign) */}
       <section id="mobile-about" className="mobile-section">
         <h2 className="mobile-section-title">About & Journey</h2>
-
-        <div
-          style={{
-            width: "100%",
-            maxWidth: "560px",
-            margin: "0 0 24px 0",
-          }}
-        >
-          <SystemInfo />
-        </div>
-
-        <div
-          style={{
-            marginBottom: "16px",
-            fontSize: "0.75rem",
-            color: "var(--text-muted)",
-            lineHeight: "1.4",
-          }}
-        >
-          // SYSTEM_TIMELINE_LOGS
-        </div>
-
-        <div
-          className="timeline-accordion-container"
-          style={{ width: "100%", maxWidth: "560px", margin: "0" }}
-        >
-          {timelineItems.map((item, idx) => {
-            const isExpanded = timelineExpanded === idx;
-            return (
-              <div
-                key={idx}
-                className={`mobile-card ${isExpanded ? "active" : ""}`}
-                style={{ padding: "14px 18px", marginBottom: "12px" }}
-              >
-                <div
-                  className="accordion-header"
-                  onClick={() => setTimelineExpanded(isExpanded ? null : idx)}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "12px",
-                    }}
-                  >
-                    <span
-                      style={{
-                        color: "var(--theme-accent)",
-                        fontWeight: "800",
-                        fontSize: "0.95rem",
-                      }}
-                    >
-                      {item.year}
-                    </span>
-                    <span
-                      style={{
-                        color: "#fff",
-                        fontWeight: "600",
-                        fontSize: "0.85rem",
-                      }}
-                    >
-                      {item.title}
-                    </span>
-                  </div>
-                  <span
-                    style={{ color: "var(--text-muted)", fontSize: "0.8rem" }}
-                  >
-                    {isExpanded ? "[-]" : "[+]"}
-                  </span>
-                </div>
-                <div
-                  className={`accordion-content ${isExpanded ? "open" : ""}`}
-                  style={{
-                    fontSize: "0.78rem",
-                    color: "var(--text-secondary)",
-                    lineHeight: "1.5",
-                  }}
-                >
-                  <p style={{ marginBottom: "10px" }}>{item.desc}</p>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "6px",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    {item.techs.map((t, tid) => (
-                      <span
-                        key={tid}
-                        style={{
-                          fontSize: "0.65rem",
-                          padding: "2px 8px",
-                          background: "rgba(255,255,255,0.04)",
-                          border: "1px solid rgba(255,255,255,0.08)",
-                          borderRadius: "4px",
-                          color: "var(--theme-accent)",
-                        }}
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div
-                    style={{
-                      borderTop: "1px solid rgba(255,255,255,0.05)",
-                      paddingTop: "8px",
-                      color: "var(--text-muted)",
-                      fontSize: "0.72rem",
-                    }}
-                  >
-                    <strong>Key Achievement:</strong> {item.achievements}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <AboutOSProfile />
       </section>
 
       {/* 3. Mobile Projects Section (Swipe Swiper) */}

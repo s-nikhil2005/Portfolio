@@ -14,4 +14,5 @@ export * from "./components/Profile/ProfileApp";
 export * from "./components/Profile/ProfileOverview";
 export * from "./components/Profile/SystemInfo";
 export * from "./components/Profile/JourneyTimeline";
+export * from "./components/About/AboutOSProfile";
 export * from "./components/Profile/TechStack";
