@@ -581,8 +581,8 @@ export const ProfileOverview = ({
         /* 3D Holographic CSS Avatar Card */
         .holo-avatar-wrapper {
           position: relative;
-          width: 280px;
-          height: 280px;
+          width: 320px;
+          height: 320px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -659,6 +659,10 @@ export const ProfileOverview = ({
             height: 380px;
             min-width: 280px;
           }
+          .holo-avatar-wrapper {
+            width: 240px;
+            height: 240px;
+          }
           .cards-grid {
             grid-template-columns: repeat(2, 1fr);
           }
@@ -708,8 +712,8 @@ export const ProfileOverview = ({
             justify-content: flex-start;
           }
           .holo-avatar-wrapper {
-            width: 130px;
-            height: 130px;
+            width: 190px;
+            height: 190px;
             margin: 10px 0 20px 0;
           }
           .mobile-avatar-container {

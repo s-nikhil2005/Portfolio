@@ -256,12 +256,7 @@ export default function Home() {
   };
 
   const handleDownloadResume = () => {
-    const link = document.createElement("a");
-    link.href = "/Nikhil_Singh_Resume.txt";
-    link.download = "Nikhil_Singh_Resume.txt";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    window.open("/Nikhil_Singh_Resume.txt", "_blank");
   };
 
   const handleContactSubmit = async (e: React.FormEvent) => {

@@ -205,32 +205,25 @@ export const MobileOS = ({
   // Timeline Accordion Data
   const timelineItems = [
     {
-      year: "2020",
-      title: "Started Programming",
-      desc: "Wrote first lines of code in HTML, CSS, and basic JavaScript. Built simple interactive webpages.",
-      techs: ["HTML5", "CSS3", "JavaScript"],
-      achievements: "Fascinated by logic engines and web layouts.",
+      year: "2021 - 2023",
+      title: "Higher Secondary Certificate (HSC)",
+      desc: "Completed HSC under Maharashtra State Board, building a strong foundation in physics, mathematics, and logic.",
+      techs: ["Physics", "Mathematics", "Logic"],
+      achievements: "Built core problem-solving methodologies.",
     },
     {
-      year: "2021",
-      title: "Full-Stack Pivot",
-      desc: "Delved into backend servers, API designs, databases, and structural libraries. Mastered full-stack deployments.",
-      techs: ["React", "Node.js", "Express", "MongoDB"],
-      achievements: "Built first full-featured multi-user web portals.",
+      year: "2023 - 2026",
+      title: "B.Sc. in Information Technology",
+      desc: "Pursuing B.Sc. IT at University of Mumbai (CGPA: 8.70). Actively participating in Coding Club as a Junior Developer, building backend APIs and mentoring peers.",
+      techs: ["Information Technology", "Web Engineering", "Data Structures"],
+      achievements: "Mentored juniors and contributed to Coding Club APIs.",
     },
     {
-      year: "2023",
-      title: "Systems & Scale",
-      desc: "Focused on type-safety, modular package architectures, and scalable cloud compute distributions.",
-      techs: ["TypeScript", "Next.js", "Docker", "AWS"],
-      achievements: "Successfully migrated microservices with zero downtime.",
-    },
-    {
-      year: "2025",
-      title: "Creative Engineering",
-      desc: "Bridging mechanical logic with canvas renders. Built interactive 3D spaces and local AI agent pipelines.",
-      techs: ["WebGL", "Three.js", "React Three Fiber", "AI agents"],
-      achievements: "Designed NIKHIL_OS web interface.",
+      year: "2024 - Present",
+      title: "Full-Stack Development Focus",
+      desc: "Deep dive into MERN stack applications. Configured REST APIs, structured MongoDB models, Redux states, and optimized web requests.",
+      techs: ["React", "Node.js", "Express.js", "MongoDB", "Redux", "JWT"],
+      achievements: "Designed and launched Voys and StudyLoop platforms.",
     },
   ];
 
