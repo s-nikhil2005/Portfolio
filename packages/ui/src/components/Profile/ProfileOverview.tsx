@@ -381,7 +381,7 @@ export const OSMascot = ({ introStage }: { introStage: string }) => {
     <group ref={groupRef}>
       {/* Outer Holographic Dashed Rings Behind Face */}
       <mesh ref={ringRef1} position={[0, 0, -0.2]}>
-        <ringGeometry args={[1.3, 1.34, 64]} />
+        <ringGeometry args={[1.65, 1.69, 64]} />
         <meshBasicMaterial
           color="#00E5FF"
           transparent
@@ -394,7 +394,7 @@ export const OSMascot = ({ introStage }: { introStage: string }) => {
         position={[0, 0, -0.25]}
         rotation={[0, 0, Math.PI / 4]}
       >
-        <ringGeometry args={[1.42, 1.45, 64]} />
+        <ringGeometry args={[1.78, 1.82, 64]} />
         <meshBasicMaterial
           color="#7B61FF"
           transparent
@@ -405,13 +405,13 @@ export const OSMascot = ({ introStage }: { introStage: string }) => {
 
       {/* Circular Soft Glow aura behind face */}
       <mesh position={[0, 0, -0.1]}>
-        <circleGeometry args={[1.15, 32]} />
+        <circleGeometry args={[1.5, 32]} />
         <meshBasicMaterial color="#00E5FF" transparent opacity={0.05} />
       </mesh>
 
       {/* Main Holographic Avatar Disc displaying User Profile Image */}
       <mesh position={[0, 0, 0]}>
-        <circleGeometry args={[1.1, 64]} />
+        <circleGeometry args={[1.45, 64]} />
         {texture ? (
           <meshBasicMaterial
             map={texture}
@@ -426,7 +426,7 @@ export const OSMascot = ({ introStage }: { introStage: string }) => {
 
       {/* Glowing neon border ring around face disc */}
       <mesh position={[0, 0, 0.01]}>
-        <ringGeometry args={[1.09, 1.11, 64]} />
+        <ringGeometry args={[1.44, 1.46, 64]} />
         <meshBasicMaterial
           color="#00E5FF"
           transparent
@@ -699,7 +699,7 @@ const AvatarScene = ({ introStage }: { introStage: string }) => {
 
   return (
     <Canvas
-      camera={{ position: [0, 0, 5.5] }}
+      camera={{ position: [0, 0, 4.2] }}
       style={{ width: "100%", height: "100%" }}
     >
       {/* Lights matching global background colors */}
@@ -961,7 +961,7 @@ export const ProfileOverview = ({
           {/* Main Heading */}
           <h1
             style={{
-              fontSize: "3.5rem",
+              fontSize: "clamp(1.9rem, 7.5vw, 3.5rem)",
               fontWeight: "900",
               color: "#fff",
               lineHeight: "1.05",
@@ -969,6 +969,7 @@ export const ProfileOverview = ({
               fontFamily: "var(--font-mono)",
               textShadow: "0 0 20px rgba(255,255,255,0.08)",
               letterSpacing: "-1px",
+              whiteSpace: "nowrap",
             }}
           >
             Nikhil Singh

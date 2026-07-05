@@ -406,8 +406,8 @@ const CameraController = ({ activeSlide }: { activeSlide: number }) => {
     const aspect = state.viewport.aspect;
     if (aspect < 1) {
       targetX = 0;
-      targetY = 0.8;
-      targetZ = 6.8;
+      targetY = 0.6;
+      targetZ = 5.2;
       targetLookX = 0;
       targetLookY = 0.2;
       targetLookZ = -0.5;
