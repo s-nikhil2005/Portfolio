@@ -1,0 +1,63 @@
+                                 NIKHIL SINGH
+                        +91 91374 78067 | Mumbai, India
+    nikhilsingh76666@gmail.com | LinkedIn: nikhil-singh | GitHub: s-nikhil2005
+
+================================================================================
+CAREER OBJECTIVE
+================================================================================
+Full-Stack Developer skilled in MERN Stack with a strong foundation in Data
+Structures and Algorithms. Interested in building scalable web applications,
+solving real-world problems, and continuously improving problem-solving and
+development skills.
+
+================================================================================
+EDUCATION
+================================================================================
+Bachelor of Science (B.Sc.) in Information Technology
+University of Mumbai | 2023 – 2026
+CGPA: 8.70
+
+Higher Secondary Certificate (HSC)
+Maharashtra State Board | 2021 – 2023
+
+================================================================================
+TECHNICAL SKILLS
+================================================================================
+- Programming Languages: C++, JavaScript, TypeScript
+- Frontend: HTML, CSS, React.js, Redux, Tailwind CSS
+- Backend: Node.js, Express.js
+- Databases: MongoDB, MySQL, Redis
+- Tools & Technologies: Git, GitHub, Postman, Docker, VS Code
+- Core Concepts: Data Structures & Algorithms, Object-Oriented Programming,
+  REST APIs, JWT Authentication, MVC Architecture
+
+================================================================================
+PROJECTS
+================================================================================
+Voys – Travel Booking Platform | MERN Stack                                 2026
+- Built a full-stack travel booking system with authentication, package
+  browsing, booking management, and reviews.
+- Implemented JWT-based authentication and role-based access control.
+- Designed modular REST APIs and structured MongoDB schemas ensuring data
+  integrity.
+- Integrated frontend and backend using Axios for seamless user experience.
+
+StudyLoop – Peer-to-Peer Learning Platform | MERN Stack          2026 – Ongoing
+- Developing a peer-to-peer collaboration platform for skill exchange and
+  academic interaction.
+- Designed structured dashboards for "Skills I Know" and "Skills I Want to Learn."
+- Implementing secure authentication and scalable backend APIs for future
+  real-time features.
+- Focused on modular architecture and reusable React components.
+
+================================================================================
+ACTIVITIES
+================================================================================
+- Junior Developer, Coding Club: Backend contributor, mentored juniors,
+  participated in coding contests.
+
+================================================================================
+HOBBIES
+================================================================================
+- Reading about technology and startup culture
+- Video editing and content creation

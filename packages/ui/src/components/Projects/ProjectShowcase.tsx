@@ -19,84 +19,58 @@ export interface ProjectData {
 
 export const projectsList: ProjectData[] = [
   {
-    id: "voya",
-    pkgName: "Voya_App.pkg",
-    title: "Voya Collaborative Canvas",
+    id: "voys",
+    pkgName: "Voys_Travel.pkg",
+    title: "Voys - Travel Booking Platform",
     tagline:
-      "Real-time interactive geographical workspace and collaborative tracking system.",
+      "Full-stack travel booking platform with authentication, package browsing, booking management, and reviews.",
     coverColor: "var(--glow-cyan)",
-    githubUrl: "https://github.com",
-    liveUrl: "https://google.com",
-    techStack: ["Next.js", "React", "Node.js", "WebSockets", "Redis", "Docker"],
-    features: [
-      "Dynamic tile mapping and vector tracking layers.",
-      "Multi-user synchronization via low-latency WebSocket connection pipes.",
-      "In-memory tracking history caches using Redis cluster nodes.",
-    ],
-    architecture:
-      "Client WebGL Canvas ➔ Node Gateway ➔ Redis Cache Grid ➔ MongoDB Shards",
-    challenges:
-      "Resolving state synchronization collisions for high-frequency user cursor shifts. Solved by implementing a delta-compression updates protocol.",
-    performance:
-      "Sync latency under 32ms. Main bundle size reduced by 35% through dynamic package chunking.",
-  },
-  {
-    id: "portfolio",
-    pkgName: "Portfolio_v3.pkg",
-    title: "Nikhil_OS Portfolio Engine",
-    tagline:
-      "Retro-futuristic operating system desktop built with interactive WebGL assets.",
-    coverColor: "var(--glow-green)",
-    githubUrl: "https://github.com",
-    liveUrl: "https://google.com",
+    githubUrl: "https://github.com/s-nikhil2005",
+    liveUrl: "https://github.com/s-nikhil2005",
     techStack: [
-      "Next.js",
-      "React Three Fiber",
-      "Drei",
-      "Three.js",
-      "Web Audio API",
-      "Turborepo",
-    ],
-    features: [
-      "Custom drag-and-drop window focus controller and desktop taskbars.",
-      "Procedural keyclick synthesizer using HTML5 Web Audio oscillators.",
-      "Subtle mouse-reactive camera parallax rotations.",
-    ],
-    architecture:
-      "React Three Fiber Canvas ➔ Shared ESM Packages ➔ Next.js SSR Optimizations",
-    challenges:
-      "Loading heavy WebGL canvas scripts without breaking initial load performance. Solved by lazily mounting R3F packages post boot-loader.",
-    performance:
-      "98+ Lighthouse scores across mobile viewports. Zero audio payload overhead due to synthesized synth clicks.",
-  },
-  {
-    id: "server",
-    pkgName: "Server_API.pkg",
-    title: "Distributed Microservices Gateway",
-    tagline:
-      "High-throughput REST and GraphQL backend API router handling millions of requests.",
-    coverColor: "var(--glow-purple)",
-    githubUrl: "https://github.com",
-    liveUrl: "https://google.com",
-    techStack: [
-      "Express",
-      "TypeScript",
-      "Redis",
+      "React",
+      "Node.js",
+      "Express.js",
       "MongoDB",
-      "Docker Compose",
-      "Nginx",
+      "Redux",
+      "Axios",
+      "JWT",
     ],
     features: [
-      "Auto-scaling reverse proxy server using Nginx configurations.",
-      "Rate-limiting protection policies utilizing Redis memory sliding-windows.",
-      "Configured Docker Compose environments for local sandbox testing.",
+      "Built a full-stack travel booking system with authentication, package browsing, booking management, and reviews.",
+      "Implemented JWT-based authentication and role-based access control.",
+      "Designed modular REST APIs and structured MongoDB database schemas ensuring data integrity.",
+      "Integrated frontend and backend using Axios for seamless user experience.",
     ],
     architecture:
-      "Nginx Proxy ➔ Express Router Instance ➔ Redis Lock ➔ MongoDB Replica Clusters",
+      "React Client ➔ Axios Gateway ➔ Express API Router ➔ MongoDB Schema Validations",
     challenges:
-      "Preventing database locks during massive webhook bursts. Solved by inserting an intermediary BullMQ queue controller.",
+      "Managing complex state flow and updates across authentication states and shopping flows. Solved by implementing global state management with Redux.",
     performance:
-      "Handles up to 4,200 requests/sec under 15ms response latency. Cache hit ratio maintained at 94.6%.",
+      "Secure API latency under 55ms. Fully optimized client assets with clean component encapsulation.",
+  },
+  {
+    id: "studyloop",
+    pkgName: "StudyLoop_P2P.pkg",
+    title: "StudyLoop - Peer Learning Platform",
+    tagline:
+      "Peer-to-peer collaboration platform for skill exchange and academic interaction.",
+    coverColor: "var(--glow-purple)",
+    githubUrl: "https://github.com/s-nikhil2005",
+    liveUrl: "https://github.com/s-nikhil2005",
+    techStack: ["React", "Node.js", "Express.js", "MongoDB", "Redux", "JWT"],
+    features: [
+      "Developing a peer-to-peer collaboration platform for skill exchange and academic interaction.",
+      "Designed structured dashboards for 'Skills I Know' and 'Skills I Want to Learn.'",
+      "Implementing secure authentication and scalable backend APIs for future real-time features.",
+      "Focused on modular architecture and reusable React components.",
+    ],
+    architecture:
+      "React Client ➔ Redux State ➔ Express API Server ➔ MongoDB Databases",
+    challenges:
+      "Structuring peer dashboard listings for bi-directional skill matches. Solved by designing optimized MongoDB aggregation pipeline queries.",
+    performance:
+      "Highly reusable React components codebase. Seamless API integration with Redux-mediated state sync.",
   },
 ];
 

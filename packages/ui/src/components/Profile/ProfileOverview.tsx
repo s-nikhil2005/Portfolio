@@ -578,6 +578,68 @@ export const ProfileOverview = ({
           align-items: center;
         }
 
+        /* 3D Holographic CSS Avatar Card */
+        .holo-avatar-wrapper {
+          position: relative;
+          width: 280px;
+          height: 280px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+          100% { transform: translateY(0px); }
+        }
+        .holo-outer-ring {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          border: 1.5px dashed rgba(0, 229, 255, 0.45);
+          animation: rotateClockwise 25s linear infinite;
+          box-sizing: border-box;
+        }
+        @keyframes rotateClockwise {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .holo-glow-aura {
+          position: absolute;
+          width: 90%;
+          height: 90%;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(0, 229, 255, 0.15) 0%, transparent 70%);
+          filter: blur(10px);
+        }
+        .holo-face-container {
+          position: relative;
+          width: 82%;
+          height: 82%;
+          border-radius: 50%;
+          overflow: hidden;
+          border: 2px solid rgba(0, 229, 255, 0.85);
+          box-shadow: 0 0 25px rgba(0, 229, 255, 0.45);
+          box-sizing: border-box;
+        }
+        .holo-face-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .holo-border-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          box-shadow: inset 0 0 15px rgba(0, 229, 255, 0.4);
+          pointer-events: none;
+        }
+
         /* Laptop Viewport Spacings */
         @media (max-width: 1440px) {
           .hero-container {
@@ -639,10 +701,16 @@ export const ProfileOverview = ({
           }
           .hero-right {
             display: flex;
-            height: 320px;
+            height: auto;
             width: 100%;
             min-width: unset;
             margin-bottom: 20px;
+            justify-content: flex-start;
+          }
+          .holo-avatar-wrapper {
+            width: 130px;
+            height: 130px;
+            margin: 10px 0 20px 0;
           }
           .mobile-avatar-container {
             display: none !important;
@@ -839,20 +907,34 @@ export const ProfileOverview = ({
             </svg>
             Resume
           </OSButton>
-          <OSButton href="https://github.com">GitHub</OSButton>
-          <OSButton href="https://linkedin.com">LinkedIn</OSButton>
-          <OSButton href="https://leetcode.com">LeetCode</OSButton>
-          <OSButton onClick={onEmailClick}>Email Me</OSButton>
+          <OSButton href="https://github.com/s-nikhil2005">GitHub</OSButton>
+          <OSButton href="https://www.linkedin.com/in/nikhil-singh-580845284/">
+            LinkedIn
+          </OSButton>
+          <OSButton href="https://leetcode.com/u/Nikhil_Singh2005/">
+            LeetCode
+          </OSButton>
+          <OSButton href="mailto:nikhilsingh76666@gmail.com">Email Me</OSButton>
         </div>
       </div>
 
-      {/* Right Side Column: 3D Visual Centerpiece */}
+      {/* Right Side Column: CSS 3D Holographic Visual Centerpiece */}
       <div className="hero-right">
-        {mounted && (
-          <React.Suspense fallback={null}>
-            <AvatarScene introStage={introStage} />
-          </React.Suspense>
-        )}
+        <div className="holo-avatar-wrapper">
+          {/* Slow Rotating Outer Ring */}
+          <div className="holo-outer-ring" />
+          {/* Inner Glow Aura */}
+          <div className="holo-glow-aura" />
+          {/* Floating Face Container */}
+          <div className="holo-face-container">
+            <img
+              src="/profile.jpg"
+              alt="Nikhil Singh"
+              className="holo-face-image"
+            />
+            <div className="holo-border-overlay" />
+          </div>
+        </div>
       </div>
     </div>
   );

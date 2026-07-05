@@ -30,44 +30,28 @@ import { MobileOS } from "@/components/MobileOS";
 
 const aboutTimelineData: TimelineItem[] = [
   {
-    id: "school",
-    title: "Secondary Education",
-    period: "2016 - 2018",
+    id: "hsc",
+    title: "Higher Secondary Certificate (HSC)",
+    period: "2021 - 2023",
     description:
-      "Completed secondary school, specializing in Mathematics and Computer Science basics. First learned logic and HTML/CSS/JS.",
-    iconText: "SCH",
+      "Completed Higher Secondary Certificate (HSC) under Maharashtra State Board, building a strong foundation in physics, mathematics, and logic.",
+    iconText: "HSC",
   },
   {
-    id: "college",
-    title: "University - Computer Science Engineering",
-    period: "2018 - 2022",
+    id: "bsc_it",
+    title: "Bachelor of Science (B.Sc.) in Information Technology",
+    period: "2023 - 2026",
     description:
-      "Earned Bachelor's in CS. Explored data structures, system design, and database engineering. Built multi-threaded simulations.",
-    iconText: "UNI",
+      "Pursuing B.Sc. in IT at University of Mumbai. Maintained a CGPA of 8.70. Actively participating in Coding Club as a Junior Developer, building backend microservices and mentoring peers.",
+    iconText: "BSC",
   },
   {
     id: "learning",
-    title: "Full Stack Specialization & Mentorship",
-    period: "2022 - 2023",
+    title: "Full-Stack Development Specialization",
+    period: "2024 - Present",
     description:
-      "Deep dive into web performance, cloud scaling (Docker/AWS), and modern framework internals. Contributed to microservice utilities.",
+      "Deep dive into MERN stack web applications. Configured REST APIs, structured MongoDB database models, Redux state management, and optimized network responses.",
     iconText: "DEV",
-  },
-  {
-    id: "projects",
-    title: "Client Platforms & Interactive Projects",
-    period: "2023 - Present",
-    description:
-      "Built high-performance, real-time products (Voya, Next-generation SaaS trackers, web APIs). Began incorporating 3D visuals using R3F.",
-    iconText: "PRJ",
-  },
-  {
-    id: "future",
-    title: "Future Vision: Distributed 3D Web",
-    period: "2026 & Beyond",
-    description:
-      "Focusing on decentralized web rendering, high-availability architecture, and standardizing low-latency interactive canvas widgets.",
-    iconText: "FTR",
   },
 ];
 
@@ -271,15 +255,13 @@ export default function Home() {
     return windowOrder.indexOf(id) + 10;
   };
 
-  const handleDownloadResume = async () => {
-    try {
-      await fetch("http://localhost:3001/api/admin/track-download", {
-        method: "POST",
-      });
-    } catch (e) {
-      console.error("Failed to track download:", e);
-    }
-    alert("Downloading Nikhil_Singh_Resume.pdf...");
+  const handleDownloadResume = () => {
+    const link = document.createElement("a");
+    link.href = "/Nikhil_Singh_Resume.txt";
+    link.download = "Nikhil_Singh_Resume.txt";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleContactSubmit = async (e: React.FormEvent) => {
