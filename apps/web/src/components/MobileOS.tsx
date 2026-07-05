@@ -6,6 +6,9 @@ import {
   ProjectData,
   WorkExperience,
   OSMascot,
+  ProfileOverview,
+  SystemInfo,
+  SkillsGalaxy,
 } from "@portfolio/ui";
 import { Canvas } from "@react-three/fiber";
 
@@ -678,231 +681,12 @@ export const MobileOS = ({
       <section
         id="mobile-home"
         className="mobile-section"
-        style={{ textAlign: "center", paddingTop: "50px" }}
+        style={{ textAlign: "center", paddingTop: "20px" }}
       >
-        <div
-          style={{
-            width: "240px",
-            height: "240px",
-            margin: "0 auto 20px auto",
-          }}
-        >
-          <Canvas
-            camera={{ position: [0, 0, 5.2] }}
-            style={{ pointerEvents: "none" }}
-          >
-            <ambientLight intensity={0.45} color="#071B2C" />
-            <directionalLight
-              position={[2, 3, 2]}
-              intensity={1.5}
-              color="#00E5FF"
-              castShadow
-            />
-            <pointLight
-              position={[-3, -1, 3]}
-              intensity={2.0}
-              color="#7B61FF"
-            />
-            <pointLight position={[3, 1, -2]} intensity={1.2} color="#00C8FF" />
-            <OSMascot introStage="done" />
-          </Canvas>
-        </div>
-
-        <h1
-          style={{
-            fontSize: "clamp(2rem, 6.5vw, 2.8rem)",
-            fontWeight: "900",
-            color: "#fff",
-            letterSpacing: "-1px",
-            marginBottom: "8px",
-          }}
-        >
-          Nikhil Singh
-        </h1>
-
-        <div style={{ minHeight: "26px", marginBottom: "16px" }}>
-          <span
-            style={{
-              fontSize: "0.95rem",
-              color: "var(--theme-accent)",
-              fontWeight: "700",
-            }}
-          >
-            &gt; {roles[roleIndex]}
-          </span>
-        </div>
-
-        <p
-          style={{
-            fontSize: "clamp(0.82rem, 3.5vw, 0.92rem)",
-            color: "var(--text-secondary)",
-            lineHeight: "1.65",
-            maxWidth: "480px",
-            margin: "0 auto 24px auto",
-          }}
-        >
-          Passionate{" "}
-          <span style={{ color: "var(--theme-accent)", fontWeight: "600" }}>
-            Full-Stack Developer
-          </span>{" "}
-          building scalable web applications with React, Node.js, Express, and
-          MongoDB.
-        </p>
-
-        {/* Action Buttons row wrapping cleanly */}
-        <div className="mobile-button-wrap" style={{ marginBottom: "36px" }}>
-          <button
-            onClick={onDownloadResume}
-            style={{
-              padding: "10px 18px",
-              background: "rgba(0, 240, 255, 0.08)",
-              border: "1px solid var(--theme-accent)",
-              borderRadius: "8px",
-              color: "var(--theme-accent)",
-              fontFamily: "inherit",
-              fontSize: "0.8rem",
-              fontWeight: "600",
-            }}
-          >
-            Download Resume
-          </button>
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              padding: "10px 18px",
-              background: "rgba(255, 255, 255, 0.02)",
-              border: "1px solid rgba(255, 255, 255, 0.12)",
-              borderRadius: "8px",
-              color: "var(--text-secondary)",
-              fontFamily: "inherit",
-              fontSize: "0.8rem",
-              textDecoration: "none",
-            }}
-          >
-            GitHub
-          </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              padding: "10px 18px",
-              background: "rgba(255, 255, 255, 0.02)",
-              border: "1px solid rgba(255, 255, 255, 0.12)",
-              borderRadius: "8px",
-              color: "var(--text-secondary)",
-              fontFamily: "inherit",
-              fontSize: "0.8rem",
-              textDecoration: "none",
-            }}
-          >
-            LinkedIn
-          </a>
-        </div>
-
-        {/* Information Cards stacked vertically in one column */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "12px",
-            textAlign: "left",
-            width: "100%",
-            maxWidth: "480px",
-            margin: "0 auto",
-          }}
-        >
-          <div
-            className="mobile-card"
-            style={{
-              borderLeft: "3.5px solid var(--glow-cyan)",
-              marginBottom: 0,
-            }}
-          >
-            <div
-              style={{ fontSize: "0.95rem", fontWeight: "700", color: "#fff" }}
-            >
-              MERN Stack
-            </div>
-            <div
-              style={{
-                fontSize: "0.72rem",
-                color: "var(--text-secondary)",
-                marginTop: "4px",
-              }}
-            >
-              Core Expertise
-            </div>
-          </div>
-          <div
-            className="mobile-card"
-            style={{
-              borderLeft: "3.5px solid var(--glow-green)",
-              marginBottom: 0,
-            }}
-          >
-            <div
-              style={{ fontSize: "0.95rem", fontWeight: "700", color: "#fff" }}
-            >
-              C++
-            </div>
-            <div
-              style={{
-                fontSize: "0.72rem",
-                color: "var(--text-secondary)",
-                marginTop: "4px",
-              }}
-            >
-              Primary Language
-            </div>
-          </div>
-          <div
-            className="mobile-card"
-            style={{
-              borderLeft: "3.5px solid var(--glow-purple)",
-              marginBottom: 0,
-            }}
-          >
-            <div
-              style={{ fontSize: "0.95rem", fontWeight: "700", color: "#fff" }}
-            >
-              Learning Infrastructure
-            </div>
-            <div
-              style={{
-                fontSize: "0.72rem",
-                color: "var(--text-secondary)",
-                marginTop: "4px",
-              }}
-            >
-              DevOps • System Design • DSA
-            </div>
-          </div>
-          <div
-            className="mobile-card"
-            style={{
-              borderLeft: "3.5px solid var(--theme-accent)",
-              marginBottom: 0,
-            }}
-          >
-            <div
-              style={{ fontSize: "0.95rem", fontWeight: "700", color: "#fff" }}
-            >
-              Open to Work
-            </div>
-            <div
-              style={{
-                fontSize: "0.72rem",
-                color: "var(--text-secondary)",
-                marginTop: "4px",
-              }}
-            >
-              Available for Opportunities
-            </div>
-          </div>
-        </div>
+        <ProfileOverview
+          onDownloadResume={onDownloadResume}
+          introStage="done"
+        />
 
         {/* Scroll Indicator */}
         <div
@@ -933,6 +717,16 @@ export const MobileOS = ({
       {/* 2. Mobile About Section (Accordion Timeline) */}
       <section id="mobile-about" className="mobile-section">
         <h2 className="mobile-section-title">About & Journey</h2>
+
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "560px",
+            margin: "0 auto 24px auto",
+          }}
+        >
+          <SystemInfo />
+        </div>
 
         <div
           style={{
@@ -1267,137 +1061,8 @@ export const MobileOS = ({
       <section id="mobile-skills" className="mobile-section">
         <h2 className="mobile-section-title">Skills Inventory</h2>
 
-        <div
-          className="skills-accordion-container"
-          style={{ width: "100%", maxWidth: "560px", margin: "0 auto" }}
-        >
-          {Object.entries(skillsCategories).map(([key, category]) => {
-            const isExpanded = skillsExpanded === key;
-            return (
-              <div
-                key={key}
-                className={`mobile-card ${isExpanded ? "active" : ""}`}
-                style={{ marginBottom: "12px", padding: "14px 18px" }}
-              >
-                <div
-                  className="accordion-header"
-                  onClick={() => setSkillsExpanded(isExpanded ? null : key)}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "12px",
-                    }}
-                  >
-                    <span
-                      style={{
-                        width: "8px",
-                        height: "8px",
-                        borderRadius: "50%",
-                        background: category.color,
-                      }}
-                    />
-                    <span
-                      style={{
-                        color: "#fff",
-                        fontWeight: "600",
-                        fontSize: "0.85rem",
-                      }}
-                    >
-                      {category.title}
-                    </span>
-                  </div>
-                  <span
-                    style={{ color: "var(--text-muted)", fontSize: "0.8rem" }}
-                  >
-                    {isExpanded ? "[-]" : "[+]"}
-                  </span>
-                </div>
-
-                <div
-                  className={`accordion-content ${isExpanded ? "open" : ""}`}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "14px",
-                      marginTop: "4px",
-                    }}
-                  >
-                    {category.items.map((skill, idx) => (
-                      <div
-                        key={idx}
-                        style={{
-                          borderBottom: "1px solid rgba(255, 255, 255, 0.04)",
-                          paddingBottom: "10px",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            marginBottom: "4px",
-                          }}
-                        >
-                          <span
-                            style={{
-                              fontSize: "0.8rem",
-                              fontWeight: "700",
-                              color: "#fff",
-                            }}
-                          >
-                            {skill.name}
-                          </span>
-                          <span
-                            style={{
-                              fontSize: "0.7rem",
-                              color: category.color,
-                              fontWeight: "600",
-                            }}
-                          >
-                            {skill.level}
-                          </span>
-                        </div>
-                        {/* Progress Bar */}
-                        <div
-                          style={{
-                            width: "100%",
-                            height: "4px",
-                            background: "rgba(255,255,255,0.06)",
-                            borderRadius: "2px",
-                            overflow: "hidden",
-                            marginBottom: "6px",
-                          }}
-                        >
-                          <div
-                            style={{
-                              width: skill.level.includes("%")
-                                ? skill.level
-                                : "80%",
-                              height: "100%",
-                              background: category.color,
-                            }}
-                          />
-                        </div>
-                        <div
-                          style={{
-                            fontSize: "0.72rem",
-                            color: "var(--text-secondary)",
-                            lineHeight: "1.4",
-                          }}
-                        >
-                          {skill.desc}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        <div style={{ width: "100%", maxWidth: "560px", margin: "0 auto" }}>
+          <SkillsGalaxy isActive={true} />
         </div>
       </section>
 

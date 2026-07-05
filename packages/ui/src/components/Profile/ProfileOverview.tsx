@@ -6,7 +6,7 @@ import { Float, Html } from "@react-three/drei";
 import * as THREE from "three";
 
 // OS Keyboard accessible button
-const OSButton = ({
+export const OSButton = ({
   children,
   onClick,
   href,
@@ -82,7 +82,7 @@ const OSButton = ({
 };
 
 // Interactive 3D Perspective Tilt Glass Card
-const GlassCard = ({
+export const GlassCard = ({
   title,
   subtitle,
   color = "var(--glow-cyan)",
@@ -321,10 +321,15 @@ const OrbitingNode = ({
 // Floating premium 3D Robot Mascot (face of NIKHIL_OS)
 export const OSMascot = ({ introStage }: { introStage: string }) => {
   const groupRef = React.useRef<THREE.Group>(null);
-  const leftEyeRef = React.useRef<THREE.Mesh>(null);
-  const rightEyeRef = React.useRef<THREE.Mesh>(null);
-  const eyeScaleY = React.useRef(1);
   const currentScale = React.useRef(0.01);
+
+  // Load user profile face texture
+  const texture = React.useMemo(() => {
+    if (typeof window === "undefined") return null;
+    const loader = new THREE.TextureLoader();
+    const tex = loader.load("/profile.jpg");
+    return tex;
+  }, []);
 
   useFrame((state) => {
     const { x, y } = state.pointer;
@@ -359,16 +364,6 @@ export const OSMascot = ({ introStage }: { introStage: string }) => {
       groupRef.current.position.y = Math.sin(t * 1.6) * 0.15;
       groupRef.current.scale.setScalar(currentScale.current);
     }
-
-    // 2. Realistic blinking animation
-    const isBlinking = Math.floor(t * 0.3) % 4 === 0 && t % 3.3 < 0.18;
-    eyeScaleY.current = THREE.MathUtils.lerp(
-      eyeScaleY.current,
-      isBlinking ? 0.05 : 1,
-      0.25,
-    );
-    if (leftEyeRef.current) leftEyeRef.current.scale.y = eyeScaleY.current;
-    if (rightEyeRef.current) rightEyeRef.current.scale.y = eyeScaleY.current;
   });
 
   return (
@@ -401,17 +396,18 @@ export const OSMascot = ({ introStage }: { introStage: string }) => {
           />
         </mesh>
 
-        {/* Left Glowing Pink Eye */}
-        <mesh position={[-0.32, 0.1, 0.85]} ref={leftEyeRef}>
-          <sphereGeometry args={[0.15, 16, 16]} />
-          <meshBasicMaterial color="#ff007f" />
-        </mesh>
-
-        {/* Right Glowing Pink Eye */}
-        <mesh position={[0.32, 0.1, 0.85]} ref={rightEyeRef}>
-          <sphereGeometry args={[0.15, 16, 16]} />
-          <meshBasicMaterial color="#ff007f" />
-        </mesh>
+        {/* User image face display inside visor */}
+        {texture && (
+          <mesh position={[0, 0.04, 0.85]} rotation={[0, 0, 0]}>
+            <circleGeometry args={[0.62, 32]} />
+            <meshBasicMaterial
+              map={texture}
+              transparent
+              opacity={0.95}
+              side={THREE.DoubleSide}
+            />
+          </mesh>
+        )}
 
         {/* Cute Ears / Side Bolts */}
         <mesh position={[-1.15, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
@@ -929,9 +925,9 @@ export const ProfileOverview = ({
         /* Mobile Viewport Spacings */
         @media (max-width: 768px) {
           .hero-container {
-            flex-direction: column;
+            flex-direction: column-reverse;
             align-items: center;
-            gap: 32px;
+            gap: 20px;
             overflow-y: auto;
             padding: 16px !important;
           }
@@ -947,10 +943,14 @@ export const ProfileOverview = ({
             justify-content: center;
           }
           .hero-right {
-            display: none; /* Hide 3D Canvas completely on mobile */
+            display: flex;
+            height: 250px;
+            width: 100%;
+            min-width: unset;
+            margin-bottom: 20px;
           }
           .mobile-avatar-container {
-            display: block;
+            display: none !important;
           }
         }
       `}</style>
