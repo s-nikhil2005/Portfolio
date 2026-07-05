@@ -805,9 +805,8 @@ export default function Home() {
         style={{
           background: "#030406",
           minHeight: "100dvh",
-          overflowY: "auto",
-          overflowX: "hidden",
           position: "relative",
+          width: "100%",
         }}
       >
         <MobileOS

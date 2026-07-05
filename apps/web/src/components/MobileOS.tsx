@@ -63,6 +63,7 @@ export const MobileOS = ({
 
   // System Menu modal open state
   const [menuOpen, setMenuOpen] = React.useState(false);
+  const [audioOn, setAudioOn] = React.useState(false);
 
   // Animated rotating titles
   const roles = [
@@ -606,20 +607,26 @@ export const MobileOS = ({
           cursor: pointer;
         }
         .drawer-item {
-          padding: 12px 14px;
-          border-radius: 8px;
+          padding: 14px 10px;
           cursor: pointer;
           transition: all 0.2s ease;
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 16px;
           color: var(--text-secondary);
           text-decoration: none;
+          font-size: 1.1rem;
+          font-weight: 700;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.02);
         }
         .drawer-item:hover, .drawer-item.active {
-          background: rgba(255, 255, 255, 0.04);
+          color: #fff;
+        }
+        .drawer-item-num {
+          font-size: 0.8rem;
           color: var(--theme-accent);
-          border-left: 2.5px solid var(--theme-accent);
+          font-weight: 800;
+          opacity: 0.9;
         }
 
         /* 8. Scroll indicator arrow bouncing */
@@ -1820,22 +1827,74 @@ export const MobileOS = ({
 
       {/* System Drawer Menu Popup (15% blurred backdrop) */}
       <div
-        className={`drawer-overlay \${menuOpen ? "open" : ""}`}
+        className={`drawer-overlay ${menuOpen ? "open" : ""}`}
         onClick={() => setMenuOpen(false)}
       />
-      <div className={`drawer-content \${menuOpen ? "open" : ""}`}>
-        <div className="drawer-header">
-          <span
+      <div className={`drawer-content ${menuOpen ? "open" : ""}`}>
+        <div
+          className="drawer-header"
+          style={{
+            borderBottom: "none",
+            paddingBottom: 0,
+            marginBottom: "30px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            {/* Initials Badge */}
+            <div
+              style={{
+                width: "36px",
+                height: "36px",
+                borderRadius: "8px",
+                background: "rgba(255,255,255,0.08)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: "800",
+                fontSize: "0.85rem",
+                color: "#fff",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+              }}
+            >
+              NS
+            </div>
+            <span
+              style={{ color: "#fff", fontWeight: "800", fontSize: "1rem" }}
+            >
+              Nikhil Singh
+            </span>
+          </div>
+          {/* Close button X */}
+          <button
+            onClick={() => setMenuOpen(false)}
             style={{
-              color: "var(--theme-accent)",
-              fontWeight: "bold",
-              fontSize: "0.78rem",
+              width: "34px",
+              height: "34px",
+              borderRadius: "8px",
+              border: "1px solid rgba(255,255,255,0.08)",
+              background: "rgba(255,255,255,0.03)",
+              color: "var(--text-secondary)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              fontFamily: "inherit",
             }}
           >
-            System Controls Menu
-          </span>
-          <button className="drawer-close" onClick={() => setMenuOpen(false)}>
-            [X]
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
           </button>
         </div>
 
@@ -1843,159 +1902,178 @@ export const MobileOS = ({
           <div
             style={{ display: "flex", flexDirection: "column", gap: "16px" }}
           >
-            {/* Quick Info */}
+            {/* Numbered Menu List */}
             <div
-              className="mobile-card"
-              style={{ padding: "12px 16px", marginBottom: 0 }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+                marginBottom: "20px",
+              }}
             >
-              <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>
-                // HOST_OS_METRICS
-              </div>
               <div
-                style={{ fontSize: "0.8rem", color: "#fff", marginTop: "4px" }}
-              >
-                Status: Normal Operation
-              </div>
-              <div style={{ fontSize: "0.8rem", color: "#fff" }}>
-                Version: NIKHIL_OS v3.4.1 (Mobile Mode)
-              </div>
-            </div>
-
-            {/* Scrollable menu navigation list with hover and active states */}
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "6px" }}
-            >
-              <span
-                style={{
-                  fontSize: "0.7rem",
-                  color: "var(--text-muted)",
-                  marginBottom: "4px",
-                }}
-              >
-                // QUICK_JUMP_WORKSPACES
-              </span>
-              <div
-                className={`drawer-item \${activeTab === "home" ? "active" : ""}`}
+                className={`drawer-item ${activeTab === "home" ? "active" : ""}`}
                 onClick={() => {
                   scrollToSection("home");
                   setMenuOpen(false);
                 }}
               >
-                Home
+                <span className="drawer-item-num">01</span> About
               </div>
               <div
-                className={`drawer-item \${activeTab === "about" ? "active" : ""}`}
-                onClick={() => {
-                  scrollToSection("about");
-                  setMenuOpen(false);
-                }}
-              >
-                About & Timeline
-              </div>
-              <div
-                className={`drawer-item \${activeTab === "projects" ? "active" : ""}`}
-                onClick={() => {
-                  scrollToSection("projects");
-                  setMenuOpen(false);
-                }}
-              >
-                Projects Swiper
-              </div>
-              <div
-                className={`drawer-item \${activeTab === "skills" ? "active" : ""}`}
+                className={`drawer-item ${activeTab === "skills" ? "active" : ""}`}
                 onClick={() => {
                   scrollToSection("skills");
                   setMenuOpen(false);
                 }}
               >
-                Skills Inventory
+                <span className="drawer-item-num">02</span> Skills
               </div>
               <div
-                className={`drawer-item \${activeTab === "experience" ? "active" : ""}`}
+                className={`drawer-item ${activeTab === "projects" ? "active" : ""}`}
+                onClick={() => {
+                  scrollToSection("projects");
+                  setMenuOpen(false);
+                }}
+              >
+                <span className="drawer-item-num">03</span> Projects
+              </div>
+              <div
+                className={`drawer-item ${activeTab === "experience" ? "active" : ""}`}
                 onClick={() => {
                   scrollToSection("experience");
                   setMenuOpen(false);
                 }}
               >
-                Work Experience
+                <span className="drawer-item-num">04</span> Experience
               </div>
               <div
-                className={`drawer-item \${activeTab === "contact" ? "active" : ""}`}
+                className={`drawer-item ${activeTab === "contact" ? "active" : ""}`}
                 onClick={() => {
                   scrollToSection("contact");
                   setMenuOpen(false);
                 }}
               >
-                Secure Mail Form
+                <span className="drawer-item-num">05</span> Contact
               </div>
             </div>
 
-            {/* Theme switcher */}
-            <div>
-              <span
-                style={{
-                  fontSize: "0.72rem",
-                  color: "var(--text-muted)",
-                  display: "block",
-                  marginBottom: "8px",
-                }}
-              >
-                // SELECT_SYSTEM_THEME_GLOW
-              </span>
-              <div style={{ display: "flex", gap: "10px" }}>
-                {["cyan", "green", "purple"].map((t) => (
-                  <button
-                    key={t}
-                    onClick={() => setActiveTheme(t as any)}
-                    style={{
-                      flex: 1,
-                      padding: "10px 0",
-                      background:
-                        activeTheme === t
-                          ? "rgba(255,255,255,0.06)"
-                          : "rgba(255,255,255,0.02)",
-                      border:
-                        activeTheme === t
-                          ? `1px solid var(--theme-accent)`
-                          : "1px solid rgba(255,255,255,0.12)",
-                      borderRadius: "6px",
-                      color:
-                        activeTheme === t
-                          ? "var(--theme-accent)"
-                          : "var(--text-secondary)",
-                      fontFamily: "inherit",
-                      fontSize: "0.72rem",
-                      fontWeight: "600",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {t}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Action buttons */}
-            <button
-              onClick={() => {
-                onDownloadResume();
-                setMenuOpen(false);
-              }}
+            {/* Bottom Actions stack */}
+            <div
               style={{
-                width: "100%",
-                padding: "12px 0",
-                background: "rgba(0, 240, 255, 0.08)",
-                border: "1px solid var(--theme-accent)",
-                borderRadius: "8px",
-                color: "var(--theme-accent)",
-                fontFamily: "inherit",
-                fontSize: "0.78rem",
-                fontWeight: "600",
-                marginTop: "10px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                borderTop: "1px solid rgba(255,255,255,0.06)",
+                paddingTop: "24px",
               }}
             >
-              Download CV Payload
-            </button>
+              {/* SWITCH THEME button */}
+              <button
+                onClick={() => {
+                  const themes: ("cyan" | "green" | "purple")[] = [
+                    "cyan",
+                    "green",
+                    "purple",
+                  ];
+                  const nextTheme =
+                    themes[(themes.indexOf(activeTheme) + 1) % themes.length];
+                  setActiveTheme(nextTheme);
+                }}
+                style={{
+                  width: "100%",
+                  padding: "14px 0",
+                  background: "var(--theme-accent)",
+                  border: "none",
+                  borderRadius: "8px",
+                  color: "#050608",
+                  fontFamily: "inherit",
+                  fontSize: "0.78rem",
+                  fontWeight: "800",
+                  textTransform: "uppercase",
+                  letterSpacing: "1px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                  boxShadow: `0 0 15px ${activeTheme === "cyan" ? "rgba(0, 240, 255, 0.3)" : activeTheme === "green" ? "rgba(0, 255, 102, 0.3)" : "rgba(157, 78, 221, 0.3)"}`,
+                }}
+              >
+                ☀️ SWITCH THEME: {activeTheme.toUpperCase()}
+              </button>
+
+              {/* AUDIO button */}
+              <button
+                onClick={() => setAudioOn(!audioOn)}
+                style={{
+                  width: "100%",
+                  padding: "14px 0",
+                  background: "transparent",
+                  border: "1px solid rgba(255,255,255,0.15)",
+                  borderRadius: "8px",
+                  color: "#fff",
+                  fontFamily: "inherit",
+                  fontSize: "0.78rem",
+                  fontWeight: "800",
+                  textTransform: "uppercase",
+                  letterSpacing: "1px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                }}
+              >
+                {audioOn ? "🔊 AUDIO: ON" : "🔇 AUDIO: OFF"}
+              </button>
+
+              {/* DIAGNOSTIC SHELL button */}
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  setTerminalOpen(true);
+                }}
+                style={{
+                  width: "100%",
+                  padding: "14px 0",
+                  background: "transparent",
+                  border: "1px solid rgba(255,255,255,0.15)",
+                  borderRadius: "8px",
+                  color: "#fff",
+                  fontFamily: "inherit",
+                  fontSize: "0.78rem",
+                  fontWeight: "800",
+                  textTransform: "uppercase",
+                  letterSpacing: "1px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                }}
+              >
+                &gt;_ DIAGNOSTIC SHELL [CLI]
+              </button>
+
+              {/* Download Resume button */}
+              <button
+                onClick={onDownloadResume}
+                style={{
+                  width: "100%",
+                  padding: "14px 0",
+                  background: "#fff",
+                  border: "none",
+                  borderRadius: "8px",
+                  color: "#050608",
+                  fontFamily: "inherit",
+                  fontSize: "0.82rem",
+                  fontWeight: "800",
+                  letterSpacing: "0.5px",
+                  marginTop: "8px",
+                  cursor: "pointer",
+                }}
+              >
+                Download Resume
+              </button>
+            </div>
           </div>
         </div>
       </div>
