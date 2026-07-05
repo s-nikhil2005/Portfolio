@@ -1,94 +1,422 @@
-import * as React from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import { StarsBackground } from "./StarsBackground";
-import { FloatingLaptop } from "./FloatingLaptop";
-import { OrbitingTechIcons } from "./OrbitingTechIcons";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
+"use client";
 
-const InteractiveGroup = ({ children }: { children: React.ReactNode }) => {
+import * as React from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import * as THREE from "three";
+
+// 1. Dynamic Space Stars & Nebula Background
+const SpaceEnvironment = () => {
   const ref = React.useRef<THREE.Group>(null);
 
-  useFrame((state) => {
-    const { x, y } = state.pointer; // Mouse position from -1 to 1
+  // Generate star field points
+  const [starPositions] = React.useState(() => {
+    const pos = new Float32Array(3000 * 3);
+    for (let i = 0; i < 3000; i++) {
+      const u = Math.random();
+      const v = Math.random();
+      const theta = u * 2.0 * Math.PI;
+      const phi = Math.acos(2.0 * v - 1.0);
+      const r = 25 + Math.random() * 35; // Far out range
+
+      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      pos[i * 3 + 2] = r * Math.cos(phi);
+    }
+    return pos;
+  });
+
+  // Slowly drift stars and dust
+  useFrame((state, delta) => {
     if (ref.current) {
-      // Smoothly rotate the scene based on cursor position
-      ref.current.rotation.y = THREE.MathUtils.lerp(
-        ref.current.rotation.y,
-        x * 0.18,
-        0.05,
-      );
-      ref.current.rotation.x = THREE.MathUtils.lerp(
-        ref.current.rotation.x,
-        -y * 0.12,
-        0.05,
-      );
+      ref.current.rotation.x += delta * 0.005;
+      ref.current.rotation.y += delta * 0.003;
     }
   });
 
-  return <group ref={ref}>{children}</group>;
+  return (
+    <group ref={ref}>
+      <points>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[starPositions, 3]}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.06}
+          color="#00C8FF"
+          transparent
+          opacity={0.45}
+          sizeAttenuation
+          depthWrite={false}
+        />
+      </points>
+      <points>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[starPositions.map((p) => p * 1.15), 3]}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.04}
+          color="#7B61FF"
+          transparent
+          opacity={0.3}
+          sizeAttenuation
+          depthWrite={false}
+        />
+      </points>
+    </group>
+  );
 };
 
+// 2. Futuristic Digital Space Planet
+const FuturisticPlanet = () => {
+  const planetRef = React.useRef<THREE.Mesh>(null);
+
+  // Generate high-resolution procedural continent and city light grid texture
+  const planetTexture = React.useMemo(() => {
+    if (typeof window === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      // Dark space core base
+      const grad = ctx.createLinearGradient(0, 0, 512, 256);
+      grad.addColorStop(0, "#030712");
+      grad.addColorStop(0.5, "#071B2C");
+      grad.addColorStop(1, "#111827");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 512, 256);
+
+      // Latitudinal lines
+      ctx.strokeStyle = "rgba(0, 229, 255, 0.15)";
+      ctx.lineWidth = 1;
+      for (let y = 16; y < 256; y += 16) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(512, y);
+        ctx.stroke();
+      }
+      // Longitudinal lines
+      for (let x = 32; x < 512; x += 32) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 256);
+        ctx.stroke();
+      }
+
+      // Add sparkling glowing clusters (cities / energy hubs)
+      ctx.fillStyle = "#00E5FF";
+      for (let i = 0; i < 50; i++) {
+        const rx = Math.random() * 512;
+        const ry = Math.random() * 256;
+        const radius = Math.random() * 2.5 + 0.5;
+        ctx.beginPath();
+        ctx.arc(rx, ry, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    const texture = new THREE.CanvasTexture(canvas);
+    return texture;
+  }, []);
+
+  useFrame((state, delta) => {
+    if (planetRef.current) {
+      planetRef.current.rotation.y += delta * 0.02;
+    }
+  });
+
+  return (
+    <group position={[7, 3, -15]}>
+      {/* Atmosphere shell glow */}
+      <mesh>
+        <sphereGeometry args={[4.6, 32, 32]} />
+        <meshBasicMaterial
+          color="#00C8FF"
+          transparent
+          opacity={0.06}
+          side={THREE.BackSide}
+        />
+      </mesh>
+
+      {/* Main Planet Mesh */}
+      <mesh ref={planetRef} castShadow receiveShadow>
+        <sphereGeometry args={[4.5, 64, 64]} />
+        {planetTexture ? (
+          <meshStandardMaterial
+            map={planetTexture}
+            roughness={0.3}
+            metalness={0.9}
+            emissive="#071B2C"
+            emissiveIntensity={0.5}
+          />
+        ) : (
+          <meshStandardMaterial
+            color="#071B2C"
+            roughness={0.4}
+            metalness={0.8}
+          />
+        )}
+      </mesh>
+    </group>
+  );
+};
+
+// 3. Metallic Ground Grid Floor
+const MetallicGridFloor = () => {
+  const gridTexture = React.useMemo(() => {
+    if (typeof window === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 128;
+    canvas.height = 128;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      // Dark floor
+      ctx.fillStyle = "#030712";
+      ctx.fillRect(0, 0, 128, 128);
+
+      // Major grid line
+      ctx.strokeStyle = "rgba(0, 229, 255, 0.12)";
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(0, 0, 128, 128);
+
+      // Minor details
+      ctx.strokeStyle = "rgba(123, 97, 255, 0.03)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(32, 32, 64, 64);
+    }
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(40, 40);
+    return texture;
+  }, []);
+
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2.5, 0]} receiveShadow>
+      <planeGeometry args={[200, 200]} />
+      {gridTexture ? (
+        <meshStandardMaterial
+          map={gridTexture}
+          roughness={0.2}
+          metalness={0.95}
+        />
+      ) : (
+        <meshStandardMaterial color="#030712" roughness={0.4} metalness={0.9} />
+      )}
+    </mesh>
+  );
+};
+
+// 4. Center Pulsing Energy Beam
+const EnergyCoreBeam = () => {
+  const beamRef = React.useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    if (beamRef.current) {
+      // Pulsing volumetric beam scale and opacity animation
+      const scaleVal = 1 + Math.sin(t * 3) * 0.08;
+      beamRef.current.scale.set(scaleVal, 1, scaleVal);
+    }
+  });
+
+  return (
+    <group position={[0, -2.5, 0]}>
+      {/* Floor glow ring indicator */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}>
+        <ringGeometry args={[1.2, 1.4, 64]} />
+        <meshBasicMaterial
+          color="#00E5FF"
+          transparent
+          opacity={0.3}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Main core cylinder beam */}
+      <mesh ref={beamRef} position={[0, 7.5, 0]}>
+        <cylinderGeometry args={[0.08, 0.15, 15, 32, 1, true]} />
+        <meshBasicMaterial
+          color="#00C8FF"
+          transparent
+          opacity={0.12}
+          side={THREE.DoubleSide}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+    </group>
+  );
+};
+
+// 5. Floating Glassmorphic Cubes & Rings
+const FloatingHoloObjects = () => {
+  const cubesGroup = React.useRef<THREE.Group>(null);
+
+  const cubesData: {
+    pos: [number, number, number];
+    size: number;
+    speed: number;
+    color: string;
+  }[] = [
+    { pos: [-3, 1, -4], size: 0.35, speed: 0.4, color: "#00E5FF" },
+    { pos: [3.5, 2, -5], size: 0.25, speed: 0.5, color: "#7B61FF" },
+    { pos: [-2, -0.5, -2.5], size: 0.2, speed: 0.6, color: "#00C8FF" },
+    { pos: [2.2, 0.2, -3], size: 0.28, speed: 0.3, color: "#7B61FF" },
+    { pos: [-4, 3, -6], size: 0.45, speed: 0.25, color: "#00E5FF" },
+  ];
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    if (cubesGroup.current) {
+      cubesGroup.current.children.forEach((child, idx) => {
+        const item = cubesData[idx];
+        if (child && item) {
+          // Floating rotation
+          child.rotation.x = t * 0.1 + idx;
+          child.rotation.y = t * 0.15 + idx;
+          // Slowly breathing up and down
+          child.position.y =
+            item.pos[1] + Math.sin(t * item.speed + idx) * 0.18;
+        }
+      });
+    }
+  });
+
+  return (
+    <group ref={cubesGroup}>
+      {cubesData.map((item, idx) => (
+        <mesh key={idx} position={item.pos}>
+          <boxGeometry args={[item.size, item.size, item.size]} />
+          <meshPhysicalMaterial
+            transparent
+            opacity={0.3}
+            roughness={0.08}
+            metalness={0.1}
+            transmission={0.9}
+            thickness={0.5}
+            color={item.color}
+          />
+        </mesh>
+      ))}
+
+      {/* Orbiting large space ring */}
+      <mesh position={[0, 0.5, -2]} rotation={[Math.PI * 0.15, 0, 0]}>
+        <torusGeometry args={[5, 0.02, 16, 100]} />
+        <meshBasicMaterial color="#7B61FF" transparent opacity={0.15} />
+      </mesh>
+    </group>
+  );
+};
+
+// 6. Camera Pan Controller with Smooth LookAt Interpolations
 const CameraController = ({ activeSlide }: { activeSlide: number }) => {
+  const lookAtTarget = React.useRef(new THREE.Vector3(0, 0, 0));
+
   useFrame((state) => {
     let targetX = 0;
-    let targetY = 1.8;
-    let targetZ = 6.5;
+    let targetY = 1.2;
+    let targetZ = 5.5;
+
+    let targetLookX = 0;
+    let targetLookY = 0;
+    let targetLookZ = 0;
 
     switch (activeSlide) {
-      case 0:
+      case 0: // Home
         targetX = 0;
-        targetY = 1.8;
-        targetZ = 6.5;
-        break;
-      case 1:
-        targetX = 1.8;
-        targetY = 1.6;
-        targetZ = 7.0;
-        break;
-      case 2:
-        targetX = -1.8;
-        targetY = 2.0;
-        targetZ = 6.8;
-        break;
-      case 3:
-        targetX = 0;
-        targetY = -1.0;
-        targetZ = 8.0;
-        break;
-      case 4:
-        targetX = -2.2;
         targetY = 1.2;
-        targetZ = 7.5;
+        targetZ = 5.5;
+        targetLookX = 0;
+        targetLookY = 0;
+        targetLookZ = 0;
         break;
-      case 5:
-        targetX = 2.2;
-        targetY = 1.4;
-        targetZ = 7.2;
+      case 1: // About
+        targetX = -2.2;
+        targetY = 1.8;
+        targetZ = 5.0;
+        targetLookX = 0.5;
+        targetLookY = 0.5;
+        targetLookZ = -0.5;
+        break;
+      case 2: // Projects
+        targetX = 0;
+        targetY = 2.4;
+        targetZ = 3.5;
+        targetLookX = 0;
+        targetLookY = -0.5;
+        targetLookZ = -2;
+        break;
+      case 3: // Skills
+        targetX = 1.8;
+        targetY = -0.2;
+        targetZ = 4.2;
+        targetLookX = -0.5;
+        targetLookY = 0.5;
+        targetLookZ = 0;
+        break;
+      case 4: // Experience
+        targetX = -2.0;
+        targetY = 0.8;
+        targetZ = 4.5;
+        targetLookX = 0.5;
+        targetLookY = 0;
+        targetLookZ = -1;
+        break;
+      case 5: // Contact
+        targetX = 2.5;
+        targetY = 1.6;
+        targetZ = 4.8;
+        targetLookX = -1;
+        targetLookY = 0;
+        targetLookZ = -0.8;
         break;
     }
 
+    // Smoothly LERP camera position
     state.camera.position.x = THREE.MathUtils.lerp(
       state.camera.position.x,
       targetX,
-      0.05,
+      0.035,
     );
     state.camera.position.y = THREE.MathUtils.lerp(
       state.camera.position.y,
       targetY,
-      0.05,
+      0.035,
     );
     state.camera.position.z = THREE.MathUtils.lerp(
       state.camera.position.z,
       targetZ,
-      0.05,
+      0.035,
     );
+
+    // Smoothly LERP camera lookAt target vector
+    lookAtTarget.current.x = THREE.MathUtils.lerp(
+      lookAtTarget.current.x,
+      targetLookX,
+      0.035,
+    );
+    lookAtTarget.current.y = THREE.MathUtils.lerp(
+      lookAtTarget.current.y,
+      targetLookY,
+      0.035,
+    );
+    lookAtTarget.current.z = THREE.MathUtils.lerp(
+      lookAtTarget.current.z,
+      targetLookZ,
+      0.035,
+    );
+
+    state.camera.lookAt(lookAtTarget.current);
   });
 
   return null;
 };
 
+// Main Scene Canvas export
 export const SceneCanvas = ({ activeSlide }: { activeSlide: number }) => {
   return (
     <div
@@ -98,51 +426,37 @@ export const SceneCanvas = ({ activeSlide }: { activeSlide: number }) => {
         left: 0,
         width: "100%",
         height: "100%",
-        zIndex: 1, // behind windows but on top of radial gradient background
-        pointerEvents: "auto", // allow user OrbitControls dragging
+        zIndex: 1,
+        pointerEvents: "none", // Prevent capturing pointer events
       }}
     >
       <Canvas
-        shadows
-        camera={{ position: [0, 1.8, 6.5], fov: 45 }}
+        camera={{ position: [0, 1.2, 5.5], fov: 45 }}
         gl={{ antialias: true, alpha: true }}
       >
-        {/* Lights */}
-        <ambientLight intensity={0.3} />
+        {/* Ambient Dark Blue Fill Light */}
+        <ambientLight intensity={0.15} color="#071B2C" />
 
-        {/* Main overhead key light */}
+        {/* Cinematic Directional Light (Planet key source) */}
         <directionalLight
-          position={[5, 10, 5]}
-          intensity={1.2}
-          castShadow
-          shadow-mapSize-width={2048}
-          shadow-mapSize-height={2048}
-          shadow-bias={-0.0001}
+          position={[10, 10, -5]}
+          intensity={1.5}
+          color="#00C8FF"
         />
 
-        {/* Glowing neon back lights */}
-        <pointLight position={[-5, 2, -3]} intensity={1.8} color="#00f0ff" />
-        <pointLight position={[5, -2, -3]} intensity={1.2} color="#9d4edd" />
+        {/* Soft Colored Accent Point Lights */}
+        <pointLight position={[-5, 3, 2]} intensity={2.0} color="#7B61FF" />
+        <pointLight position={[5, -2, 2]} intensity={1.5} color="#00E5FF" />
 
-        {/* Scene Objects */}
-        <StarsBackground />
+        {/* Unified 3D Space Base Environment components */}
+        <SpaceEnvironment />
+        <FuturisticPlanet />
+        <MetallicGridFloor />
+        <EnergyCoreBeam />
+        <FloatingHoloObjects />
 
-        <InteractiveGroup>
-          <FloatingLaptop />
-          <OrbitingTechIcons />
-        </InteractiveGroup>
-
+        {/* Camera lookAt / sweeps controller */}
         <CameraController activeSlide={activeSlide} />
-
-        {/* Recruiter-friendly Camera Controls */}
-        <OrbitControls
-          enableZoom={false}
-          enablePan={false}
-          minPolarAngle={Math.PI / 4}
-          maxPolarAngle={Math.PI * 0.58}
-          autoRotate={false}
-          makeDefault
-        />
       </Canvas>
     </div>
   );

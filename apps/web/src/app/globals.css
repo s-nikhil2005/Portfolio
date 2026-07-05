@@ -1,12 +1,13 @@
 /* Base system styles for NIKHIL_OS */
 
 :root {
-  --bg-obsidian: #0a0b0e;
+  --bg-obsidian: #030712;
+  --bg-secondary: #071b2c;
   --text-primary: #f8f9fa;
   --text-secondary: #8e9aa8;
   --glow-green: #00ff66;
-  --glow-cyan: #00f0ff;
-  --glow-purple: #9d4edd;
+  --glow-cyan: #00e5ff;
+  --glow-purple: #7b61ff;
 }
 
 * {

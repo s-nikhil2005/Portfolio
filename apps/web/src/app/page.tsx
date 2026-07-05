@@ -872,27 +872,12 @@ export default function Home() {
         width: "100vw",
         height: "100vh",
         background:
-          "radial-gradient(circle at center, #111422 0%, #050608 100%)",
+          "radial-gradient(circle at center, #071B2C 0%, #030712 100%)",
         overflow: "hidden",
       }}
     >
       {/* Background Cursor Glow Trail */}
       <CursorGlow />
-
-      {/* Background Grid Pattern */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          backgroundImage:
-            "radial-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-          pointerEvents: "none",
-        }}
-      />
 
       {/* 3D Experience Scene */}
       <SceneCanvas activeSlide={activeSlide} />
