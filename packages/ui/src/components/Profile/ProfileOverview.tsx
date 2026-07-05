@@ -318,9 +318,11 @@ const OrbitingNode = ({
   );
 };
 
-// Floating premium 3D Robot Mascot (face of NIKHIL_OS)
+// Floating premium 3D Holographic Avatar Card (face of NIKHIL_OS)
 export const OSMascot = ({ introStage }: { introStage: string }) => {
   const groupRef = React.useRef<THREE.Group>(null);
+  const ringRef1 = React.useRef<THREE.Mesh>(null);
+  const ringRef2 = React.useRef<THREE.Mesh>(null);
   const currentScale = React.useRef(0.01);
 
   // Load user profile face texture
@@ -335,7 +337,7 @@ export const OSMascot = ({ introStage }: { introStage: string }) => {
     const { x, y } = state.pointer;
     const t = state.clock.getElapsedTime();
 
-    // 0. Scale up mascot dynamically once stage is mascotOn
+    // 0. Scale up avatar dynamically matching intro sequence
     const targetScale =
       introStage === "hidden" ||
       introStage === "reactorOn" ||
@@ -348,8 +350,12 @@ export const OSMascot = ({ introStage }: { introStage: string }) => {
       0.08,
     );
 
-    // 1. Mouse reactive look-around and tilt
     if (groupRef.current) {
+      // Gentle floating up and down bobbing
+      groupRef.current.position.y = Math.sin(t * 1.5) * 0.12;
+      groupRef.current.scale.setScalar(currentScale.current);
+
+      // Mouse reactive tilt and rotation toward cursor
       groupRef.current.rotation.y = THREE.MathUtils.lerp(
         groupRef.current.rotation.y,
         x * 0.45,
@@ -360,140 +366,72 @@ export const OSMascot = ({ introStage }: { introStage: string }) => {
         -y * 0.35,
         0.08,
       );
-      // Floating bobbing motion
-      groupRef.current.position.y = Math.sin(t * 1.6) * 0.15;
-      groupRef.current.scale.setScalar(currentScale.current);
+    }
+
+    // Rotating background accent rings
+    if (ringRef1.current) {
+      ringRef1.current.rotation.z = t * 0.12;
+    }
+    if (ringRef2.current) {
+      ringRef2.current.rotation.z = -t * 0.18;
     }
   });
 
   return (
     <group ref={groupRef}>
-      {/* ROBOT MASCOT GROUP */}
-      <group position={[0, 0.4, 0]}>
-        {/* Hoodie Hood Back Shell */}
-        <mesh>
-          <sphereGeometry args={[1.12, 32, 32]} />
-          <meshStandardMaterial
-            color="#0b172a"
-            roughness={0.6}
-            metalness={0.1}
-          />
-        </mesh>
-
-        {/* Hoodie Hood Open Rim (Torus wrapper) */}
-        <mesh position={[0, 0, 0.12]} rotation={[0.08, 0, 0]}>
-          <torusGeometry args={[1.05, 0.15, 16, 64]} />
-          <meshStandardMaterial color="#0b172a" roughness={0.6} />
-        </mesh>
-
-        {/* Visor / Face Plate */}
-        <mesh position={[0, 0, 0.05]}>
-          <sphereGeometry args={[0.95, 32, 32]} />
-          <meshStandardMaterial
-            color="#030712"
-            roughness={0.1}
-            metalness={0.9}
-          />
-        </mesh>
-
-        {/* User image face display inside visor */}
-        {texture && (
-          <mesh position={[0, 0.04, 0.85]} rotation={[0, 0, 0]}>
-            <circleGeometry args={[0.62, 32]} />
-            <meshBasicMaterial
-              map={texture}
-              transparent
-              opacity={0.95}
-              side={THREE.DoubleSide}
-            />
-          </mesh>
-        )}
-
-        {/* Cute Ears / Side Bolts */}
-        <mesh position={[-1.15, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.15, 0.15, 0.3, 16]} />
-          <meshStandardMaterial
-            color="#334155"
-            roughness={0.3}
-            metalness={0.8}
-          />
-        </mesh>
-        <mesh position={[1.15, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.15, 0.15, 0.3, 16]} />
-          <meshStandardMaterial
-            color="#334155"
-            roughness={0.3}
-            metalness={0.8}
-          />
-        </mesh>
-
-        {/* Neck connector */}
-        <mesh position={[0, -1.0, 0]}>
-          <cylinderGeometry args={[0.3, 0.3, 0.3, 16]} />
-          <meshStandardMaterial
-            color="#1e293b"
-            roughness={0.4}
-            metalness={0.7}
-          />
-        </mesh>
-
-        {/* Hoodie Body */}
-        <mesh position={[0, -1.7, 0]}>
-          <cylinderGeometry args={[0.65, 0.78, 1.1, 32]} />
-          <meshStandardMaterial color="#0b172a" roughness={0.65} />
-        </mesh>
-
-        {/* Hoodie front pocket */}
-        <mesh position={[0, -1.82, 0.45]} rotation={[0.15, 0, 0]}>
-          <boxGeometry args={[0.6, 0.35, 0.15]} />
-          <meshStandardMaterial color="#0f172a" roughness={0.7} />
-        </mesh>
-
-        {/* Little robot hands */}
-        <mesh position={[-0.9, -1.6, 0.2]}>
-          <sphereGeometry args={[0.15, 16, 16]} />
-          <meshStandardMaterial
-            color="#ff007f"
-            roughness={0.4}
-            metalness={0.5}
-          />
-        </mesh>
-        <mesh position={[0.9, -1.6, 0.2]}>
-          <sphereGeometry args={[0.15, 16, 16]} />
-          <meshStandardMaterial
-            color="#ff007f"
-            roughness={0.4}
-            metalness={0.5}
-          />
-        </mesh>
-
-        {/* Little robot feet */}
-        <mesh position={[-0.35, -2.3, 0.1]}>
-          <sphereGeometry args={[0.2, 16, 16]} />
-          <meshStandardMaterial
-            color="#030712"
-            roughness={0.3}
-            metalness={0.8}
-          />
-        </mesh>
-        <mesh position={[0.35, -2.3, 0.1]}>
-          <sphereGeometry args={[0.2, 16, 16]} />
-          <meshStandardMaterial
-            color="#030712"
-            roughness={0.3}
-            metalness={0.8}
-          />
-        </mesh>
-      </group>
-
-      {/* Orbiting halo accent behind mascot */}
-      <mesh position={[0, 0.4, -0.4]} rotation={[0.2, 0, 0]}>
-        <ringGeometry args={[1.4, 1.45, 64]} />
+      {/* Outer Holographic Dashed Rings Behind Face */}
+      <mesh ref={ringRef1} position={[0, 0, -0.2]}>
+        <ringGeometry args={[1.3, 1.34, 64]} />
         <meshBasicMaterial
-          color="#ff007f"
-          side={THREE.DoubleSide}
+          color="#00E5FF"
           transparent
-          opacity={0.18}
+          opacity={0.35}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+      <mesh
+        ref={ringRef2}
+        position={[0, 0, -0.25]}
+        rotation={[0, 0, Math.PI / 4]}
+      >
+        <ringGeometry args={[1.42, 1.45, 64]} />
+        <meshBasicMaterial
+          color="#7B61FF"
+          transparent
+          opacity={0.2}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Circular Soft Glow aura behind face */}
+      <mesh position={[0, 0, -0.1]}>
+        <circleGeometry args={[1.15, 32]} />
+        <meshBasicMaterial color="#00E5FF" transparent opacity={0.05} />
+      </mesh>
+
+      {/* Main Holographic Avatar Disc displaying User Profile Image */}
+      <mesh position={[0, 0, 0]}>
+        <circleGeometry args={[1.1, 64]} />
+        {texture ? (
+          <meshBasicMaterial
+            map={texture}
+            transparent
+            opacity={0.92}
+            side={THREE.DoubleSide}
+          />
+        ) : (
+          <meshBasicMaterial color="#00E5FF" transparent opacity={0.3} />
+        )}
+      </mesh>
+
+      {/* Glowing neon border ring around face disc */}
+      <mesh position={[0, 0, 0.01]}>
+        <ringGeometry args={[1.09, 1.11, 64]} />
+        <meshBasicMaterial
+          color="#00E5FF"
+          transparent
+          opacity={0.8}
+          side={THREE.DoubleSide}
         />
       </mesh>
     </group>
