@@ -10,20 +10,22 @@ export const OSButton = ({
   children,
   onClick,
   href,
-  primary = false,
+  variant = "dark",
 }: {
   children: React.ReactNode;
   onClick?: () => void;
   href?: string;
-  primary?: boolean;
+  variant?: "green" | "dark";
 }) => {
   const [focused, setFocused] = React.useState(false);
   const [hovered, setHovered] = React.useState(false);
 
+  const isGreen = variant === "green";
+
   const style: React.CSSProperties = {
     fontFamily: "var(--font-mono)",
     fontSize: "0.82rem",
-    fontWeight: "600",
+    fontWeight: "700",
     padding: "10px 20px",
     borderRadius: "8px",
     cursor: "pointer",
@@ -32,21 +34,17 @@ export const OSButton = ({
     justifyContent: "center",
     gap: "8px",
     transition: "all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1)",
-    border: primary
-      ? "1px solid var(--glow-cyan)"
-      : "1px solid rgba(255, 255, 255, 0.12)",
-    background: primary
-      ? "rgba(0, 240, 255, 0.08)"
-      : "rgba(255, 255, 255, 0.02)",
-    color: primary ? "var(--glow-cyan)" : "var(--text-secondary)",
+    border: isGreen ? "none" : "1px solid rgba(255, 255, 255, 0.08)",
+    background: isGreen ? "#50b484" : "rgba(24, 24, 27, 0.65)",
+    color: isGreen ? "#09090b" : "#e4e4e7",
     boxShadow:
       hovered || focused
-        ? primary
-          ? "0 0 15px rgba(0, 240, 255, 0.3)"
-          : "0 0 10px rgba(255, 255, 255, 0.15)"
+        ? isGreen
+          ? "0 4px 14px rgba(80, 180, 132, 0.4)"
+          : "0 0 10px rgba(255, 255, 255, 0.1)"
         : "none",
-    transform: hovered ? "translateY(-1px)" : "none",
-    outline: focused ? "2px solid var(--glow-cyan)" : "none",
+    transform: hovered ? "translateY(-1.5px)" : "none",
+    outline: focused ? "2px solid #50b484" : "none",
     textDecoration: "none",
   };
 
@@ -571,7 +569,13 @@ export const ProfileOverview = ({
           gap: 16px;
           width: 100%;
         }
-        .buttons-row {
+        .buttons-rows-container {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          width: 100%;
+        }
+        .buttons-row-line {
           display: flex;
           flex-wrap: wrap;
           gap: 12px;
@@ -700,7 +704,7 @@ export const ProfileOverview = ({
           .cards-grid {
             grid-template-columns: 1fr;
           }
-          .buttons-row {
+          .buttons-row-line {
             justify-content: flex-start;
           }
           .hero-right {
@@ -893,32 +897,82 @@ export const ProfileOverview = ({
           />
         </div>
 
-        {/* Action Buttons Row */}
-        <div className="buttons-row">
-          <OSButton primary onClick={onDownloadResume}>
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              style={{ marginRight: "2px" }}
-            >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            Resume
-          </OSButton>
-          <OSButton href="https://github.com/s-nikhil2005">GitHub</OSButton>
-          <OSButton href="https://www.linkedin.com/in/nikhil-singh-580845284/">
-            LinkedIn
-          </OSButton>
-          <OSButton href="https://leetcode.com/u/Nikhil_Singh2005/">
-            LeetCode
-          </OSButton>
-          <OSButton href="mailto:nikhilsingh76666@gmail.com">Email Me</OSButton>
+        {/* Action Buttons Rows */}
+        <div className="buttons-rows-container">
+          <div className="buttons-row-line">
+            <OSButton variant="green" href="/resume">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                style={{ marginRight: "2px" }}
+              >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+              </svg>
+              Resume
+            </OSButton>
+            <OSButton href="https://github.com/s-nikhil2005">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+              </svg>
+              GitHub
+            </OSButton>
+            <OSButton href="https://www.linkedin.com/in/nikhil-singh-580845284/">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                <rect x="2" y="9" width="4" height="12" />
+                <circle cx="4" cy="4" r="2" />
+              </svg>
+              LinkedIn
+            </OSButton>
+            <OSButton href="https://tryhackme.com">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+              </svg>
+              TryHackMe
+            </OSButton>
+          </div>
+          <div className="buttons-row-line">
+            <OSButton href="mailto:nikhilsingh76666@gmail.com">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+              Email
+            </OSButton>
+          </div>
         </div>
       </div>
 

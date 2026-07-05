@@ -256,7 +256,7 @@ export default function Home() {
   };
 
   const handleDownloadResume = () => {
-    window.open("/Nikhil_Singh_Resume.txt", "_blank");
+    window.open("/resume", "_blank");
   };
 
   const handleContactSubmit = async (e: React.FormEvent) => {

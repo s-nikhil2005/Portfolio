@@ -1712,9 +1712,13 @@ export const MobileOS = ({
               </button>
 
               {/* Download Resume button */}
-              <button
-                onClick={onDownloadResume}
+              <a
+                href="/resume"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
+                  display: "block",
+                  textAlign: "center",
                   width: "100%",
                   padding: "14px 0",
                   background: "#fff",
@@ -1727,10 +1731,11 @@ export const MobileOS = ({
                   letterSpacing: "0.5px",
                   marginTop: "8px",
                   cursor: "pointer",
+                  textDecoration: "none",
                 }}
               >
                 Download Resume
-              </button>
+              </a>
             </div>
           </div>
         </div>
