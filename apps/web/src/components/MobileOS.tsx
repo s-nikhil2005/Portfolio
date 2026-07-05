@@ -2026,33 +2026,6 @@ export const MobileOS = ({
                 {audioOn ? "🔊 AUDIO: ON" : "🔇 AUDIO: OFF"}
               </button>
 
-              {/* DIAGNOSTIC SHELL button */}
-              <button
-                onClick={() => {
-                  setMenuOpen(false);
-                  setTerminalOpen(true);
-                }}
-                style={{
-                  width: "100%",
-                  padding: "14px 0",
-                  background: "transparent",
-                  border: "1px solid rgba(255,255,255,0.15)",
-                  borderRadius: "8px",
-                  color: "#fff",
-                  fontFamily: "inherit",
-                  fontSize: "0.78rem",
-                  fontWeight: "800",
-                  textTransform: "uppercase",
-                  letterSpacing: "1px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "8px",
-                }}
-              >
-                &gt;_ DIAGNOSTIC SHELL [CLI]
-              </button>
-
               {/* Download Resume button */}
               <button
                 onClick={onDownloadResume}

@@ -6,7 +6,6 @@ import {
   Dock,
   MacWindow,
   TerminalWindow,
-  CommandPalette,
   Button,
   Input,
   Timeline,
@@ -96,8 +95,6 @@ export default function Home() {
       }, 2000);
     }, 300);
   };
-
-  const [isPaletteOpen, setIsPaletteOpen] = React.useState(false);
 
   // Time & Nav States
   const [timeString, setTimeString] = React.useState("");
@@ -253,19 +250,6 @@ export default function Home() {
     { text: "System connection established.", type: "system" },
     { text: "Type 'help' to see list of available commands.", type: "output" },
   ]);
-
-  // Keyboard shortcut listener for Command Palette (Ctrl + K)
-  React.useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
-        e.preventDefault();
-        setIsPaletteOpen((prev) => !prev);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
 
   const openApp = (id: string) => {
     setOpenWindows((prev) => ({ ...prev, [id]: true }));
@@ -1340,29 +1324,6 @@ export default function Home() {
               </div>
             )}
           </div>
-
-          <span style={{ color: "var(--text-muted)", fontWeight: "normal" }}>
-            |
-          </span>
-
-          {/* Quick search shortcut trigger */}
-          <button
-            onClick={() => setIsPaletteOpen(true)}
-            style={{
-              background: "none",
-              border: "none",
-              color: "var(--text-secondary)",
-              font: "inherit",
-              cursor: "pointer",
-              padding: 0,
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#f8f9fa")}
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.color = "var(--text-secondary)")
-            }
-          >
-            Search (Ctrl+K)
-          </button>
         </div>
 
         {/* System Bar Right (Clock & Status indicators) */}
@@ -1494,13 +1455,6 @@ export default function Home() {
           if (activeSlide === 5) return "contact";
           return "about";
         })()}
-      />
-
-      {/* Global Command Palette */}
-      <CommandPalette
-        isOpen={isPaletteOpen}
-        onClose={() => setIsPaletteOpen(false)}
-        commands={commandsList}
       />
 
       {/* Case Study Full-Screen Modal */}
