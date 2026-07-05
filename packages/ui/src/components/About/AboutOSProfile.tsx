@@ -38,7 +38,7 @@ export const AboutOSProfile = () => {
         .os-profile-dashboard {
           width: 100%;
           display: grid;
-          grid-template-columns: 1fr 1.15fr;
+          grid-template-columns: 1.05fr 1fr;
           gap: 24px;
           color: #e4e4e7;
           font-family: var(--font-mono), monospace;
@@ -280,32 +280,26 @@ export const AboutOSProfile = () => {
           border-radius: 3px;
         }
 
-        /* Projects inner block */
-        .project-log-item {
-          border-left: 2px solid rgba(16, 185, 129, 0.25);
-          padding-left: 10px;
-          margin-bottom: 12px;
+        /* Interest items grid */
+        .interests-columns {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+          margin-top: 6px;
         }
-        .project-log-item:last-child {
-          margin-bottom: 0;
-        }
-        .project-log-header {
-          display: flex;
-          justify-content: space-between;
+        .interest-item {
           font-size: 0.82rem;
-          font-weight: bold;
-          color: #ffffff;
+          color: #d4d4d8;
+          display: flex;
+          align-items: center;
+          gap: 8px;
         }
-        .project-log-tech {
-          font-size: 0.7rem;
-          color: var(--glow-cyan);
-          margin: 2px 0 4px 0;
-        }
-        .project-log-bullet {
-          font-size: 0.72rem;
-          color: #a1a1aa;
-          margin: 2px 0;
-          line-height: 1.35;
+        .interest-dot {
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: #10b981;
+          flex-shrink: 0;
         }
 
         /* Layout Grid Columns */
@@ -410,6 +404,48 @@ export const AboutOSProfile = () => {
           </div>
         </div>
 
+        {/* INTERESTS Card */}
+        <div
+          className={`os-panel-card ${visibleCards["interests"] ? "reveal" : "reveal"}`}
+          data-card-id="interests"
+        >
+          <div className="card-inner-layout">
+            <div className="card-icon-wrapper">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+              </svg>
+            </div>
+            <div className="card-body-content">
+              <span className="meta-label-tag">INTERESTS</span>
+              <div className="interests-columns">
+                <div className="interest-item">
+                  <div className="interest-dot" />
+                  <span>Threat Intelligence</span>
+                </div>
+                <div className="interest-item">
+                  <div className="interest-dot" />
+                  <span>SOC Operations</span>
+                </div>
+                <div className="interest-item">
+                  <div className="interest-dot" />
+                  <span>Cloud Security</span>
+                </div>
+                <div className="interest-item">
+                  <div className="interest-dot" />
+                  <span>AI + Security</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* TECHNICAL_SKILLS.sys */}
         <div
           className={`os-panel-card ${visibleCards["skills"] ? "reveal" : "reveal"}`}
@@ -489,46 +525,38 @@ export const AboutOSProfile = () => {
           </div>
         </div>
 
-        {/* PROJECTS Card */}
+        {/* LOCATION Card */}
         <div
-          className={`os-panel-card ${visibleCards["projects"] ? "reveal" : "reveal"}`}
-          data-card-id="projects"
+          className={`os-panel-card ${visibleCards["location"] ? "reveal" : "reveal"}`}
+          data-card-id="location"
         >
-          <div className="card-header-tab">PROJECTS.sys</div>
-          <div style={{ marginTop: "10px" }}>
-            <div className="project-log-item">
-              <div className="project-log-header">
-                <span>Voys – Travel Booking Platform</span>
-                <span style={{ fontSize: "0.68rem", color: "#a1a1aa" }}>
-                  2026
-                </span>
-              </div>
-              <div className="project-log-tech">
-                MERN Stack | JWT Auth | REST APIs
-              </div>
-              <p className="project-log-bullet">
-                • Built full-stack travel booking with package management.
-              </p>
-              <p className="project-log-bullet">
-                • Structured MongoDB schemas ensuring data integrity.
-              </p>
+          <div className="card-inner-layout">
+            <div className="card-icon-wrapper">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
             </div>
-            <div className="project-log-item">
-              <div className="project-log-header">
-                <span>StudyLoop – P2P Learning Platform</span>
-                <span style={{ fontSize: "0.68rem", color: "#a1a1aa" }}>
-                  Ongoing
-                </span>
-              </div>
-              <div className="project-log-tech">
-                React | Node.js | Reusable Components
-              </div>
-              <p className="project-log-bullet">
-                • Developing peer-to-peer collaboration and interaction
-                dashboard.
-              </p>
-              <p className="project-log-bullet">
-                • Implementing secure verification and scalable backend APIs.
+            <div className="card-body-content">
+              <span className="meta-label-tag">LOCATION</span>
+              <h4 className="meta-main-title">Mumbai, India</h4>
+              <p className="meta-sub-title">India (IST — UTC+5:30)</p>
+              <p
+                style={{
+                  fontSize: "0.78rem",
+                  color: "#a1a1aa",
+                  margin: "4px 0 0 0",
+                  lineHeight: "1.4",
+                }}
+              >
+                Open to remote roles and on-site opportunities in Mumbai.
               </p>
             </div>
           </div>
