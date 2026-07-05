@@ -74,6 +74,29 @@ const aboutTimelineData: TimelineItem[] = [
 
 export default function Home() {
   const [booted, setBooted] = React.useState(false);
+  const [bootState, setBootState] = React.useState<
+    "booting" | "fading" | "intro" | "ready"
+  >("booting");
+  const [introStage, setIntroStage] = React.useState<
+    "hidden" | "reactorOn" | "lightsOn" | "mascotOn" | "uiOn" | "done"
+  >("hidden");
+
+  const handleBootComplete = () => {
+    setBootState("fading");
+    setTimeout(() => {
+      setBootState("intro");
+      setBooted(true);
+      setTimeout(() => setIntroStage("reactorOn"), 200);
+      setTimeout(() => setIntroStage("lightsOn"), 600);
+      setTimeout(() => setIntroStage("mascotOn"), 1000);
+      setTimeout(() => setIntroStage("uiOn"), 1400);
+      setTimeout(() => {
+        setIntroStage("done");
+        setBootState("ready");
+      }, 2000);
+    }, 300);
+  };
+
   const [isPaletteOpen, setIsPaletteOpen] = React.useState(false);
 
   // Time & Nav States
@@ -795,8 +818,8 @@ export default function Home() {
     },
   ];
 
-  if (!booted) {
-    return <LoadingScreen onComplete={() => setBooted(true)} />;
+  if (bootState === "booting") {
+    return <LoadingScreen onComplete={handleBootComplete} />;
   }
 
   if (isMobile) {
@@ -879,8 +902,26 @@ export default function Home() {
       {/* Background Cursor Glow Trail */}
       <CursorGlow />
 
+      {/* Cinematic Transition Black Fader Overlay */}
+      {bootState !== "ready" && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "#030712",
+            zIndex: 9999,
+            transition: "opacity 0.4s ease",
+            opacity: bootState === "fading" ? 1 : 0,
+            pointerEvents: "none",
+          }}
+        />
+      )}
+
       {/* 3D Experience Scene */}
-      <SceneCanvas activeSlide={activeSlide} />
+      <SceneCanvas activeSlide={activeSlide} introStage={introStage} />
 
       {/* Sliding Background Workspace Panels */}
       <div
@@ -904,6 +945,7 @@ export default function Home() {
           <ProfileOverview
             onDownloadResume={handleDownloadResume}
             onEmailClick={() => goToSlide(5)}
+            introStage={introStage}
           />
         </div>
 

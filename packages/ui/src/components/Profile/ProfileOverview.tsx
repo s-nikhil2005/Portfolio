@@ -318,89 +318,188 @@ const OrbitingNode = ({
   );
 };
 
-// Floating Holographic Avatar image
-const HolographicAvatar = () => {
+// Floating premium 3D Robot Mascot (face of NIKHIL_OS)
+const OSMascot = ({ introStage }: { introStage: string }) => {
   const groupRef = React.useRef<THREE.Group>(null);
-  const ringRef = React.useRef<THREE.Mesh>(null);
+  const leftEyeRef = React.useRef<THREE.Mesh>(null);
+  const rightEyeRef = React.useRef<THREE.Mesh>(null);
+  const eyeScaleY = React.useRef(1);
+  const currentScale = React.useRef(0.01);
 
   useFrame((state) => {
     const { x, y } = state.pointer;
+    const t = state.clock.getElapsedTime();
+
+    // 0. Scale up mascot dynamically once stage is mascotOn
+    const targetScale =
+      introStage === "hidden" ||
+      introStage === "reactorOn" ||
+      introStage === "lightsOn"
+        ? 0.01
+        : 1.0;
+    currentScale.current = THREE.MathUtils.lerp(
+      currentScale.current,
+      targetScale,
+      0.08,
+    );
+
+    // 1. Mouse reactive look-around and tilt
     if (groupRef.current) {
       groupRef.current.rotation.y = THREE.MathUtils.lerp(
         groupRef.current.rotation.y,
-        x * 0.25,
+        x * 0.45,
         0.08,
       );
       groupRef.current.rotation.x = THREE.MathUtils.lerp(
         groupRef.current.rotation.x,
-        -y * 0.2,
+        -y * 0.35,
         0.08,
       );
+      // Floating bobbing motion
+      groupRef.current.position.y = Math.sin(t * 1.6) * 0.15;
+      groupRef.current.scale.setScalar(currentScale.current);
     }
-    if (ringRef.current) {
-      ringRef.current.rotation.z += 0.004;
-    }
+
+    // 2. Realistic blinking animation
+    const isBlinking = Math.floor(t * 0.3) % 4 === 0 && t % 3.3 < 0.18;
+    eyeScaleY.current = THREE.MathUtils.lerp(
+      eyeScaleY.current,
+      isBlinking ? 0.05 : 1,
+      0.25,
+    );
+    if (leftEyeRef.current) leftEyeRef.current.scale.y = eyeScaleY.current;
+    if (rightEyeRef.current) rightEyeRef.current.scale.y = eyeScaleY.current;
   });
 
   return (
     <group ref={groupRef}>
-      <Float speed={2.2} rotationIntensity={0.3} floatIntensity={0.8}>
-        <Html transform distanceFactor={4.5} sprite={false}>
-          <div
-            style={{
-              width: "180px",
-              height: "180px",
-              borderRadius: "50%",
-              overflow: "hidden",
-              border: "2px solid rgba(0, 240, 255, 0.6)",
-              boxShadow:
-                "0 0 35px rgba(0, 240, 255, 0.45), inset 0 0 20px rgba(0, 240, 255, 0.2)",
-              background: "rgba(10, 11, 14, 0.5)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              position: "relative",
-            }}
-          >
-            <img
-              src="/profile.jpg"
-              alt="Nikhil Singh Holographic Avatar"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                opacity: 0.95,
-                mixBlendMode: "lighten",
-              }}
-            />
-            {/* Cyber scanlines overlay */}
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                background:
-                  "linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 240, 255, 0.12) 50%)",
-                backgroundSize: "100% 4px",
-                pointerEvents: "none",
-              }}
-            />
-          </div>
-        </Html>
-
-        {/* Rotating holographic ring behind avatar */}
-        <mesh position={[0, 0, -0.35]} ref={ringRef}>
-          <ringGeometry args={[1.05, 1.15, 64]} />
-          <meshBasicMaterial
-            color="#00f0ff"
-            side={THREE.DoubleSide}
-            transparent
-            opacity={0.25}
+      {/* ROBOT MASCOT GROUP */}
+      <group position={[0, 0.4, 0]}>
+        {/* Hoodie Hood Back Shell */}
+        <mesh>
+          <sphereGeometry args={[1.12, 32, 32]} />
+          <meshStandardMaterial
+            color="#0b172a"
+            roughness={0.6}
+            metalness={0.1}
           />
         </mesh>
-      </Float>
+
+        {/* Hoodie Hood Open Rim (Torus wrapper) */}
+        <mesh position={[0, 0, 0.12]} rotation={[0.08, 0, 0]}>
+          <torusGeometry args={[1.05, 0.15, 16, 64]} />
+          <meshStandardMaterial color="#0b172a" roughness={0.6} />
+        </mesh>
+
+        {/* Visor / Face Plate */}
+        <mesh position={[0, 0, 0.05]}>
+          <sphereGeometry args={[0.95, 32, 32]} />
+          <meshStandardMaterial
+            color="#030712"
+            roughness={0.1}
+            metalness={0.9}
+          />
+        </mesh>
+
+        {/* Left Glowing Pink Eye */}
+        <mesh position={[-0.32, 0.1, 0.85]} ref={leftEyeRef}>
+          <sphereGeometry args={[0.15, 16, 16]} />
+          <meshBasicMaterial color="#ff007f" />
+        </mesh>
+
+        {/* Right Glowing Pink Eye */}
+        <mesh position={[0.32, 0.1, 0.85]} ref={rightEyeRef}>
+          <sphereGeometry args={[0.15, 16, 16]} />
+          <meshBasicMaterial color="#ff007f" />
+        </mesh>
+
+        {/* Cute Ears / Side Bolts */}
+        <mesh position={[-1.15, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.15, 0.15, 0.3, 16]} />
+          <meshStandardMaterial
+            color="#334155"
+            roughness={0.3}
+            metalness={0.8}
+          />
+        </mesh>
+        <mesh position={[1.15, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.15, 0.15, 0.3, 16]} />
+          <meshStandardMaterial
+            color="#334155"
+            roughness={0.3}
+            metalness={0.8}
+          />
+        </mesh>
+
+        {/* Neck connector */}
+        <mesh position={[0, -1.0, 0]}>
+          <cylinderGeometry args={[0.3, 0.3, 0.3, 16]} />
+          <meshStandardMaterial
+            color="#1e293b"
+            roughness={0.4}
+            metalness={0.7}
+          />
+        </mesh>
+
+        {/* Hoodie Body */}
+        <mesh position={[0, -1.7, 0]}>
+          <cylinderGeometry args={[0.65, 0.78, 1.1, 32]} />
+          <meshStandardMaterial color="#0b172a" roughness={0.65} />
+        </mesh>
+
+        {/* Hoodie front pocket */}
+        <mesh position={[0, -1.82, 0.45]} rotation={[0.15, 0, 0]}>
+          <boxGeometry args={[0.6, 0.35, 0.15]} />
+          <meshStandardMaterial color="#0f172a" roughness={0.7} />
+        </mesh>
+
+        {/* Little robot hands */}
+        <mesh position={[-0.9, -1.6, 0.2]}>
+          <sphereGeometry args={[0.15, 16, 16]} />
+          <meshStandardMaterial
+            color="#ff007f"
+            roughness={0.4}
+            metalness={0.5}
+          />
+        </mesh>
+        <mesh position={[0.9, -1.6, 0.2]}>
+          <sphereGeometry args={[0.15, 16, 16]} />
+          <meshStandardMaterial
+            color="#ff007f"
+            roughness={0.4}
+            metalness={0.5}
+          />
+        </mesh>
+
+        {/* Little robot feet */}
+        <mesh position={[-0.35, -2.3, 0.1]}>
+          <sphereGeometry args={[0.2, 16, 16]} />
+          <meshStandardMaterial
+            color="#030712"
+            roughness={0.3}
+            metalness={0.8}
+          />
+        </mesh>
+        <mesh position={[0.35, -2.3, 0.1]}>
+          <sphereGeometry args={[0.2, 16, 16]} />
+          <meshStandardMaterial
+            color="#030712"
+            roughness={0.3}
+            metalness={0.8}
+          />
+        </mesh>
+      </group>
+
+      {/* Orbiting halo accent behind mascot */}
+      <mesh position={[0, 0.4, -0.4]} rotation={[0.2, 0, 0]}>
+        <ringGeometry args={[1.4, 1.45, 64]} />
+        <meshBasicMaterial
+          color="#ff007f"
+          side={THREE.DoubleSide}
+          transparent
+          opacity={0.18}
+        />
+      </mesh>
     </group>
   );
 };
@@ -436,7 +535,7 @@ const Particles = () => {
 };
 
 // Main 3D Canvas Scene
-const AvatarScene = () => {
+const AvatarScene = ({ introStage }: { introStage: string }) => {
   const techNodes = [
     {
       name: "React",
@@ -669,9 +768,16 @@ const AvatarScene = () => {
       camera={{ position: [0, 0, 5.5] }}
       style={{ width: "100%", height: "100%" }}
     >
-      <ambientLight intensity={0.7} />
-      <directionalLight position={[1, 3, 2]} intensity={1.0} />
-      <pointLight position={[-2, -2, -2]} intensity={0.4} />
+      {/* Lights matching global background colors */}
+      <ambientLight intensity={0.45} color="#071B2C" />
+      <directionalLight
+        position={[2, 3, 2]}
+        intensity={1.5}
+        color="#00E5FF"
+        castShadow
+      />
+      <pointLight position={[-3, -1, 3]} intensity={2.0} color="#7B61FF" />
+      <pointLight position={[3, 1, -2]} intensity={1.2} color="#00C8FF" />
 
       {/* Very faint digital grid helper */}
       <gridHelper
@@ -681,7 +787,7 @@ const AvatarScene = () => {
       <Particles />
 
       {/* Main Holographic Avatar image core */}
-      <HolographicAvatar />
+      <OSMascot introStage={introStage} />
 
       {techNodes.map((node, idx) => (
         <OrbitingNode
@@ -703,11 +809,13 @@ const AvatarScene = () => {
 export interface ProfileOverviewProps {
   onDownloadResume?: () => void;
   onEmailClick?: () => void;
+  introStage?: string;
 }
 
 export const ProfileOverview = ({
   onDownloadResume,
   onEmailClick,
+  introStage = "done",
 }: ProfileOverviewProps) => {
   const [mounted, setMounted] = React.useState(false);
   const [roleIndex, setRoleIndex] = React.useState(0);
@@ -848,7 +956,25 @@ export const ProfileOverview = ({
       `}</style>
 
       {/* Left Side Column */}
-      <div className="hero-left">
+      <div
+        className="hero-left"
+        style={{
+          opacity:
+            introStage === "uiOn" ||
+            introStage === "done" ||
+            introStage === "ready"
+              ? 1
+              : 0,
+          transform:
+            introStage === "uiOn" ||
+            introStage === "done" ||
+            introStage === "ready"
+              ? "translateY(0)"
+              : "translateY(24px)",
+          transition:
+            "transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.8s ease",
+        }}
+      >
         <div>
           {/* Status Badge */}
           <div
@@ -1029,7 +1155,7 @@ export const ProfileOverview = ({
       <div className="hero-right">
         {mounted && (
           <React.Suspense fallback={null}>
-            <AvatarScene />
+            <AvatarScene introStage={introStage} />
           </React.Suspense>
         )}
       </div>

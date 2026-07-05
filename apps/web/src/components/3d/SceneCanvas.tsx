@@ -212,15 +212,27 @@ const MetallicGridFloor = () => {
 };
 
 // 4. Center Pulsing Energy Beam
-const EnergyCoreBeam = () => {
+const EnergyCoreBeam = ({ introStage }: { introStage: string }) => {
   const beamRef = React.useRef<THREE.Mesh>(null);
+  const opacityRef = React.useRef(0);
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
     if (beamRef.current) {
-      // Pulsing volumetric beam scale and opacity animation
       const scaleVal = 1 + Math.sin(t * 3) * 0.08;
       beamRef.current.scale.set(scaleVal, 1, scaleVal);
+    }
+    // Fade opacity dynamically based on stage
+    const targetOpacity =
+      introStage === "hidden" ? 0 : introStage === "reactorOn" ? 0.05 : 0.12;
+    opacityRef.current = THREE.MathUtils.lerp(
+      opacityRef.current,
+      targetOpacity,
+      0.05,
+    );
+    if (beamRef.current) {
+      const mat = beamRef.current.material as THREE.MeshBasicMaterial;
+      if (mat) mat.opacity = opacityRef.current;
     }
   });
 
@@ -232,7 +244,7 @@ const EnergyCoreBeam = () => {
         <meshBasicMaterial
           color="#00E5FF"
           transparent
-          opacity={0.3}
+          opacity={introStage === "hidden" ? 0 : 0.3}
           side={THREE.DoubleSide}
         />
       </mesh>
@@ -243,7 +255,7 @@ const EnergyCoreBeam = () => {
         <meshBasicMaterial
           color="#00C8FF"
           transparent
-          opacity={0.12}
+          opacity={0}
           side={THREE.DoubleSide}
           blending={THREE.AdditiveBlending}
         />
@@ -253,8 +265,9 @@ const EnergyCoreBeam = () => {
 };
 
 // 5. Floating Glassmorphic Cubes & Rings
-const FloatingHoloObjects = () => {
+const FloatingHoloObjects = ({ introStage }: { introStage: string }) => {
   const cubesGroup = React.useRef<THREE.Group>(null);
+  const currentScale = React.useRef(0.01);
 
   const cubesData: {
     pos: [number, number, number];
@@ -271,14 +284,27 @@ const FloatingHoloObjects = () => {
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
+
+    // Scale objects up only after lights are active (stage mascotOn or uiOn or done)
+    const targetScale =
+      introStage === "hidden" ||
+      introStage === "reactorOn" ||
+      introStage === "lightsOn"
+        ? 0.01
+        : 1;
+    currentScale.current = THREE.MathUtils.lerp(
+      currentScale.current,
+      targetScale,
+      0.05,
+    );
+
     if (cubesGroup.current) {
+      cubesGroup.current.scale.setScalar(currentScale.current);
       cubesGroup.current.children.forEach((child, idx) => {
         const item = cubesData[idx];
-        if (child && item) {
-          // Floating rotation
+        if (child && item && idx < cubesData.length) {
           child.rotation.x = t * 0.1 + idx;
           child.rotation.y = t * 0.15 + idx;
-          // Slowly breathing up and down
           child.position.y =
             item.pos[1] + Math.sin(t * item.speed + idx) * 0.18;
         }
@@ -417,7 +443,16 @@ const CameraController = ({ activeSlide }: { activeSlide: number }) => {
 };
 
 // Main Scene Canvas export
-export const SceneCanvas = ({ activeSlide }: { activeSlide: number }) => {
+export const SceneCanvas = ({
+  activeSlide,
+  introStage = "done",
+}: {
+  activeSlide: number;
+  introStage?: string;
+}) => {
+  const lightFactor =
+    introStage === "hidden" || introStage === "reactorOn" ? 0.05 : 1.0;
+
   return (
     <div
       style={{
@@ -431,29 +466,37 @@ export const SceneCanvas = ({ activeSlide }: { activeSlide: number }) => {
       }}
     >
       <Canvas
-        camera={{ position: [0, 1.2, 5.5], fov: 45 }}
+        camera={{ position: [0, 10, 18], fov: 45 }}
         gl={{ antialias: true, alpha: true }}
       >
         {/* Ambient Dark Blue Fill Light */}
-        <ambientLight intensity={0.15} color="#071B2C" />
+        <ambientLight intensity={0.15 * lightFactor} color="#071B2C" />
 
         {/* Cinematic Directional Light (Planet key source) */}
         <directionalLight
           position={[10, 10, -5]}
-          intensity={1.5}
+          intensity={1.5 * lightFactor}
           color="#00C8FF"
         />
 
         {/* Soft Colored Accent Point Lights */}
-        <pointLight position={[-5, 3, 2]} intensity={2.0} color="#7B61FF" />
-        <pointLight position={[5, -2, 2]} intensity={1.5} color="#00E5FF" />
+        <pointLight
+          position={[-5, 3, 2]}
+          intensity={2.0 * lightFactor}
+          color="#7B61FF"
+        />
+        <pointLight
+          position={[5, -2, 2]}
+          intensity={1.5 * lightFactor}
+          color="#00E5FF"
+        />
 
         {/* Unified 3D Space Base Environment components */}
         <SpaceEnvironment />
         <FuturisticPlanet />
         <MetallicGridFloor />
-        <EnergyCoreBeam />
-        <FloatingHoloObjects />
+        <EnergyCoreBeam introStage={introStage} />
+        <FloatingHoloObjects introStage={introStage} />
 
         {/* Camera lookAt / sweeps controller */}
         <CameraController activeSlide={activeSlide} />
