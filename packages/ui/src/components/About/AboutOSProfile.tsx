@@ -39,11 +39,11 @@ export const AboutOSProfile = () => {
           width: 100%;
           display: grid;
           grid-template-columns: 1.05fr 1fr;
-          gap: 24px;
+          gap: 28px;
           color: #e4e4e7;
           font-family: var(--font-mono), monospace;
           box-sizing: border-box;
-          padding: 4px 0;
+          padding: 8px 0;
           overflow: hidden;
         }
 
@@ -102,8 +102,8 @@ export const AboutOSProfile = () => {
           font-family: Georgia, serif;
         }
         .quote-text {
-          font-size: 0.8rem;
-          line-height: 1.5;
+          font-size: 0.82rem;
+          line-height: 1.55;
           color: #d4d4d8;
           margin: 0;
         }
@@ -175,50 +175,26 @@ export const AboutOSProfile = () => {
           background: rgba(255, 255, 255, 0.01);
           border: 1px solid rgba(255, 255, 255, 0.03);
           border-radius: 6px;
-          padding: 10px 6px;
+          padding: 12px 6px;
           text-align: center;
         }
         .stat-num {
-          font-size: 1.35rem;
+          font-size: 1.45rem;
           font-weight: 800;
           color: #ffffff;
           margin-bottom: 2px;
         }
         .stat-lbl {
-          font-size: 0.58rem;
+          font-size: 0.6rem;
           color: #71717a;
           text-transform: uppercase;
-        }
-
-        /* Technical Skills Section */
-        .skills-summary-block {
-          margin-top: 8px;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-        }
-        .skills-row {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
-        .skills-label {
-          font-size: 0.65rem;
-          color: #71717a;
-          text-transform: uppercase;
-          letter-spacing: 0.8px;
-        }
-        .skills-values {
-          font-size: 0.78rem;
-          color: #e4e4e7;
-          line-height: 1.4;
         }
 
         /* Right column items */
         .right-column-stack {
           display: flex;
           flex-direction: column;
-          gap: 20px;
+          gap: 16px;
         }
         .card-inner-layout {
           margin-top: 10px;
@@ -306,7 +282,6 @@ export const AboutOSProfile = () => {
         .dash-left {
           display: flex;
           flex-direction: column;
-          gap: 20px;
         }
 
         /* Responsive Breakpoints */
@@ -403,80 +378,6 @@ export const AboutOSProfile = () => {
             </div>
           </div>
         </div>
-
-        {/* INTERESTS Card */}
-        <div
-          className={`os-panel-card ${visibleCards["interests"] ? "reveal" : "reveal"}`}
-          data-card-id="interests"
-        >
-          <div className="card-inner-layout">
-            <div className="card-icon-wrapper">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-              </svg>
-            </div>
-            <div className="card-body-content">
-              <span className="meta-label-tag">INTERESTS</span>
-              <div className="interests-columns">
-                <div className="interest-item">
-                  <div className="interest-dot" />
-                  <span>Threat Intelligence</span>
-                </div>
-                <div className="interest-item">
-                  <div className="interest-dot" />
-                  <span>SOC Operations</span>
-                </div>
-                <div className="interest-item">
-                  <div className="interest-dot" />
-                  <span>Cloud Security</span>
-                </div>
-                <div className="interest-item">
-                  <div className="interest-dot" />
-                  <span>AI + Security</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* TECHNICAL_SKILLS.sys */}
-        <div
-          className={`os-panel-card ${visibleCards["skills"] ? "reveal" : "reveal"}`}
-          data-card-id="skills"
-        >
-          <div className="card-header-tab">TECHNICAL_SKILLS.sys</div>
-          <div className="skills-summary-block">
-            <div className="skills-row">
-              <span className="skills-label">Languages</span>
-              <span className="skills-values">C++, JavaScript, TypeScript</span>
-            </div>
-            <div className="skills-row">
-              <span className="skills-label">Frontend</span>
-              <span className="skills-values">
-                HTML, CSS, React.js, Redux, Tailwind CSS
-              </span>
-            </div>
-            <div className="skills-row">
-              <span className="skills-label">Backend & Databases</span>
-              <span className="skills-values">
-                Node.js, Express.js, MongoDB, MySQL, Redis
-              </span>
-            </div>
-            <div className="skills-row">
-              <span className="skills-label">Tools & Core Concepts</span>
-              <span className="skills-values">
-                Git, GitHub, Docker, OOP, REST APIs, JWT Auth, DSA
-              </span>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* RIGHT COLUMN */}
@@ -558,6 +459,48 @@ export const AboutOSProfile = () => {
               >
                 Open to remote roles and on-site opportunities in Mumbai.
               </p>
+            </div>
+          </div>
+        </div>
+
+        {/* INTERESTS Card */}
+        <div
+          className={`os-panel-card ${visibleCards["interests"] ? "reveal" : "reveal"}`}
+          data-card-id="interests"
+        >
+          <div className="card-inner-layout">
+            <div className="card-icon-wrapper">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+              </svg>
+            </div>
+            <div className="card-body-content">
+              <span className="meta-label-tag">INTERESTS</span>
+              <div className="interests-columns">
+                <div className="interest-item">
+                  <div className="interest-dot" />
+                  <span>Threat Intelligence</span>
+                </div>
+                <div className="interest-item">
+                  <div className="interest-dot" />
+                  <span>SOC Operations</span>
+                </div>
+                <div className="interest-item">
+                  <div className="interest-dot" />
+                  <span>Cloud Security</span>
+                </div>
+                <div className="interest-item">
+                  <div className="interest-dot" />
+                  <span>AI + Security</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
