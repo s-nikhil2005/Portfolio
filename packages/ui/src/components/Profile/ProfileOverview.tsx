@@ -474,233 +474,6 @@ const Particles = () => {
 
 // Main 3D Canvas Scene
 const AvatarScene = ({ introStage }: { introStage: string }) => {
-  const techNodes = [
-    {
-      name: "React",
-      expLevel: "3+ Years",
-      projects: "Voya Canvas, Portfolio Engine",
-      radius: 2.3,
-      speed: 0.28,
-      phase: 0,
-      color: "#00d8ff",
-      icon: (
-        <svg
-          width="18"
-          height="18"
-          viewBox="-11.5 -10.23174 23 20.46348"
-          fill="none"
-          stroke="currentColor"
-        >
-          <circle r="2.05" fill="currentColor" />
-          <ellipse rx="11" ry="4.2" stroke="currentColor" strokeWidth="1" />
-          <ellipse
-            rx="11"
-            ry="4.2"
-            transform="rotate(60)"
-            stroke="currentColor"
-            strokeWidth="1"
-          />
-          <ellipse
-            rx="11"
-            ry="4.2"
-            transform="rotate(120)"
-            stroke="currentColor"
-            strokeWidth="1"
-          />
-        </svg>
-      ),
-    },
-    {
-      name: "Node.js",
-      expLevel: "3+ Years",
-      projects: "Microservices backend routes",
-      radius: 2.5,
-      speed: -0.22,
-      phase: 0.6,
-      color: "#43c6ac",
-      icon: (
-        <span
-          style={{
-            fontSize: "0.68rem",
-            fontWeight: "900",
-            color: "#43c6ac",
-            fontFamily: "var(--font-mono)",
-          }}
-        >
-          Node
-        </span>
-      ),
-    },
-    {
-      name: "Express",
-      expLevel: "3 Years",
-      projects: "API microservice gateways",
-      radius: 2.2,
-      speed: 0.25,
-      phase: 1.2,
-      color: "#ffffff",
-      icon: (
-        <span
-          style={{
-            fontSize: "0.68rem",
-            fontWeight: "900",
-            color: "#ffffff",
-            fontFamily: "var(--font-mono)",
-          }}
-        >
-          Exp
-        </span>
-      ),
-    },
-    {
-      name: "MongoDB",
-      expLevel: "2.5 Years",
-      projects: "Database replicas sharding",
-      radius: 2.4,
-      speed: -0.26,
-      phase: 1.8,
-      color: "#47a248",
-      icon: (
-        <span
-          style={{
-            fontSize: "0.68rem",
-            fontWeight: "900",
-            color: "#47a248",
-            fontFamily: "var(--font-mono)",
-          }}
-        >
-          MDB
-        </span>
-      ),
-    },
-    {
-      name: "TypeScript",
-      expLevel: "2 Years",
-      projects: "Shared package model types",
-      radius: 2.6,
-      speed: 0.2,
-      phase: 2.4,
-      color: "#3178c6",
-      icon: (
-        <span
-          style={{
-            fontSize: "0.75rem",
-            fontWeight: "900",
-            color: "#3178c6",
-            fontFamily: "var(--font-mono)",
-          }}
-        >
-          TS
-        </span>
-      ),
-    },
-    {
-      name: "Next.js",
-      expLevel: "2 Years",
-      projects: "SSR visual components & layouts",
-      radius: 2.3,
-      speed: -0.24,
-      phase: 3.0,
-      color: "#ffffff",
-      icon: (
-        <span
-          style={{
-            fontSize: "0.75rem",
-            fontWeight: "900",
-            color: "#ffffff",
-            fontFamily: "var(--font-mono)",
-          }}
-        >
-          Next
-        </span>
-      ),
-    },
-    {
-      name: "Docker",
-      expLevel: "1.5 Years",
-      projects: "Containerized environments configuration",
-      radius: 2.7,
-      speed: 0.18,
-      phase: 3.6,
-      color: "#2496ed",
-      icon: (
-        <span
-          style={{
-            fontSize: "0.68rem",
-            fontWeight: "900",
-            color: "#2496ed",
-            fontFamily: "var(--font-mono)",
-          }}
-        >
-          DK
-        </span>
-      ),
-    },
-    {
-      name: "AWS",
-      expLevel: "1 Year",
-      projects: "Deployment scripts hosting",
-      radius: 2.2,
-      speed: -0.3,
-      phase: 4.2,
-      color: "#ff9900",
-      icon: (
-        <span
-          style={{
-            fontSize: "0.68rem",
-            fontWeight: "900",
-            color: "#ff9900",
-            fontFamily: "var(--font-mono)",
-          }}
-        >
-          AWS
-        </span>
-      ),
-    },
-    {
-      name: "Git",
-      expLevel: "3+ Years",
-      projects: "Version controls monorepo pipeline",
-      radius: 2.5,
-      speed: 0.22,
-      phase: 4.8,
-      color: "#f05032",
-      icon: (
-        <span
-          style={{
-            fontSize: "0.68rem",
-            fontWeight: "900",
-            color: "#f05032",
-            fontFamily: "var(--font-mono)",
-          }}
-        >
-          Git
-        </span>
-      ),
-    },
-    {
-      name: "Linux",
-      expLevel: "2 Years",
-      projects: "CLI script automations environments",
-      radius: 2.4,
-      speed: -0.25,
-      phase: 5.4,
-      color: "#fcc624",
-      icon: (
-        <span
-          style={{
-            fontSize: "0.68rem",
-            fontWeight: "900",
-            color: "#fcc624",
-            fontFamily: "var(--font-mono)",
-          }}
-        >
-          Tux
-        </span>
-      ),
-    },
-  ];
-
   return (
     <Canvas
       camera={{ position: [0, 0, 4.2] }}
@@ -717,29 +490,10 @@ const AvatarScene = ({ introStage }: { introStage: string }) => {
       <pointLight position={[-3, -1, 3]} intensity={2.0} color="#7B61FF" />
       <pointLight position={[3, 1, -2]} intensity={1.2} color="#00C8FF" />
 
-      {/* Very faint digital grid helper */}
-      <gridHelper
-        args={[10, 10, "rgba(0, 240, 255, 0.05)", "rgba(255,255,255,0.005)"]}
-        position={[0, -2.2, 0]}
-      />
       <Particles />
 
       {/* Main Holographic Avatar image core */}
       <OSMascot introStage={introStage} />
-
-      {techNodes.map((node, idx) => (
-        <OrbitingNode
-          key={idx}
-          name={node.name}
-          icon={node.icon}
-          expLevel={node.expLevel}
-          projects={node.projects}
-          radius={node.radius}
-          speed={node.speed}
-          phase={node.phase}
-          color={node.color}
-        />
-      ))}
     </Canvas>
   );
 };
@@ -1006,14 +760,13 @@ export const ProfileOverview = ({
         {/* Description paragraph */}
         <p
           style={{
-            fontSize: "0.92rem",
+            fontSize: "0.85rem",
             color: "var(--text-secondary)",
-            lineHeight: "1.65",
+            lineHeight: "1.6",
             margin: 0,
-            maxWidth: "600px",
+            maxWidth: "650px",
           }}
         >
-          Passionate{" "}
           <span style={{ color: "var(--glow-cyan)", fontWeight: "600" }}>
             Full-Stack Developer
           </span>{" "}
@@ -1033,7 +786,7 @@ export const ProfileOverview = ({
           <span style={{ color: "var(--glow-cyan)", fontWeight: "600" }}>
             MongoDB
           </span>
-          . Currently expanding my expertise in{" "}
+          . Expanding expertise in{" "}
           <span style={{ color: "var(--glow-cyan)", fontWeight: "600" }}>
             DevOps
           </span>
@@ -1043,9 +796,9 @@ export const ProfileOverview = ({
           </span>
           , and{" "}
           <span style={{ color: "var(--glow-cyan)", fontWeight: "600" }}>
-            Data Structures & Algorithms
-          </span>{" "}
-          to build production-ready software.
+            DSA
+          </span>
+          .
         </p>
 
         {/* Premium Glass Information Cards */}

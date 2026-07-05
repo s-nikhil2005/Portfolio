@@ -222,9 +222,8 @@ const EnergyCoreBeam = ({ introStage }: { introStage: string }) => {
       const scaleVal = 1 + Math.sin(t * 3) * 0.08;
       beamRef.current.scale.set(scaleVal, 1, scaleVal);
     }
-    // Fade opacity dynamically based on stage
-    const targetOpacity =
-      introStage === "hidden" ? 0 : introStage === "reactorOn" ? 0.05 : 0.12;
+    // Fade opacity dynamically based on stage - disabled/removed as requested
+    const targetOpacity = 0;
     opacityRef.current = THREE.MathUtils.lerp(
       opacityRef.current,
       targetOpacity,
