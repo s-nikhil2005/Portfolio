@@ -116,7 +116,7 @@ export const MobileOS = ({
         const el = document.getElementById(`mobile-${section}`);
         if (el) {
           const rect = el.getBoundingClientRect();
-          if (rect.top <= 120 && rect.bottom >= 120) {
+          if (rect.top <= 180 && rect.bottom >= 180) {
             setActiveTab(section);
             break;
           }
@@ -319,21 +319,77 @@ export const MobileOS = ({
   };
 
   return (
-    <div
-      className="mobile-os-root"
-      style={{
-        background: "#050608",
-        color: "#f8f9fa",
-        minHeight: "100vh",
-        paddingBottom: "70px",
-        fontFamily: "var(--font-mono)",
-        overflowX: "hidden",
-      }}
-    >
+    <div className="mobile-os-root">
       <style>{`
         .mobile-os-root {
-          --theme-accent: ${activeTheme === "cyan" ? "var(--glow-cyan)" : activeTheme === "green" ? "var(--glow-green)" : "var(--glow-purple)"};
+          --theme-accent: \${activeTheme === "cyan" ? "var(--glow-cyan)" : activeTheme === "green" ? "var(--glow-green)" : "var(--glow-purple)"};
+          --font-size-h2: clamp(1.6rem, 5.5vw, 2.2rem);
+          width: 100%;
+          min-height: 100dvh;
+          font-family: var(--font-mono);
+          position: relative;
         }
+
+        /* 1. Cyberpunk Fixed Background Stack */
+        .mobile-cyber-bg {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle at 50% 25%, rgba(0, 240, 255, 0.07) 0%, transparent 60%),
+                      linear-gradient(180deg, #07090e 0%, #030406 100%);
+          z-index: -3;
+          pointer-events: none;
+        }
+        .mobile-cyber-glow {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle at 10% 80%, rgba(189, 52, 254, 0.03) 0%, transparent 50%),
+                      radial-gradient(circle at 90% 40%, rgba(0, 255, 102, 0.02) 0%, transparent 45%);
+          z-index: -2;
+          pointer-events: none;
+          animation: ambientPulse 10s ease-in-out infinite alternate;
+        }
+        .mobile-cyber-stars {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: -1;
+          opacity: 0.15;
+          pointer-events: none;
+          background-image: 
+            radial-gradient(circle at 15% 25%, #fff 1px, transparent 1px),
+            radial-gradient(circle at 80% 20%, #fff 1px, transparent 1px),
+            radial-gradient(circle at 45% 65%, #fff 1.5px, transparent 1.5px),
+            radial-gradient(circle at 25% 80%, #fff 1px, transparent 1px),
+            radial-gradient(circle at 70% 85%, #fff 1.2px, transparent 1.2px);
+          background-size: 150px 150px, 200px 200px, 180px 180px, 160px 160px, 220px 220px;
+        }
+        .mobile-cyber-grid {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: -1;
+          opacity: 0.03;
+          pointer-events: none;
+          background-image: linear-gradient(rgba(0, 240, 255, 0.15) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(0, 240, 255, 0.15) 1px, transparent 1px);
+          background-size: 24px 24px;
+        }
+        @keyframes ambientPulse {
+          0% { opacity: 0.7; }
+          100% { opacity: 1; }
+        }
+
+        /* 2. Layout Elements */
         .mobile-header {
           position: sticky;
           top: 0;
@@ -350,24 +406,27 @@ export const MobileOS = ({
           z-index: 1000;
         }
         .mobile-section {
-          padding: 60px 20px;
+          padding: clamp(40px, 8vw, 80px) clamp(16px, 4vw, 24px);
           border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+          width: 100%;
+          box-sizing: border-box;
         }
         .mobile-section-title {
-          font-size: 1.4rem;
+          font-size: var(--font-size-h2);
           font-weight: 800;
-          margin-bottom: 30px;
+          margin-bottom: 24px;
           color: var(--theme-accent);
           display: flex;
           align-items: center;
           gap: 10px;
+          letter-spacing: -0.5px;
         }
         .mobile-section-title::before {
           content: '>';
           color: var(--theme-accent);
         }
         
-        /* Floating Avatar Ring animation */
+        /* 3. Avatar Section Ring */
         .mobile-avatar-ring {
           position: relative;
           width: 150px;
@@ -384,8 +443,8 @@ export const MobileOS = ({
           width: 100%;
           height: 100%;
           border-radius: 50%;
-          border: 2px dashed var(--theme-accent);
-          opacity: 0.4;
+          border: 1.5px dashed var(--theme-accent);
+          opacity: 0.35;
           animation: spinRing 25s linear infinite;
         }
         .mobile-avatar-img-wrap {
@@ -408,7 +467,7 @@ export const MobileOS = ({
           100% { transform: rotate(360deg); }
         }
 
-        /* Mobile Glass Card */
+        /* 4. Cards & Buttons */
         .mobile-card {
           background: rgba(255, 255, 255, 0.02);
           border: 1px solid rgba(255, 255, 255, 0.06);
@@ -421,8 +480,15 @@ export const MobileOS = ({
           border-color: var(--theme-accent);
           background: rgba(255, 255, 255, 0.04);
         }
+        .mobile-button-wrap {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          justify-content: center;
+          width: 100%;
+        }
 
-        /* Accordion Timeline styles */
+        /* 5. Accordion Animations */
         .accordion-header {
           display: flex;
           justify-content: space-between;
@@ -438,19 +504,19 @@ export const MobileOS = ({
           padding-top: 0;
         }
         .accordion-content.open {
-          max-height: 400px;
+          max-height: 450px;
           padding-top: 14px;
         }
 
-        /* Bottom navigation styles */
+        /* 6. Sticky Bottom Navigation */
         .bottom-nav {
           position: fixed;
           bottom: 0;
           left: 0;
           width: 100%;
           height: 60px;
-          background: rgba(8, 9, 12, 0.85);
-          backdrop-filter: blur(20px);
+          background: rgba(8, 9, 12, 0.82);
+          backdrop-filter: blur(24px);
           border-top: 1px solid rgba(255, 255, 255, 0.08);
           display: flex;
           justify-content: space-around;
@@ -478,15 +544,15 @@ export const MobileOS = ({
           margin-bottom: 4px;
         }
 
-        /* Interactive Drawer modal */
+        /* 7. Redesigned 85% Width Drawer System */
         .drawer-overlay {
           position: fixed;
           top: 0;
           left: 0;
           width: 100vw;
           height: 100vh;
-          background: rgba(0, 0, 0, 0.6);
-          backdrop-filter: blur(4px);
+          background: rgba(3, 4, 6, 0.45);
+          backdrop-filter: blur(8px);
           z-index: 3000;
           opacity: 0;
           pointer-events: none;
@@ -498,21 +564,30 @@ export const MobileOS = ({
         }
         .drawer-content {
           position: fixed;
-          bottom: -100%;
-          left: 0;
-          width: 100%;
-          max-height: 80vh;
-          background: rgba(10, 11, 14, 0.98);
-          border-top: 1px solid var(--theme-accent);
-          border-radius: 20px 20px 0 0;
-          box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
-          padding: 24px 20px;
+          top: 0;
+          right: -85%;
+          width: 85%;
+          height: 100dvh;
+          background: rgba(10, 11, 14, 0.82);
+          backdrop-filter: blur(24px);
+          border-left: 1px solid rgba(0, 240, 255, 0.15);
+          box-shadow: -15px 0 45px rgba(0,0,0,0.65);
           z-index: 3100;
-          transition: bottom 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
-          overflow-y: auto;
+          transition: right 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+          display: flex;
+          flex-direction: column;
+          padding: 24px 20px;
+          border-radius: 20px 0 0 20px;
+          box-sizing: border-box;
         }
         .drawer-content.open {
-          bottom: 0;
+          right: 0;
+        }
+        .drawer-scroll-container {
+          flex: 1;
+          overflow-y: auto;
+          padding-right: 4px;
+          padding-bottom: 40px;
         }
         .drawer-header {
           display: flex;
@@ -530,9 +605,37 @@ export const MobileOS = ({
           font-size: 0.85rem;
           cursor: pointer;
         }
+        .drawer-item {
+          padding: 12px 14px;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          color: var(--text-secondary);
+          text-decoration: none;
+        }
+        .drawer-item:hover, .drawer-item.active {
+          background: rgba(255, 255, 255, 0.04);
+          color: var(--theme-accent);
+          border-left: 2.5px solid var(--theme-accent);
+        }
+
+        /* 8. Scroll indicator arrow bouncing */
+        @keyframes bounceArrow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(6px); }
+        }
       `}</style>
 
-      {/* Mobile Top Status Header */}
+      {/* Cyberpunk background layers */}
+      <div className="mobile-cyber-bg" />
+      <div className="mobile-cyber-glow" />
+      <div className="mobile-cyber-stars" />
+      <div className="mobile-cyber-grid" />
+
+      {/* Mobile Top System Header Bar */}
       <header className="mobile-header">
         <span
           style={{
@@ -555,9 +658,7 @@ export const MobileOS = ({
         >
           <span>[ONLINE]</span>
           <span>•</span>
-          <span style={{ fontFamily: "monospace", color: "#fff" }}>
-            {timeStr}
-          </span>
+          <span style={{ color: "#fff" }}>{timeStr}</span>
         </div>
       </header>
 
@@ -565,7 +666,7 @@ export const MobileOS = ({
       <section
         id="mobile-home"
         className="mobile-section"
-        style={{ textAlign: "center", paddingTop: "40px" }}
+        style={{ textAlign: "center", paddingTop: "50px" }}
       >
         <div className="mobile-avatar-ring">
           <div className="mobile-avatar-img-wrap">
@@ -575,7 +676,7 @@ export const MobileOS = ({
 
         <h1
           style={{
-            fontSize: "2.2rem",
+            fontSize: "clamp(2rem, 6.5vw, 2.8rem)",
             fontWeight: "900",
             color: "#fff",
             letterSpacing: "-1px",
@@ -599,10 +700,10 @@ export const MobileOS = ({
 
         <p
           style={{
-            fontSize: "0.85rem",
+            fontSize: "clamp(0.82rem, 3.5vw, 0.92rem)",
             color: "var(--text-secondary)",
-            lineHeight: "1.6",
-            maxWidth: "450px",
+            lineHeight: "1.65",
+            maxWidth: "480px",
             margin: "0 auto 24px auto",
           }}
         >
@@ -614,16 +715,8 @@ export const MobileOS = ({
           MongoDB.
         </p>
 
-        {/* Action Buttons */}
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "10px",
-            justifyContent: "center",
-            marginBottom: "36px",
-          }}
-        >
+        {/* Action Buttons row wrapping cleanly */}
+        <div className="mobile-button-wrap" style={{ marginBottom: "36px" }}>
           <button
             onClick={onDownloadResume}
             style={{
@@ -675,18 +768,24 @@ export const MobileOS = ({
           </a>
         </div>
 
-        {/* Information Cards stacked vertically */}
+        {/* Information Cards stacked vertically in one column */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             gap: "12px",
             textAlign: "left",
+            width: "100%",
+            maxWidth: "480px",
+            margin: "0 auto",
           }}
         >
           <div
             className="mobile-card"
-            style={{ borderLeft: "3px solid var(--glow-cyan)" }}
+            style={{
+              borderLeft: "3.5px solid var(--glow-cyan)",
+              marginBottom: 0,
+            }}
           >
             <div
               style={{ fontSize: "0.95rem", fontWeight: "700", color: "#fff" }}
@@ -705,7 +804,10 @@ export const MobileOS = ({
           </div>
           <div
             className="mobile-card"
-            style={{ borderLeft: "3px solid var(--glow-green)" }}
+            style={{
+              borderLeft: "3.5px solid var(--glow-green)",
+              marginBottom: 0,
+            }}
           >
             <div
               style={{ fontSize: "0.95rem", fontWeight: "700", color: "#fff" }}
@@ -724,7 +826,10 @@ export const MobileOS = ({
           </div>
           <div
             className="mobile-card"
-            style={{ borderLeft: "3px solid var(--glow-purple)" }}
+            style={{
+              borderLeft: "3.5px solid var(--glow-purple)",
+              marginBottom: 0,
+            }}
           >
             <div
               style={{ fontSize: "0.95rem", fontWeight: "700", color: "#fff" }}
@@ -743,7 +848,10 @@ export const MobileOS = ({
           </div>
           <div
             className="mobile-card"
-            style={{ borderLeft: "3px solid #ff007f" }}
+            style={{
+              borderLeft: "3.5px solid var(--theme-accent)",
+              marginBottom: 0,
+            }}
           >
             <div
               style={{ fontSize: "0.95rem", fontWeight: "700", color: "#fff" }}
@@ -757,8 +865,33 @@ export const MobileOS = ({
                 marginTop: "4px",
               }}
             >
-              Available for Full-Time Opportunities
+              Available for Opportunities
             </div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div
+          className="scroll-indicator"
+          style={{
+            marginTop: "48px",
+            opacity: 0.5,
+            animation: "bounceArrow 1.5s ease-in-out infinite",
+          }}
+        >
+          <div style={{ fontSize: "1.2rem", color: "var(--theme-accent)" }}>
+            &darr;
+          </div>
+          <div
+            style={{
+              fontSize: "0.6rem",
+              textTransform: "uppercase",
+              letterSpacing: "1.5px",
+              marginTop: "4px",
+              color: "var(--text-secondary)",
+            }}
+          >
+            Scroll to Explore
           </div>
         </div>
       </section>
@@ -778,7 +911,10 @@ export const MobileOS = ({
           // SYSTEM_TIMELINE_LOGS
         </div>
 
-        <div className="timeline-accordion-container">
+        <div
+          className="timeline-accordion-container"
+          style={{ width: "100%", maxWidth: "560px", margin: "0 auto" }}
+        >
           {timelineItems.map((item, idx) => {
             const isExpanded = timelineExpanded === idx;
             return (
@@ -875,15 +1011,19 @@ export const MobileOS = ({
         </div>
       </section>
 
-      {/* 3. Mobile Projects Section (Swipe Carousel) */}
+      {/* 3. Mobile Projects Section (Swipe Swiper) */}
       <section id="mobile-projects" className="mobile-section">
         <h2 className="mobile-section-title">Projects Showcase</h2>
 
         <div
           className="projects-carousel-container"
-          style={{ position: "relative" }}
+          style={{
+            position: "relative",
+            width: "100%",
+            maxWidth: "480px",
+            margin: "0 auto",
+          }}
         >
-          {/* Active project card */}
           {projectsList.map((project, idx) => {
             if (idx !== projectIndex) return null;
             return (
@@ -891,12 +1031,12 @@ export const MobileOS = ({
                 key={project.id}
                 className="mobile-card active"
                 style={{
-                  minHeight: "440px",
+                  minHeight: "420px",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
                   borderColor: project.coverColor,
-                  boxShadow: `0 8px 24px ${project.coverColor}11`,
+                  boxShadow: `0 8px 24px \${project.coverColor}11`,
                 }}
               >
                 <div>
@@ -1093,7 +1233,10 @@ export const MobileOS = ({
       <section id="mobile-skills" className="mobile-section">
         <h2 className="mobile-section-title">Skills Inventory</h2>
 
-        <div className="skills-accordion-container">
+        <div
+          className="skills-accordion-container"
+          style={{ width: "100%", maxWidth: "560px", margin: "0 auto" }}
+        >
           {Object.entries(skillsCategories).map(([key, category]) => {
             const isExpanded = skillsExpanded === key;
             return (
@@ -1140,7 +1283,6 @@ export const MobileOS = ({
 
                 <div
                   className={`accordion-content ${isExpanded ? "open" : ""}`}
-                  style={{ overflow: "hidden" }}
                 >
                   <div
                     style={{
@@ -1210,9 +1352,10 @@ export const MobileOS = ({
                           style={{
                             fontSize: "0.72rem",
                             color: "var(--text-secondary)",
+                            lineHeight: "1.4",
                           }}
                         >
-                          <strong>Exp:</strong> {skill.exp} &bull; {skill.desc}
+                          {skill.desc}
                         </div>
                       </div>
                     ))}
@@ -1224,7 +1367,7 @@ export const MobileOS = ({
         </div>
       </section>
 
-      {/* 5. Mobile Experience Section (Work Timeline) */}
+      {/* 5. Mobile Experience Section */}
       <section id="mobile-experience" className="mobile-section">
         <h2 className="mobile-section-title">Work Experience</h2>
         <div
@@ -1232,6 +1375,9 @@ export const MobileOS = ({
             marginBottom: "20px",
             fontSize: "0.75rem",
             color: "var(--text-muted)",
+            width: "100%",
+            maxWidth: "560px",
+            margin: "0 auto 20px auto",
           }}
         >
           // SYSTEM_EMPLOYMENT_LOGS
@@ -1240,6 +1386,9 @@ export const MobileOS = ({
           style={{
             paddingLeft: "10px",
             borderLeft: "1px solid rgba(255, 255, 255, 0.08)",
+            width: "100%",
+            maxWidth: "560px",
+            margin: "0 auto",
           }}
         >
           <WorkExperience />
@@ -1247,10 +1396,22 @@ export const MobileOS = ({
       </section>
 
       {/* 6. Mobile Contact Section */}
-      <section id="mobile-contact" className="mobile-section">
+      <section
+        id="mobile-contact"
+        className="mobile-section"
+        style={{ paddingBottom: "120px" }}
+      >
         <h2 className="mobile-section-title">Secure Mail</h2>
 
-        <div className="mobile-card" style={{ padding: "20px" }}>
+        <div
+          className="mobile-card"
+          style={{
+            padding: "20px",
+            width: "100%",
+            maxWidth: "480px",
+            margin: "0 auto",
+          }}
+        >
           <form
             onSubmit={handleContactSubmit}
             style={{ display: "flex", flexDirection: "column", gap: "14px" }}
@@ -1282,6 +1443,7 @@ export const MobileOS = ({
                   fontFamily: "inherit",
                   fontSize: "0.8rem",
                   outline: "none",
+                  boxSizing: "border-box",
                 }}
               />
             </div>
@@ -1313,6 +1475,7 @@ export const MobileOS = ({
                   fontFamily: "inherit",
                   fontSize: "0.8rem",
                   outline: "none",
+                  boxSizing: "border-box",
                 }}
               />
             </div>
@@ -1344,7 +1507,8 @@ export const MobileOS = ({
                   fontFamily: "inherit",
                   fontSize: "0.8rem",
                   outline: "none",
-                  resize: "vertical",
+                  resize: "none",
+                  boxSizing: "border-box",
                 }}
               />
             </div>
@@ -1390,10 +1554,29 @@ export const MobileOS = ({
         </div>
       </section>
 
-      {/* Sticky Bottom Navigation */}
+      {/* Footer Section */}
+      <footer
+        style={{
+          padding: "40px 20px 100px 20px",
+          textAlign: "center",
+          borderTop: "1px solid rgba(255,255,255,0.04)",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "0.7rem",
+            color: "var(--text-muted)",
+            fontFamily: "monospace",
+          }}
+        >
+          &copy; 2026 NIKHIL_OS. ALL SYSTEM CHANNELS NOMINAL.
+        </div>
+      </footer>
+
+      {/* Sticky Bottom Navigation Bar */}
       <nav className="bottom-nav">
         <button
-          className={`bottom-nav-item ${activeTab === "home" ? "active" : ""}`}
+          className={`bottom-nav-item \${activeTab === "home" ? "active" : ""}`}
           onClick={() => scrollToSection("home")}
         >
           <svg
@@ -1410,7 +1593,7 @@ export const MobileOS = ({
           Home
         </button>
         <button
-          className={`bottom-nav-item ${activeTab === "projects" ? "active" : ""}`}
+          className={`bottom-nav-item \${activeTab === "projects" ? "active" : ""}`}
           onClick={() => scrollToSection("projects")}
         >
           <svg
@@ -1426,7 +1609,7 @@ export const MobileOS = ({
           Projects
         </button>
         <button
-          className={`bottom-nav-item ${terminalOpen ? "active" : ""}`}
+          className={`bottom-nav-item \${terminalOpen ? "active" : ""}`}
           onClick={() => setTerminalOpen(true)}
         >
           <svg
@@ -1443,7 +1626,7 @@ export const MobileOS = ({
           Terminal
         </button>
         <button
-          className={`bottom-nav-item ${activeTab === "contact" ? "active" : ""}`}
+          className={`bottom-nav-item \${activeTab === "contact" ? "active" : ""}`}
           onClick={() => scrollToSection("contact")}
         >
           <svg
@@ -1460,7 +1643,7 @@ export const MobileOS = ({
           Contact
         </button>
         <button
-          className={`bottom-nav-item ${menuOpen ? "active" : ""}`}
+          className={`bottom-nav-item \${menuOpen ? "active" : ""}`}
           onClick={() => setMenuOpen(true)}
         >
           <svg
@@ -1479,17 +1662,20 @@ export const MobileOS = ({
         </button>
       </nav>
 
-      {/* Terminal Drawer Overlay Modal */}
+      {/* Terminal Drawer Overlay Modal (15% blurred backdrop) */}
       <div
-        className={`drawer-overlay ${terminalOpen ? "open" : ""}`}
+        className={`drawer-overlay \${terminalOpen ? "open" : ""}`}
         onClick={() => setTerminalOpen(false)}
       />
-      <div
-        className={`drawer-content ${terminalOpen ? "open" : ""}`}
-        style={{ fontFamily: "monospace" }}
-      >
+      <div className={`drawer-content \${terminalOpen ? "open" : ""}`}>
         <div className="drawer-header">
-          <span style={{ color: "var(--theme-accent)", fontWeight: "bold" }}>
+          <span
+            style={{
+              color: "var(--theme-accent)",
+              fontWeight: "bold",
+              fontSize: "0.78rem",
+            }}
+          >
             Console Session — guest@nikhil-os:~
           </span>
           <button
@@ -1500,144 +1686,152 @@ export const MobileOS = ({
           </button>
         </div>
 
-        {/* Terminal Logs */}
-        <div
-          style={{
-            height: "200px",
-            overflowY: "auto",
-            background: "#050608",
-            border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: "8px",
-            padding: "10px",
-            fontSize: "0.72rem",
-            color: "var(--theme-accent)",
-            lineHeight: "1.4",
-            marginBottom: "12px",
-            whiteSpace: "pre-wrap",
-          }}
-        >
-          {terminalLogs.map((log, idx) => (
-            <div key={idx}>{log}</div>
-          ))}
-        </div>
-
-        {/* Quick Action Chips */}
-        <div
-          style={{
-            display: "flex",
-            gap: "8px",
-            flexWrap: "wrap",
-            marginBottom: "16px",
-          }}
-        >
-          <button
-            onClick={() => handleQuickCommand("help")}
+        {/* Scrollable logs container */}
+        <div className="drawer-scroll-container">
+          <div
             style={{
-              padding: "6px 12px",
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "6px",
-              color: "#fff",
-              fontSize: "0.7rem",
-              fontFamily: "inherit",
-            }}
-          >
-            [ run help ]
-          </button>
-          <button
-            onClick={() => handleQuickCommand("system")}
-            style={{
-              padding: "6px 12px",
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "6px",
-              color: "#fff",
-              fontSize: "0.7rem",
-              fontFamily: "inherit",
-            }}
-          >
-            [ system diagnostic ]
-          </button>
-          <button
-            onClick={() => handleQuickCommand("resume")}
-            style={{
-              padding: "6px 12px",
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "6px",
-              color: "#fff",
-              fontSize: "0.7rem",
-              fontFamily: "inherit",
-            }}
-          >
-            [ resume payload ]
-          </button>
-          <button
-            onClick={() => handleQuickCommand("clear")}
-            style={{
-              padding: "6px 12px",
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "6px",
-              color: "#fff",
-              fontSize: "0.7rem",
-              fontFamily: "inherit",
-            }}
-          >
-            [ clear ]
-          </button>
-        </div>
-
-        {/* Input Form */}
-        <form
-          onSubmit={handleTerminalSubmit}
-          style={{ display: "flex", gap: "10px" }}
-        >
-          <span style={{ color: "var(--theme-accent)", alignSelf: "center" }}>
-            &gt;
-          </span>
-          <input
-            type="text"
-            value={terminalInput}
-            onChange={(e) => setTerminalInput(e.target.value)}
-            placeholder="Type command here..."
-            style={{
-              flex: 1,
+              height: "200px",
+              overflowY: "auto",
+              background: "#050608",
+              border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: "8px",
               padding: "10px",
-              background: "rgba(255,255,255,0.02)",
-              border: "1px solid rgba(255,255,255,0.12)",
-              borderRadius: "6px",
-              color: "#fff",
-              fontFamily: "inherit",
-              fontSize: "0.75rem",
-              outline: "none",
-            }}
-          />
-          <button
-            type="submit"
-            style={{
-              padding: "0 20px",
-              background: "rgba(0,240,255,0.08)",
-              border: "1px solid var(--theme-accent)",
-              borderRadius: "6px",
+              fontSize: "0.72rem",
               color: "var(--theme-accent)",
-              fontFamily: "inherit",
-              fontSize: "0.75rem",
+              lineHeight: "1.4",
+              marginBottom: "12px",
+              whiteSpace: "pre-wrap",
             }}
           >
-            ENTER
-          </button>
-        </form>
+            {terminalLogs.map((log, idx) => (
+              <div key={idx}>{log}</div>
+            ))}
+          </div>
+
+          {/* Quick Action Chips */}
+          <div
+            style={{
+              display: "flex",
+              gap: "8px",
+              flexWrap: "wrap",
+              marginBottom: "16px",
+            }}
+          >
+            <button
+              onClick={() => handleQuickCommand("help")}
+              style={{
+                padding: "6px 12px",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: "6px",
+                color: "#fff",
+                fontSize: "0.7rem",
+                fontFamily: "inherit",
+              }}
+            >
+              [ run help ]
+            </button>
+            <button
+              onClick={() => handleQuickCommand("system")}
+              style={{
+                padding: "6px 12px",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: "6px",
+                color: "#fff",
+                fontSize: "0.7rem",
+                fontFamily: "inherit",
+              }}
+            >
+              [ system diagnostic ]
+            </button>
+            <button
+              onClick={() => handleQuickCommand("resume")}
+              style={{
+                padding: "6px 12px",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: "6px",
+                color: "#fff",
+                fontSize: "0.7rem",
+                fontFamily: "inherit",
+              }}
+            >
+              [ resume payload ]
+            </button>
+            <button
+              onClick={() => handleQuickCommand("clear")}
+              style={{
+                padding: "6px 12px",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: "6px",
+                color: "#fff",
+                fontSize: "0.7rem",
+                fontFamily: "inherit",
+              }}
+            >
+              [ clear ]
+            </button>
+          </div>
+
+          {/* Input Form */}
+          <form
+            onSubmit={handleTerminalSubmit}
+            style={{ display: "flex", gap: "10px" }}
+          >
+            <span style={{ color: "var(--theme-accent)", alignSelf: "center" }}>
+              &gt;
+            </span>
+            <input
+              type="text"
+              value={terminalInput}
+              onChange={(e) => setTerminalInput(e.target.value)}
+              placeholder="Type command here..."
+              style={{
+                flex: 1,
+                padding: "10px",
+                background: "rgba(255,255,255,0.02)",
+                border: "1px solid rgba(255,255,255,0.12)",
+                borderRadius: "6px",
+                color: "#fff",
+                fontFamily: "inherit",
+                fontSize: "0.75rem",
+                outline: "none",
+              }}
+            />
+            <button
+              type="submit"
+              style={{
+                padding: "0 14px",
+                background: "rgba(0,240,255,0.08)",
+                border: "1px solid var(--theme-accent)",
+                borderRadius: "6px",
+                color: "var(--theme-accent)",
+                fontFamily: "inherit",
+                fontSize: "0.72rem",
+              }}
+            >
+              RUN
+            </button>
+          </form>
+        </div>
       </div>
 
-      {/* System Drawer Menu Popup */}
+      {/* System Drawer Menu Popup (15% blurred backdrop) */}
       <div
-        className={`drawer-overlay ${menuOpen ? "open" : ""}`}
+        className={`drawer-overlay \${menuOpen ? "open" : ""}`}
         onClick={() => setMenuOpen(false)}
       />
-      <div className={`drawer-content ${menuOpen ? "open" : ""}`}>
+      <div className={`drawer-content \${menuOpen ? "open" : ""}`}>
         <div className="drawer-header">
-          <span style={{ color: "var(--theme-accent)", fontWeight: "bold" }}>
+          <span
+            style={{
+              color: "var(--theme-accent)",
+              fontWeight: "bold",
+              fontSize: "0.78rem",
+            }}
+          >
             System Controls Menu
           </span>
           <button className="drawer-close" onClick={() => setMenuOpen(false)}>
@@ -1645,106 +1839,164 @@ export const MobileOS = ({
           </button>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          {/* Quick Info */}
+        <div className="drawer-scroll-container">
           <div
-            className="mobile-card"
-            style={{ padding: "12px 16px", marginBottom: 0 }}
+            style={{ display: "flex", flexDirection: "column", gap: "16px" }}
           >
-            <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>
-              // HOST_OS_METRICS
-            </div>
+            {/* Quick Info */}
             <div
-              style={{ fontSize: "0.8rem", color: "#fff", marginTop: "4px" }}
+              className="mobile-card"
+              style={{ padding: "12px 16px", marginBottom: 0 }}
             >
-              Status: Normal Operation
+              <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                // HOST_OS_METRICS
+              </div>
+              <div
+                style={{ fontSize: "0.8rem", color: "#fff", marginTop: "4px" }}
+              >
+                Status: Normal Operation
+              </div>
+              <div style={{ fontSize: "0.8rem", color: "#fff" }}>
+                Version: NIKHIL_OS v3.4.1 (Mobile Mode)
+              </div>
             </div>
-            <div style={{ fontSize: "0.8rem", color: "#fff" }}>
-              Version: NIKHIL_OS v3.4.1 (Mobile Mode)
-            </div>
-          </div>
 
-          {/* Theme switcher */}
-          <div>
-            <span
+            {/* Scrollable menu navigation list with hover and active states */}
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "6px" }}
+            >
+              <span
+                style={{
+                  fontSize: "0.7rem",
+                  color: "var(--text-muted)",
+                  marginBottom: "4px",
+                }}
+              >
+                // QUICK_JUMP_WORKSPACES
+              </span>
+              <div
+                className={`drawer-item \${activeTab === "home" ? "active" : ""}`}
+                onClick={() => {
+                  scrollToSection("home");
+                  setMenuOpen(false);
+                }}
+              >
+                Home
+              </div>
+              <div
+                className={`drawer-item \${activeTab === "about" ? "active" : ""}`}
+                onClick={() => {
+                  scrollToSection("about");
+                  setMenuOpen(false);
+                }}
+              >
+                About & Timeline
+              </div>
+              <div
+                className={`drawer-item \${activeTab === "projects" ? "active" : ""}`}
+                onClick={() => {
+                  scrollToSection("projects");
+                  setMenuOpen(false);
+                }}
+              >
+                Projects Swiper
+              </div>
+              <div
+                className={`drawer-item \${activeTab === "skills" ? "active" : ""}`}
+                onClick={() => {
+                  scrollToSection("skills");
+                  setMenuOpen(false);
+                }}
+              >
+                Skills Inventory
+              </div>
+              <div
+                className={`drawer-item \${activeTab === "experience" ? "active" : ""}`}
+                onClick={() => {
+                  scrollToSection("experience");
+                  setMenuOpen(false);
+                }}
+              >
+                Work Experience
+              </div>
+              <div
+                className={`drawer-item \${activeTab === "contact" ? "active" : ""}`}
+                onClick={() => {
+                  scrollToSection("contact");
+                  setMenuOpen(false);
+                }}
+              >
+                Secure Mail Form
+              </div>
+            </div>
+
+            {/* Theme switcher */}
+            <div>
+              <span
+                style={{
+                  fontSize: "0.72rem",
+                  color: "var(--text-muted)",
+                  display: "block",
+                  marginBottom: "8px",
+                }}
+              >
+                // SELECT_SYSTEM_THEME_GLOW
+              </span>
+              <div style={{ display: "flex", gap: "10px" }}>
+                {["cyan", "green", "purple"].map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setActiveTheme(t as any)}
+                    style={{
+                      flex: 1,
+                      padding: "10px 0",
+                      background:
+                        activeTheme === t
+                          ? "rgba(255,255,255,0.06)"
+                          : "rgba(255,255,255,0.02)",
+                      border:
+                        activeTheme === t
+                          ? `1px solid var(--theme-accent)`
+                          : "1px solid rgba(255,255,255,0.12)",
+                      borderRadius: "6px",
+                      color:
+                        activeTheme === t
+                          ? "var(--theme-accent)"
+                          : "var(--text-secondary)",
+                      fontFamily: "inherit",
+                      fontSize: "0.72rem",
+                      fontWeight: "600",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Action buttons */}
+            <button
+              onClick={() => {
+                onDownloadResume();
+                setMenuOpen(false);
+              }}
               style={{
-                fontSize: "0.72rem",
-                color: "var(--text-muted)",
-                display: "block",
-                marginBottom: "8px",
+                width: "100%",
+                padding: "12px 0",
+                background: "rgba(0, 240, 255, 0.08)",
+                border: "1px solid var(--theme-accent)",
+                borderRadius: "8px",
+                color: "var(--theme-accent)",
+                fontFamily: "inherit",
+                fontSize: "0.78rem",
+                fontWeight: "600",
+                marginTop: "10px",
               }}
             >
-              // SELECT_SYSTEM_THEME_GLOW
-            </span>
-            <div style={{ display: "flex", gap: "10px" }}>
-              {["cyan", "green", "purple"].map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setActiveTheme(t as any)}
-                  style={{
-                    flex: 1,
-                    padding: "10px 0",
-                    background:
-                      activeTheme === t
-                        ? "rgba(255,255,255,0.06)"
-                        : "rgba(255,255,255,0.02)",
-                    border:
-                      activeTheme === t
-                        ? `1px solid var(--theme-accent)`
-                        : "1px solid rgba(255,255,255,0.12)",
-                    borderRadius: "6px",
-                    color:
-                      activeTheme === t
-                        ? "var(--theme-accent)"
-                        : "var(--text-secondary)",
-                    fontFamily: "inherit",
-                    fontSize: "0.72rem",
-                    fontWeight: "600",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
+              Download CV Payload
+            </button>
           </div>
-
-          {/* Action buttons */}
-          <button
-            onClick={() => {
-              onDownloadResume();
-              setMenuOpen(false);
-            }}
-            style={{
-              width: "100%",
-              padding: "12px 0",
-              background: "rgba(0, 240, 255, 0.08)",
-              border: "1px solid var(--theme-accent)",
-              borderRadius: "8px",
-              color: "var(--theme-accent)",
-              fontFamily: "inherit",
-              fontSize: "0.78rem",
-              fontWeight: "600",
-            }}
-          >
-            Download CV Payload
-          </button>
-
-          <button
-            onClick={() => setMenuOpen(false)}
-            style={{
-              width: "100%",
-              padding: "12px 0",
-              background: "rgba(255,255,255,0.02)",
-              border: "1px solid rgba(255,255,255,0.12)",
-              borderRadius: "8px",
-              color: "var(--text-secondary)",
-              fontFamily: "inherit",
-              fontSize: "0.78rem",
-            }}
-          >
-            Dismiss Controls Menu
-          </button>
         </div>
       </div>
     </div>

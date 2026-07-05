@@ -801,7 +801,15 @@ export default function Home() {
 
   if (isMobile) {
     return (
-      <div style={{ background: "#050608", minHeight: "100vh" }}>
+      <div
+        style={{
+          background: "#030406",
+          minHeight: "100dvh",
+          overflowY: "auto",
+          overflowX: "hidden",
+          position: "relative",
+        }}
+      >
         <MobileOS
           onDownloadResume={handleDownloadResume}
           onSelectProject={setSelectedProject}
