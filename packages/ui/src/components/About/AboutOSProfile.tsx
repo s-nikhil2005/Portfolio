@@ -6,47 +6,10 @@ export const AboutOSProfile = () => {
   const [visibleCards, setVisibleCards] = React.useState<
     Record<string, boolean>
   >({});
-  const [snifferLogs, setSnifferLogs] = React.useState<string[]>([
-    "[19:50:30] SYS_INITIALIZE: LOAD_DRIVERS [OK]",
-    "[19:50:32] NETWORK_MONITOR: INTERFACE eth0 [UP]",
-    "[19:50:35] AUDIT_AGENT: PACKET_SNIFFER STABLE",
-  ]);
-
   const containerRef = React.useRef<HTMLDivElement>(null);
 
-  // Simulated Packet Sniffer logs generator
   React.useEffect(() => {
-    const logsTemplates = [
-      "AUDIT: INBOUND TCP packet on PORT 443 from THM_SERVER",
-      "SYS_ALERT: Port scanning detected - source node secure",
-      "COMPLETED_LAB: Privilege Escalation Auditing completed",
-      "DECRYPT_STREAM: Handshake verified key_len: 2048bit",
-      "SYS_STAT: SOC operations log synced to repository",
-      "AUDIT: Volumetric network scan safe, zero packet loss",
-      "THM_ROOMS: Fetching current rooms progress [50+ OK]",
-      "SYS_NODE: Mumbai location ping returned latency: 18ms",
-      "MONITOR: Port 8080 listening for API secure payloads",
-    ];
-
-    const interval = setInterval(() => {
-      const timestamp = new Date().toLocaleTimeString("en-GB", {
-        hour12: false,
-      });
-      const randomTemplate =
-        logsTemplates[Math.floor(Math.random() * logsTemplates.length)];
-      const newLog = `[${timestamp}] ${randomTemplate}`;
-
-      setSnifferLogs((prev) => {
-        const updated = [...prev, newLog];
-        return updated.slice(-6); // Keep last 6 lines
-      });
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  React.useEffect(() => {
-    // Intersection observer for entrance animations
+    // Intersection observer for entry reveal animations
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -58,7 +21,7 @@ export const AboutOSProfile = () => {
           }
         });
       },
-      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
+      { threshold: 0.05, rootMargin: "0px 0px -20px 0px" },
     );
 
     const cards = containerRef.current?.querySelectorAll(".os-panel-card");
@@ -75,12 +38,13 @@ export const AboutOSProfile = () => {
         .os-profile-dashboard {
           width: 100%;
           display: grid;
-          grid-template-columns: 1fr 1.1fr;
-          gap: 36px;
+          grid-template-columns: 1fr 1.15fr;
+          gap: 24px;
           color: #e4e4e7;
           font-family: var(--font-mono), monospace;
           box-sizing: border-box;
-          padding: 10px 0;
+          padding: 4px 0;
+          overflow: hidden;
         }
 
         /* Futuristic OS Panels */
@@ -89,24 +53,24 @@ export const AboutOSProfile = () => {
           backdrop-filter: blur(12px);
           -webkit-backdrop-filter: blur(12px);
           border: 1px solid rgba(0, 229, 255, 0.12);
-          border-radius: 12px;
-          padding: 24px;
+          border-radius: 10px;
+          padding: 20px;
           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
           position: relative;
           overflow: hidden;
           opacity: 0;
-          transform: translateY(20px);
+          transform: translateY(15px);
           box-sizing: border-box;
         }
         .os-panel-card.reveal {
           opacity: 1;
           transform: translateY(0);
-          transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                      transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .os-panel-card:hover {
-          border-color: rgba(0, 229, 255, 0.25);
-          box-shadow: 0 8px 32px rgba(0, 229, 255, 0.05);
+          border-color: rgba(0, 229, 255, 0.22);
+          box-shadow: 0 8px 24px rgba(0, 229, 255, 0.04);
         }
 
         /* Card Header Tabs */
@@ -114,13 +78,13 @@ export const AboutOSProfile = () => {
           position: absolute;
           top: 0;
           left: 0;
-          font-size: 0.65rem;
+          font-size: 0.62rem;
           color: var(--glow-cyan);
-          background: rgba(0, 229, 255, 0.08);
-          border-bottom-right-radius: 8px;
-          border-right: 1px solid rgba(0, 229, 255, 0.15);
-          border-bottom: 1px solid rgba(0, 229, 255, 0.15);
-          padding: 4px 10px;
+          background: rgba(0, 229, 255, 0.06);
+          border-bottom-right-radius: 6px;
+          border-right: 1px solid rgba(0, 229, 255, 0.12);
+          border-bottom: 1px solid rgba(0, 229, 255, 0.12);
+          padding: 3px 8px;
           text-transform: uppercase;
           letter-spacing: 1px;
         }
@@ -128,182 +92,145 @@ export const AboutOSProfile = () => {
         /* Bio Blockquote Layout */
         .bio-quote-container {
           position: relative;
-          padding: 20px 0 10px 0;
+          padding: 12px 0 4px 0;
         }
         .quote-icon {
-          font-size: 2.2rem;
-          color: rgba(0, 229, 255, 0.15);
+          font-size: 1.8rem;
+          color: rgba(0, 229, 255, 0.12);
           line-height: 1;
-          margin-bottom: 8px;
+          margin-bottom: 4px;
           font-family: Georgia, serif;
         }
         .quote-text {
-          font-size: 0.86rem;
-          line-height: 1.55;
+          font-size: 0.8rem;
+          line-height: 1.5;
           color: #d4d4d8;
           margin: 0;
         }
 
-        /* Connecting Node Visualization (Screenshot 2 Match) */
+        /* Connecting Node Visualization */
         .node-network-box {
           position: relative;
-          margin: 28px 0;
-          padding-bottom: 24px;
+          margin: 18px 0 10px 0;
+          padding-bottom: 12px;
         }
         .focus-chips-container {
           display: flex;
           flex-wrap: wrap;
-          gap: 10px;
+          gap: 6px;
           position: relative;
           z-index: 2;
+          max-width: 85%;
         }
         .focus-chip {
-          font-size: 0.72rem;
+          font-size: 0.65rem;
           font-weight: 600;
-          padding: 6px 12px;
-          background: rgba(16, 185, 129, 0.04);
-          border: 1px solid rgba(16, 185, 129, 0.2);
+          padding: 4px 10px;
+          background: rgba(16, 185, 129, 0.03);
+          border: 1px solid rgba(16, 185, 129, 0.18);
           color: #10b981;
-          border-radius: 20px;
-          transition: all 0.25s ease;
+          border-radius: 15px;
+          transition: all 0.2s ease;
         }
         .focus-chip:hover {
-          background: rgba(16, 185, 129, 0.08);
+          background: rgba(16, 185, 129, 0.06);
           border-color: #10b981;
-          box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
-          transform: translateY(-1px);
+          box-shadow: 0 0 8px rgba(16, 185, 129, 0.2);
         }
         
-        /* Floating node connectors graphics */
         .connector-group {
           position: absolute;
-          right: 10px;
-          bottom: -5px;
+          right: 5px;
+          bottom: 0;
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 6px;
           pointer-events: none;
         }
         .connector-line-svg {
-          width: 80px;
-          height: 30px;
-          opacity: 0.55;
+          width: 55px;
+          height: 25px;
+          opacity: 0.45;
         }
         .target-node-details {
           display: flex;
           flex-direction: column;
-          font-size: 0.55rem;
+          font-size: 0.52rem;
           color: #10b981;
-          background: rgba(16, 185, 129, 0.03);
-          border: 1px solid rgba(16, 185, 129, 0.15);
-          padding: 4px 6px;
-          border-radius: 4px;
-          line-height: 1.3;
+          background: rgba(16, 185, 129, 0.02);
+          border: 1px solid rgba(16, 185, 129, 0.12);
+          padding: 3px 5px;
+          border-radius: 3px;
+          line-height: 1.2;
         }
 
         /* Stats Row */
         .stats-grid-row {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: 16px;
-          margin-top: 10px;
+          gap: 12px;
+          margin-top: 14px;
         }
         .stat-counter-card {
           background: rgba(255, 255, 255, 0.01);
-          border: 1px solid rgba(255, 255, 255, 0.04);
-          border-radius: 8px;
-          padding: 16px 10px;
+          border: 1px solid rgba(255, 255, 255, 0.03);
+          border-radius: 6px;
+          padding: 10px 6px;
           text-align: center;
-          transition: border-color 0.25s;
-        }
-        .stat-counter-card:hover {
-          border-color: rgba(0, 229, 255, 0.18);
         }
         .stat-num {
-          font-size: 1.7rem;
+          font-size: 1.35rem;
           font-weight: 800;
           color: #ffffff;
-          margin-bottom: 4px;
-          text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+          margin-bottom: 2px;
         }
         .stat-lbl {
+          font-size: 0.58rem;
+          color: #71717a;
+          text-transform: uppercase;
+        }
+
+        /* Technical Skills Section */
+        .skills-summary-block {
+          margin-top: 8px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+        .skills-row {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+        .skills-label {
           font-size: 0.65rem;
           color: #71717a;
           text-transform: uppercase;
-          letter-spacing: 0.5px;
+          letter-spacing: 0.8px;
         }
-
-        /* Packet Sniffer Terminal (Unique Cybersecurity UI) */
-        .sniffer-panel {
-          border-color: rgba(16, 185, 129, 0.18);
-          background: rgba(5, 8, 14, 0.6);
-        }
-        .sniffer-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          border-bottom: 1px solid rgba(16, 185, 129, 0.15);
-          padding-bottom: 10px;
-          margin-bottom: 12px;
-        }
-        .sniffer-title {
-          font-size: 0.72rem;
-          font-weight: bold;
-          color: #10b981;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
-        .sniffer-pulse {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #10b981;
-          animation: snifferBlink 1.5s infinite alternate;
-        }
-        @keyframes snifferBlink {
-          from { opacity: 0.2; }
-          to { opacity: 1; }
-        }
-        .sniffer-toggle-label {
-          font-size: 0.58rem;
-          color: rgba(16, 185, 129, 0.5);
-          text-transform: uppercase;
-        }
-        .sniffer-log-container {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-          height: 105px;
-          overflow: hidden;
-        }
-        .sniffer-log-row {
-          font-size: 0.68rem;
-          color: #34d399;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+        .skills-values {
+          font-size: 0.78rem;
+          color: #e4e4e7;
           line-height: 1.4;
-          opacity: 0.85;
         }
 
         /* Right column items */
         .right-column-stack {
           display: flex;
           flex-direction: column;
-          gap: 24px;
+          gap: 20px;
         }
         .card-inner-layout {
-          margin-top: 12px;
+          margin-top: 10px;
           display: flex;
-          gap: 16px;
+          gap: 14px;
         }
         .card-icon-wrapper {
-          width: 42px;
-          height: 42px;
-          border-radius: 8px;
-          background: rgba(16, 185, 129, 0.05);
-          border: 1px solid rgba(16, 185, 129, 0.15);
+          width: 36px;
+          height: 36px;
+          border-radius: 6px;
+          background: rgba(16, 185, 129, 0.04);
+          border: 1px solid rgba(16, 185, 129, 0.12);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -314,101 +241,104 @@ export const AboutOSProfile = () => {
           flex: 1;
         }
         .meta-label-tag {
-          font-size: 0.65rem;
+          font-size: 0.6rem;
           text-transform: uppercase;
           color: #71717a;
-          letter-spacing: 1px;
-          margin-bottom: 6px;
+          letter-spacing: 0.8px;
+          margin-bottom: 4px;
           display: block;
         }
         .meta-main-title {
-          font-size: 0.98rem;
+          font-size: 0.9rem;
           font-weight: bold;
           color: #ffffff;
-          margin: 0 0 4px 0;
+          margin: 0 0 2px 0;
         }
         .meta-sub-title {
-          font-size: 0.82rem;
+          font-size: 0.78rem;
           color: var(--glow-cyan);
-          margin: 0 0 10px 0;
+          margin: 0 0 6px 0;
         }
         
-        /* Badges for Education */
         .meta-badges-row {
           display: flex;
           gap: 10px;
           align-items: center;
-          margin-top: 8px;
+          margin-top: 4px;
         }
         .date-badge {
-          font-size: 0.68rem;
+          font-size: 0.65rem;
           color: #a1a1aa;
         }
         .grade-badge {
-          font-size: 0.68rem;
+          font-size: 0.65rem;
           font-weight: bold;
-          padding: 2px 8px;
-          border: 1px solid rgba(16, 185, 129, 0.3);
-          background: rgba(16, 185, 129, 0.05);
+          padding: 1px 6px;
+          border: 1px solid rgba(16, 185, 129, 0.25);
+          background: rgba(16, 185, 129, 0.04);
           color: #10b981;
-          border-radius: 4px;
+          border-radius: 3px;
         }
 
-        /* Interest items grid */
-        .interests-columns {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 10px;
-          margin-top: 6px;
+        /* Projects inner block */
+        .project-log-item {
+          border-left: 2px solid rgba(16, 185, 129, 0.25);
+          padding-left: 10px;
+          margin-bottom: 12px;
         }
-        .interest-item {
-          font-size: 0.82rem;
-          color: #d4d4d8;
+        .project-log-item:last-child {
+          margin-bottom: 0;
+        }
+        .project-log-header {
           display: flex;
-          align-items: center;
-          gap: 8px;
+          justify-content: space-between;
+          font-size: 0.82rem;
+          font-weight: bold;
+          color: #ffffff;
         }
-        .interest-dot {
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          background: #10b981;
-          flex-shrink: 0;
+        .project-log-tech {
+          font-size: 0.7rem;
+          color: var(--glow-cyan);
+          margin: 2px 0 4px 0;
+        }
+        .project-log-bullet {
+          font-size: 0.72rem;
+          color: #a1a1aa;
+          margin: 2px 0;
+          line-height: 1.35;
         }
 
         /* Layout Grid Columns */
         .dash-left {
           display: flex;
           flex-direction: column;
-          gap: 24px;
+          gap: 20px;
         }
 
         /* Responsive Breakpoints */
         @media (max-width: 1024px) {
           .os-profile-dashboard {
             grid-template-columns: 1fr;
-            gap: 24px;
+            gap: 20px;
+            overflow: visible;
           }
           .right-column-stack {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
+            gap: 20px;
           }
         }
 
         @media (max-width: 768px) {
           .right-column-stack {
             grid-template-columns: 1fr;
-            gap: 20px;
+            gap: 16px;
           }
           .os-panel-card {
-            padding: 20px;
-          }
-          .stats-grid-row {
-            gap: 10px;
+            padding: 16px;
           }
           .connector-group {
-            display: none; /* Hide visual connectors on mobile for space */
+            display: none;
           }
         }
       `}</style>
@@ -424,24 +354,23 @@ export const AboutOSProfile = () => {
           <div className="bio-quote-container">
             <div className="quote-icon">“</div>
             <p className="quote-text">
-              B.Sc. IT graduate passionate about Cybersecurity, Cloud Security
-              and Secure Software Development. I actively solve labs on
-              TryHackMe, pursue industry certifications, and build real-world
-              projects involving SOC operations, threat intelligence and
-              AI-powered security solutions.
+              Full-Stack Developer skilled in MERN Stack with a strong
+              foundation in Data Structures and Algorithms. Interested in
+              building scalable web applications, solving real-world problems,
+              and continuously improving problem-solving and development skills.
             </p>
           </div>
 
           {/* Node Network Visual connecting chips */}
           <div className="node-network-box">
             <div className="focus-chips-container">
-              <span className="focus-chip">B.Sc. Information Technology</span>
-              <span className="focus-chip">TryHackMe Labs</span>
-              <span className="focus-chip">AI-powered Security</span>
-              <span className="focus-chip">SOC Operations</span>
+              <span className="focus-chip">MERN Stack</span>
+              <span className="focus-chip">Data Structures & Algorithms</span>
+              <span className="focus-chip">C++ Programming</span>
+              <span className="focus-chip">System Design</span>
             </div>
 
-            {/* Glowing target node graphics (Screenshot 2 style) */}
+            {/* Glowing target node graphics */}
             <div className="connector-group">
               <svg
                 className="connector-line-svg"
@@ -467,39 +396,49 @@ export const AboutOSProfile = () => {
           {/* Stats counters board */}
           <div className="stats-grid-row">
             <div className="stat-counter-card">
-              <div className="stat-num">3+</div>
-              <div className="stat-lbl">Projects Built</div>
+              <div className="stat-num">2+</div>
+              <div className="stat-lbl">MERN Projects</div>
             </div>
             <div className="stat-counter-card">
-              <div className="stat-num">50+</div>
-              <div className="stat-lbl">THM Rooms</div>
+              <div className="stat-num">8.70</div>
+              <div className="stat-lbl">CGPA Grade</div>
             </div>
             <div className="stat-counter-card">
               <div className="stat-num">2026</div>
-              <div className="stat-lbl">Graduated</div>
+              <div className="stat-lbl">Graduation</div>
             </div>
           </div>
         </div>
 
-        {/* Live Packet Sniffer terminal console */}
+        {/* TECHNICAL_SKILLS.sys */}
         <div
-          className={`os-panel-card sniffer-panel ${visibleCards["sniffer"] ? "reveal" : "reveal"}`}
-          data-card-id="sniffer"
+          className={`os-panel-card ${visibleCards["skills"] ? "reveal" : "reveal"}`}
+          data-card-id="skills"
         >
-          <div className="card-header-tab">network_sniff.cfg</div>
-          <div className="sniffer-header">
-            <div className="sniffer-title">
-              <div className="sniffer-pulse" />
-              <span>[SYS_PACKET_SNIFFER: ON]</span>
+          <div className="card-header-tab">TECHNICAL_SKILLS.sys</div>
+          <div className="skills-summary-block">
+            <div className="skills-row">
+              <span className="skills-label">Languages</span>
+              <span className="skills-values">C++, JavaScript, TypeScript</span>
             </div>
-            <span className="sniffer-toggle-label">auditing eth0</span>
-          </div>
-          <div className="sniffer-log-container">
-            {snifferLogs.map((log, index) => (
-              <div className="sniffer-log-row" key={index}>
-                {log}
-              </div>
-            ))}
+            <div className="skills-row">
+              <span className="skills-label">Frontend</span>
+              <span className="skills-values">
+                HTML, CSS, React.js, Redux, Tailwind CSS
+              </span>
+            </div>
+            <div className="skills-row">
+              <span className="skills-label">Backend & Databases</span>
+              <span className="skills-values">
+                Node.js, Express.js, MongoDB, MySQL, Redis
+              </span>
+            </div>
+            <div className="skills-row">
+              <span className="skills-label">Tools & Core Concepts</span>
+              <span className="skills-values">
+                Git, GitHub, Docker, OOP, REST APIs, JWT Auth, DSA
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -514,8 +453,8 @@ export const AboutOSProfile = () => {
           <div className="card-inner-layout">
             <div className="card-icon-wrapper">
               <svg
-                width="20"
-                height="20"
+                width="18"
+                height="18"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -527,91 +466,70 @@ export const AboutOSProfile = () => {
             </div>
             <div className="card-body-content">
               <span className="meta-label-tag">EDUCATION</span>
-              <h4 className="meta-main-title">B.Sc. Information Technology</h4>
-              <p className="meta-sub-title">Guru Nanak Khalsa College</p>
+              <h4 className="meta-main-title">
+                Bachelor of Science (B.Sc.) in IT
+              </h4>
+              <p className="meta-sub-title">University of Mumbai</p>
               <div className="meta-badges-row">
-                <span className="date-badge">2023-2026</span>
-                <span className="grade-badge">CGPA 7.5</span>
+                <span className="date-badge">2023 - 2026</span>
+                <span className="grade-badge">CGPA 8.70</span>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* LOCATION Card */}
-        <div
-          className={`os-panel-card ${visibleCards["location"] ? "reveal" : "reveal"}`}
-          data-card-id="location"
-        >
-          <div className="card-inner-layout">
-            <div className="card-icon-wrapper">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-            </div>
-            <div className="card-body-content">
-              <span className="meta-label-tag">LOCATION</span>
-              <h4 className="meta-main-title">Mumbai, India</h4>
-              <p className="meta-sub-title">India (IST — UTC+5:30)</p>
               <p
                 style={{
-                  fontSize: "0.78rem",
-                  color: "#a1a1aa",
-                  margin: "4px 0 0 0",
-                  lineHeight: "1.4",
+                  fontSize: "0.72rem",
+                  color: "#71717a",
+                  margin: "8px 0 0 0",
+                  lineHeight: "1.3",
                 }}
               >
-                Open to remote roles and on-site opportunities in Mumbai.
+                Higher Secondary Certificate (HSC) | Maharashtra State Board
+                (2021 - 2023)
               </p>
             </div>
           </div>
         </div>
 
-        {/* INTERESTS Card */}
+        {/* PROJECTS Card */}
         <div
-          className={`os-panel-card ${visibleCards["interests"] ? "reveal" : "reveal"}`}
-          data-card-id="interests"
+          className={`os-panel-card ${visibleCards["projects"] ? "reveal" : "reveal"}`}
+          data-card-id="projects"
         >
-          <div className="card-inner-layout">
-            <div className="card-icon-wrapper">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-              </svg>
-            </div>
-            <div className="card-body-content">
-              <span className="meta-label-tag">INTERESTS</span>
-              <div className="interests-columns">
-                <div className="interest-item">
-                  <div className="interest-dot" />
-                  <span>Threat Intelligence</span>
-                </div>
-                <div className="interest-item">
-                  <div className="interest-dot" />
-                  <span>SOC Operations</span>
-                </div>
-                <div className="interest-item">
-                  <div className="interest-dot" />
-                  <span>Cloud Security</span>
-                </div>
-                <div className="interest-item">
-                  <div className="interest-dot" />
-                  <span>AI + Security</span>
-                </div>
+          <div className="card-header-tab">PROJECTS.sys</div>
+          <div style={{ marginTop: "10px" }}>
+            <div className="project-log-item">
+              <div className="project-log-header">
+                <span>Voys – Travel Booking Platform</span>
+                <span style={{ fontSize: "0.68rem", color: "#a1a1aa" }}>
+                  2026
+                </span>
               </div>
+              <div className="project-log-tech">
+                MERN Stack | JWT Auth | REST APIs
+              </div>
+              <p className="project-log-bullet">
+                • Built full-stack travel booking with package management.
+              </p>
+              <p className="project-log-bullet">
+                • Structured MongoDB schemas ensuring data integrity.
+              </p>
+            </div>
+            <div className="project-log-item">
+              <div className="project-log-header">
+                <span>StudyLoop – P2P Learning Platform</span>
+                <span style={{ fontSize: "0.68rem", color: "#a1a1aa" }}>
+                  Ongoing
+                </span>
+              </div>
+              <div className="project-log-tech">
+                React | Node.js | Reusable Components
+              </div>
+              <p className="project-log-bullet">
+                • Developing peer-to-peer collaboration and interaction
+                dashboard.
+              </p>
+              <p className="project-log-bullet">
+                • Implementing secure verification and scalable backend APIs.
+              </p>
             </div>
           </div>
         </div>
