@@ -411,17 +411,6 @@ export const AboutOSProfile = () => {
                 <span className="date-badge">2023 - 2026</span>
                 <span className="grade-badge">CGPA 8.70</span>
               </div>
-              <p
-                style={{
-                  fontSize: "0.72rem",
-                  color: "#71717a",
-                  margin: "8px 0 0 0",
-                  lineHeight: "1.3",
-                }}
-              >
-                Higher Secondary Certificate (HSC) | Maharashtra State Board
-                (2021 - 2023)
-              </p>
             </div>
           </div>
         </div>
@@ -486,19 +475,19 @@ export const AboutOSProfile = () => {
               <div className="interests-columns">
                 <div className="interest-item">
                   <div className="interest-dot" />
-                  <span>Threat Intelligence</span>
+                  <span>Backend Development</span>
                 </div>
                 <div className="interest-item">
                   <div className="interest-dot" />
-                  <span>SOC Operations</span>
+                  <span>System Design</span>
                 </div>
                 <div className="interest-item">
                   <div className="interest-dot" />
-                  <span>Cloud Security</span>
+                  <span>Database Design</span>
                 </div>
                 <div className="interest-item">
                   <div className="interest-dot" />
-                  <span>AI + Security</span>
+                  <span>DevOps</span>
                 </div>
               </div>
             </div>
