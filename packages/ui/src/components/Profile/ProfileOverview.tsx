@@ -654,21 +654,37 @@ export const ProfileOverview = ({
           }
         }
 
-        /* Tablet Viewport Spacings */
+        /* Tablet & Narrow Viewport Spacings */
         @media (max-width: 1024px) {
           .hero-container {
+            flex-direction: column-reverse;
+            align-items: flex-start;
             gap: 24px;
+            padding: 20px !important;
+          }
+          .hero-left {
+            max-width: 100%;
+            align-items: flex-start;
+            text-align: left;
+          }
+          .cards-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          .buttons-row-line {
+            justify-content: flex-start;
           }
           .hero-right {
-            height: 380px;
-            min-width: 280px;
+            display: flex;
+            height: auto;
+            width: 100%;
+            min-width: unset;
+            margin-bottom: 20px;
+            justify-content: center;
           }
           .holo-avatar-wrapper {
             width: 240px;
             height: 240px;
-          }
-          .cards-grid {
-            grid-template-columns: repeat(2, 1fr);
+            margin: 10px auto 20px auto;
           }
         }
 
@@ -691,34 +707,15 @@ export const ProfileOverview = ({
         /* Mobile Viewport Spacings */
         @media (max-width: 768px) {
           .hero-container {
-            flex-direction: column-reverse;
-            align-items: flex-start;
-            gap: 20px;
             padding: 16px !important;
-          }
-          .hero-left {
-            max-width: 100%;
-            align-items: flex-start;
-            text-align: left;
           }
           .cards-grid {
             grid-template-columns: 1fr;
           }
-          .buttons-row-line {
-            justify-content: flex-start;
-          }
-          .hero-right {
-            display: flex;
-            height: auto;
-            width: 100%;
-            min-width: unset;
-            margin-bottom: 20px;
-            justify-content: flex-start;
-          }
           .holo-avatar-wrapper {
             width: 190px;
             height: 190px;
-            margin: 10px 0 20px 0;
+            margin: 10px auto 20px auto;
           }
           .mobile-avatar-container {
             display: none !important;
@@ -900,7 +897,7 @@ export const ProfileOverview = ({
         {/* Action Buttons Rows */}
         <div className="buttons-rows-container">
           <div className="buttons-row-line">
-            <OSButton variant="green" href="/resume">
+            <OSButton variant="green" href="/Nikhil_Singh_Resume.pdf">
               <svg
                 width="14"
                 height="14"
@@ -943,7 +940,7 @@ export const ProfileOverview = ({
               </svg>
               LinkedIn
             </OSButton>
-            <OSButton href="https://tryhackme.com">
+            <OSButton href="https://leetcode.com/u/Nikhil_Singh2005/">
               <svg
                 width="14"
                 height="14"
@@ -952,9 +949,10 @@ export const ProfileOverview = ({
                 stroke="currentColor"
                 strokeWidth="2.5"
               >
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
               </svg>
-              TryHackMe
+              LeetCode
             </OSButton>
           </div>
           <div className="buttons-row-line">

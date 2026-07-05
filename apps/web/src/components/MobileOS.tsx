@@ -1713,7 +1713,7 @@ export const MobileOS = ({
 
               {/* Download Resume button */}
               <a
-                href="/resume"
+                href="/Nikhil_Singh_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
