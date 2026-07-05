@@ -1,7 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { TimelineItem, ProjectData, WorkExperience } from "@portfolio/ui";
+import {
+  TimelineItem,
+  ProjectData,
+  WorkExperience,
+  OSMascot,
+} from "@portfolio/ui";
+import { Canvas } from "@react-three/fiber";
 
 interface MobileOSProps {
   onDownloadResume: () => void;
@@ -338,8 +344,7 @@ export const MobileOS = ({
           left: 0;
           width: 100%;
           height: 100%;
-          background: radial-gradient(circle at 50% 25%, rgba(0, 240, 255, 0.07) 0%, transparent 60%),
-                      linear-gradient(180deg, #07090e 0%, #030406 100%);
+          background: transparent;
           z-index: -3;
           pointer-events: none;
         }
@@ -675,10 +680,32 @@ export const MobileOS = ({
         className="mobile-section"
         style={{ textAlign: "center", paddingTop: "50px" }}
       >
-        <div className="mobile-avatar-ring">
-          <div className="mobile-avatar-img-wrap">
-            <img src="/profile.jpg" alt="Nikhil Singh Avatar" />
-          </div>
+        <div
+          style={{
+            width: "240px",
+            height: "240px",
+            margin: "0 auto 20px auto",
+          }}
+        >
+          <Canvas
+            camera={{ position: [0, 0, 5.2] }}
+            style={{ pointerEvents: "none" }}
+          >
+            <ambientLight intensity={0.45} color="#071B2C" />
+            <directionalLight
+              position={[2, 3, 2]}
+              intensity={1.5}
+              color="#00E5FF"
+              castShadow
+            />
+            <pointLight
+              position={[-3, -1, 3]}
+              intensity={2.0}
+              color="#7B61FF"
+            />
+            <pointLight position={[3, 1, -2]} intensity={1.2} color="#00C8FF" />
+            <OSMascot introStage="done" />
+          </Canvas>
         </div>
 
         <h1

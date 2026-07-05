@@ -810,28 +810,46 @@ export default function Home() {
     return (
       <div
         style={{
-          background: "#030406",
+          background: "#030712",
           minHeight: "100dvh",
           position: "relative",
           width: "100%",
         }}
       >
-        <MobileOS
-          onDownloadResume={handleDownloadResume}
-          onSelectProject={setSelectedProject}
-          projectsList={projectsList}
-          contactName={contactName}
-          setContactName={setContactName}
-          contactEmail={contactEmail}
-          setContactEmail={setContactEmail}
-          contactMessage={contactMessage}
-          setContactMessage={setContactMessage}
-          contactStatus={contactStatus}
-          contactResponse={contactResponse}
-          handleContactSubmit={handleContactSubmit}
-          activeTheme={activeTheme}
-          setActiveTheme={setActiveTheme}
-        />
+        {/* 3D Background canvas scene on Mobile */}
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        >
+          <SceneCanvas activeSlide={0} introStage="done" />
+        </div>
+
+        {/* UI Content Layer */}
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <MobileOS
+            onDownloadResume={handleDownloadResume}
+            onSelectProject={setSelectedProject}
+            projectsList={projectsList}
+            contactName={contactName}
+            setContactName={setContactName}
+            contactEmail={contactEmail}
+            setContactEmail={setContactEmail}
+            contactMessage={contactMessage}
+            setContactMessage={setContactMessage}
+            contactStatus={contactStatus}
+            contactResponse={contactResponse}
+            handleContactSubmit={handleContactSubmit}
+            activeTheme={activeTheme}
+            setActiveTheme={setActiveTheme}
+          />
+        </div>
         {/* Case Study Full-Screen Modal */}
         <CaseStudyModal
           project={selectedProject}

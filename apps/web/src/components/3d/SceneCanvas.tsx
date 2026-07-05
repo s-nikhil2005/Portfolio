@@ -402,6 +402,17 @@ const CameraController = ({ activeSlide }: { activeSlide: number }) => {
         break;
     }
 
+    // Responsive portrait composition override for mobile screens
+    const aspect = state.viewport.aspect;
+    if (aspect < 1) {
+      targetX = 0;
+      targetY = 0.8;
+      targetZ = 6.8;
+      targetLookX = 0;
+      targetLookY = 0.2;
+      targetLookZ = -0.5;
+    }
+
     // Smoothly LERP camera position
     state.camera.position.x = THREE.MathUtils.lerp(
       state.camera.position.x,

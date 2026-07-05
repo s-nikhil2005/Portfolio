@@ -319,7 +319,7 @@ const OrbitingNode = ({
 };
 
 // Floating premium 3D Robot Mascot (face of NIKHIL_OS)
-const OSMascot = ({ introStage }: { introStage: string }) => {
+export const OSMascot = ({ introStage }: { introStage: string }) => {
   const groupRef = React.useRef<THREE.Group>(null);
   const leftEyeRef = React.useRef<THREE.Mesh>(null);
   const rightEyeRef = React.useRef<THREE.Mesh>(null);
