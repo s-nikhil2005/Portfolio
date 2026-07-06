@@ -15,4 +15,6 @@ export * from "./components/Profile/ProfileOverview";
 export * from "./components/Profile/SystemInfo";
 export * from "./components/Profile/JourneyTimeline";
 export * from "./components/About/AboutOSProfile";
+export * from "./components/About/AboutOSStudyTimeline";
 export * from "./components/Profile/TechStack";
+export * from "./components/Contact/ContactHub";

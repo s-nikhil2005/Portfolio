@@ -13,13 +13,12 @@ import {
   SkillsGalaxy,
   WorkExperience,
   ProjectShowcase,
-  CaseStudyModal,
   AIAssistantWindow,
-  type ProjectData,
-  projectsList,
   AboutOSProfile,
+  AboutOSStudyTimeline,
   TechStack,
   ProfileOverview,
+  ContactHub,
 } from "@portfolio/ui";
 import { SceneCanvas } from "@/components/3d/SceneCanvas";
 import { CursorGlow } from "@/components/animation/CursorGlow";
@@ -87,14 +86,17 @@ export default function Home() {
   const [selectedIconId, setSelectedIconId] = React.useState<string | null>(
     null,
   );
-  const [selectedProject, setSelectedProject] =
-    React.useState<ProjectData | null>(null);
 
   // Device & Background Slide States
   const [isMobile, setIsMobile] = React.useState(false);
   const [isTransitioning, setIsTransitioning] = React.useState(false);
   const [activeSlide, setActiveSlide] = React.useState(0);
   const isScrolling = React.useRef(false);
+
+  const [aboutSubPage, setAboutSubPage] = React.useState<
+    "profile" | "timeline"
+  >("profile");
+  const aboutContainerRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     const checkMobile = () => {
@@ -104,6 +106,37 @@ export default function Home() {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  React.useEffect(() => {
+    if (activeSlide !== 1) return;
+    const container = aboutContainerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            if (id === "about-sub-profile") {
+              setAboutSubPage("profile");
+            } else if (id === "about-sub-timeline") {
+              setAboutSubPage("timeline");
+            }
+          }
+        });
+      },
+      { threshold: 0.5, root: container },
+    );
+
+    const profileEl = container.querySelector("#about-sub-profile");
+    const timelineEl = container.querySelector("#about-sub-timeline");
+    if (profileEl) observer.observe(profileEl);
+    if (timelineEl) observer.observe(timelineEl);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [activeSlide]);
 
   const goToSlide = (idx: number) => {
     if (idx < 0 || idx > 5) return;
@@ -115,7 +148,38 @@ export default function Home() {
       isScrolling.current = false;
     }, 850);
   };
+  const handleAboutSubScroll = (direction: "down" | "up"): boolean => {
+    if (activeSlide !== 1) return false;
+    const container = aboutContainerRef.current;
+    if (!container) return false;
 
+    if (direction === "down") {
+      if (aboutSubPage === "profile") {
+        isScrolling.current = true;
+        container.scrollTo({
+          top: container.clientHeight,
+          behavior: "smooth",
+        });
+        setTimeout(() => {
+          isScrolling.current = false;
+        }, 850);
+        return true;
+      }
+    } else {
+      if (aboutSubPage === "timeline") {
+        isScrolling.current = true;
+        container.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+        setTimeout(() => {
+          isScrolling.current = false;
+        }, 850);
+        return true;
+      }
+    }
+    return false;
+  };
   const handleWheel = (e: React.WheelEvent) => {
     if (isMobile) return;
     const target = e.target as HTMLElement;
@@ -130,10 +194,12 @@ export default function Home() {
     if (isScrolling.current) return;
 
     if (e.deltaY > 15) {
-      if (activeSlide < 5) {
+      if (handleAboutSubScroll("down")) return;
+      if (activeSlide < 4) {
         goToSlide(activeSlide + 1);
       }
     } else if (e.deltaY < -15) {
+      if (handleAboutSubScroll("up")) return;
       if (activeSlide > 0) {
         goToSlide(activeSlide - 1);
       }
@@ -162,10 +228,12 @@ export default function Home() {
     if (isScrolling.current) return;
 
     if (diff > 50) {
-      if (activeSlide < 5) {
+      if (handleAboutSubScroll("down")) return;
+      if (activeSlide < 4) {
         goToSlide(activeSlide + 1);
       }
     } else if (diff < -50) {
+      if (handleAboutSubScroll("up")) return;
       if (activeSlide > 0) {
         goToSlide(activeSlide - 1);
       }
@@ -662,28 +730,10 @@ export default function Home() {
       ),
     },
     {
-      id: "projects",
-      label: "Projects Folder",
-      isOpen: false,
-      onClick: () => goToSlide(2),
-      icon: (
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-        </svg>
-      ),
-    },
-    {
       id: "skills",
       label: "Skills Galaxy",
       isOpen: false,
-      onClick: () => goToSlide(3),
+      onClick: () => goToSlide(2),
       icon: (
         <svg
           width="24"
@@ -700,10 +750,10 @@ export default function Home() {
       ),
     },
     {
-      id: "experience",
-      label: "Timeline.sys",
+      id: "projects",
+      label: "Projects Folder",
       isOpen: false,
-      onClick: () => goToSlide(4),
+      onClick: () => goToSlide(3),
       icon: (
         <svg
           width="24"
@@ -713,8 +763,7 @@ export default function Home() {
           stroke="currentColor"
           strokeWidth="2"
         >
-          <circle cx="12" cy="12" r="10" />
-          <polyline points="12 6 12 12 16 14" />
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
         </svg>
       ),
     },
@@ -722,7 +771,7 @@ export default function Home() {
       id: "contact",
       label: "Send Mail",
       isOpen: false,
-      onClick: () => goToSlide(5),
+      onClick: () => goToSlide(4),
       icon: (
         <svg
           width="24"
@@ -811,8 +860,6 @@ export default function Home() {
         <div style={{ position: "relative", zIndex: 1 }}>
           <MobileOS
             onDownloadResume={handleDownloadResume}
-            onSelectProject={setSelectedProject}
-            projectsList={projectsList}
             contactName={contactName}
             setContactName={setContactName}
             contactEmail={contactEmail}
@@ -826,11 +873,6 @@ export default function Home() {
             setActiveTheme={setActiveTheme}
           />
         </div>
-        {/* Case Study Full-Screen Modal */}
-        <CaseStudyModal
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-        />
       </div>
     );
   }
@@ -899,7 +941,11 @@ export default function Home() {
       )}
 
       {/* 3D Experience Scene */}
-      <SceneCanvas activeSlide={activeSlide} introStage={introStage} />
+      <SceneCanvas
+        activeSlide={activeSlide}
+        aboutSubPage={aboutSubPage}
+        introStage={introStage}
+      />
 
       {/* Sliding Background Workspace Panels */}
       <div
@@ -910,10 +956,10 @@ export default function Home() {
           position: "absolute",
           top: 0,
           left: 0,
-          width: "600vw",
+          width: "500vw",
           height: "100vh",
           display: "flex",
-          transform: `translate3d(-${activeSlide * 16.666}%, 0, 0)`,
+          transform: `translate3d(-${activeSlide * 20}%, 0, 0)`,
           transition: "transform 0.85s cubic-bezier(0.25, 1, 0.5, 1)",
           zIndex: 2,
         }}
@@ -928,156 +974,94 @@ export default function Home() {
         </div>
 
         {/* Slide 1: About Workspace (Futuristic OS Profile Redesign) */}
-        <div style={getSlideStyle(1)}>
+        <div style={{ ...getSlideStyle(1), padding: 0, position: "relative" }}>
+          <style>{`
+            .about-snap-container::-webkit-scrollbar {
+              display: none;
+            }
+          `}</style>
+
           <div
+            ref={aboutContainerRef}
+            className="about-snap-container"
             style={{
               width: "100%",
-              height: "80vh",
-              overflowY: "auto",
-              paddingRight: "12px",
+              height: "100vh",
+              overflowY: "scroll",
+              scrollSnapType: "y mandatory",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+              position: "relative",
             }}
           >
-            <AboutOSProfile />
+            {/* Screen 1: About Profile */}
+            <div
+              id="about-sub-profile"
+              style={{
+                width: "100%",
+                height: "100vh",
+                scrollSnapAlign: "start",
+                boxSizing: "border-box",
+                padding: "8vh 6vw 80px 6vw",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                transition:
+                  "transform 0.85s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.85s",
+                transform:
+                  aboutSubPage === "profile"
+                    ? "translateY(0) translateZ(0px)"
+                    : "translateY(-100px) translateZ(-80px)",
+                opacity: aboutSubPage === "profile" ? 1 : 0,
+              }}
+            >
+              <AboutOSProfile />
+            </div>
+
+            {/* Screen 2: Journey Timeline */}
+            <div
+              id="about-sub-timeline"
+              style={{
+                width: "100%",
+                height: "100vh",
+                scrollSnapAlign: "start",
+                boxSizing: "border-box",
+                padding: "8vh 6vw 80px 6vw",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                transition:
+                  "transform 0.85s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.85s",
+                transform:
+                  aboutSubPage === "timeline"
+                    ? "translateY(0) translateZ(0px)"
+                    : "translateY(100px) translateZ(-80px)",
+                opacity: aboutSubPage === "timeline" ? 1 : 0,
+              }}
+            >
+              <AboutOSStudyTimeline />
+            </div>
           </div>
         </div>
 
-        {/* Slide 2: Projects Workspace */}
+        {/* Slide 2: Skills Workspace */}
         <div style={getSlideStyle(2)}>
-          <div style={{ width: "100%", maxWidth: "1200px", height: "80vh" }}>
-            <SmoothScroll style={{ padding: "12px", height: "100%" }}>
-              <ProjectShowcase onSelectProject={setSelectedProject} />
-            </SmoothScroll>
-          </div>
-        </div>
-
-        {/* Slide 3: Skills Workspace */}
-        <div style={getSlideStyle(3)}>
           <div style={{ width: "100%", maxWidth: "1200px" }}>
-            <SkillsGalaxy isActive={activeSlide === 3} />
+            <SkillsGalaxy isActive={activeSlide === 2} />
           </div>
         </div>
 
-        {/* Slide 4: Experience Workspace */}
+        {/* Slide 3: Projects Workspace */}
+        <div style={{ ...getSlideStyle(3), padding: "80px 4vw 90px 4vw" }}>
+          <div style={{ width: "100%", height: "100%" }}>
+            <ProjectShowcase />
+          </div>
+        </div>
+
+        {/* Slide 4: Contact Workspace */}
         <div style={getSlideStyle(4)}>
-          <div style={{ width: "100%", maxWidth: "1200px", height: "80vh" }}>
-            <SmoothScroll style={{ padding: "24px", height: "100%" }}>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "20px",
-                }}
-              >
-                <div>
-                  <p
-                    style={{
-                      color: "var(--glow-purple)",
-                      fontFamily: "var(--font-mono)",
-                      fontSize: "0.85rem",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    // SYSTEM_LOG: WORK_HISTORY
-                  </p>
-                  <h3
-                    style={{
-                      color: "var(--text-primary)",
-                      fontSize: "1.3rem",
-                      fontWeight: "700",
-                    }}
-                  >
-                    Employment History
-                  </h3>
-                </div>
-                <WorkExperience />
-              </div>
-            </SmoothScroll>
-          </div>
-        </div>
-
-        {/* Slide 5: Contact Workspace */}
-        <div style={getSlideStyle(5)}>
-          <div
-            style={{
-              width: "100%",
-              maxWidth: "600px",
-              padding: "40px",
-              background: "rgba(10, 11, 14, 0.45)",
-              backdropFilter: "blur(20px)",
-              border: "1px solid rgba(255, 255, 255, 0.06)",
-              borderRadius: "16px",
-              boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
-            }}
-          >
-            <h3
-              style={{
-                color: "var(--text-primary)",
-                fontSize: "1.8rem",
-                fontWeight: "700",
-                marginBottom: "12px",
-              }}
-            >
-              Send Secure Message
-            </h3>
-            <p
-              style={{
-                fontSize: "0.95rem",
-                color: "var(--text-secondary)",
-                marginBottom: "24px",
-                lineHeight: "1.5",
-              }}
-            >
-              Send an email directly through the portfolio API. I'll get back to
-              you shortly.
-            </p>
-            <form
-              onSubmit={handleContactSubmit}
-              style={{ display: "flex", flexDirection: "column", gap: "16px" }}
-            >
-              <Input
-                placeholder="Your Name"
-                value={contactName}
-                onChange={(e) => setContactName(e.target.value)}
-                required
-              />
-              <Input
-                placeholder="Your Email"
-                type="email"
-                value={contactEmail}
-                onChange={(e) => setContactEmail(e.target.value)}
-                required
-              />
-              <Input
-                placeholder="Write your message..."
-                value={contactMessage}
-                onChange={(e) => setContactMessage(e.target.value)}
-                required
-              />
-              <Button
-                variant="primary"
-                type="submit"
-                disabled={contactStatus === "sending"}
-              >
-                {contactStatus === "sending"
-                  ? "Sending..."
-                  : "Send Transmission"}
-              </Button>
-              {contactResponse && (
-                <div
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.75rem",
-                    color:
-                      contactStatus === "error"
-                        ? "var(--color-danger)"
-                        : "var(--glow-green)",
-                    marginTop: "4px",
-                  }}
-                >
-                  &gt; {contactResponse}
-                </div>
-              )}
-            </form>
+          <div style={{ width: "100%", maxWidth: "1080px" }}>
+            <ContactHub />
           </div>
         </div>
       </div>
@@ -1421,18 +1405,11 @@ export default function Home() {
             if (openWindows[appId]) return appId;
           }
           if (activeSlide === 1) return "about_sec";
-          if (activeSlide === 2) return "projects";
-          if (activeSlide === 3) return "skills";
-          if (activeSlide === 4) return "experience";
-          if (activeSlide === 5) return "contact";
+          if (activeSlide === 2) return "skills";
+          if (activeSlide === 3) return "projects";
+          if (activeSlide === 4) return "contact";
           return "about";
         })()}
-      />
-
-      {/* Case Study Full-Screen Modal */}
-      <CaseStudyModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
       />
     </main>
   );

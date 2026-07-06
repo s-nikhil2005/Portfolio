@@ -1,6 +1,6 @@
 import * as React from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import styles from "./ProjectShowcase.module.css";
-import { Button } from "../Button/Button";
 
 export interface ProjectData {
   id: string;
@@ -8,13 +8,27 @@ export interface ProjectData {
   title: string;
   tagline: string;
   coverColor: string;
+  accentColor: string;
   githubUrl: string;
   liveUrl: string;
+  category: "Full-Stack" | "Peer-to-Peer" | "System" | "Other";
+  status: "LIVE" | "WORK IN PROGRESS" | "LOCKED";
+  version: string;
+  lastUpdate: string;
+  deploymentStatus: string;
   techStack: string[];
   features: string[];
-  architecture: string;
-  challenges: string;
-  performance: string;
+  featuresDetailed: { title: string; desc: string }[];
+  architecture: string[];
+  performance: {
+    score: string;
+    build: string;
+    apiHealth: string;
+    dbStatus: string;
+    responseTime: string;
+    uptime: string;
+  };
+  gallery: string[];
 }
 
 export const projectsList: ProjectData[] = [
@@ -23,10 +37,16 @@ export const projectsList: ProjectData[] = [
     pkgName: "Voys_Travel.pkg",
     title: "Voys - Travel Booking Platform",
     tagline:
-      "Full-stack travel booking platform with authentication, package browsing, booking management, and reviews.",
+      "A complete full-stack enterprise travel planning ecosystem utilizing automated reservation pipelines, modular API gateway routing, and responsive dashboard controllers.",
     coverColor: "var(--glow-cyan)",
+    accentColor: "#00e5ff",
     githubUrl: "https://github.com/s-nikhil2005",
     liveUrl: "https://github.com/s-nikhil2005",
+    category: "Full-Stack",
+    status: "LIVE",
+    version: "v2.4.1",
+    lastUpdate: "2026-06-28",
+    deploymentStatus: "ONLINE",
     techStack: [
       "React",
       "Node.js",
@@ -37,704 +57,797 @@ export const projectsList: ProjectData[] = [
       "JWT",
     ],
     features: [
-      "Built a full-stack travel booking system with authentication, package browsing, booking management, and reviews.",
-      "Implemented JWT-based authentication and role-based access control.",
-      "Designed modular REST APIs and structured MongoDB database schemas ensuring data integrity.",
-      "Integrated frontend and backend using Axios for seamless user experience.",
+      "Authentication",
+      "Booking Engine",
+      "Payment Gateway",
+      "Admin Panel",
+      "Reviews System",
     ],
-    architecture:
-      "React Client ➔ Axios Gateway ➔ Express API Router ➔ MongoDB Schema Validations",
-    challenges:
-      "Managing complex state flow and updates across authentication states and shopping flows. Solved by implementing global state management with Redux.",
-    performance:
-      "Secure API latency under 55ms. Fully optimized client assets with clean component encapsulation.",
+    featuresDetailed: [
+      {
+        title: "Dynamic Package Explorer",
+        desc: "Enables granular filtering of packages and automated price calculation.",
+      },
+      {
+        title: "JWT Auth Shield",
+        desc: "Access tokens validated via express router sessions.",
+      },
+    ],
+    architecture: ["React Client", "Express API", "MongoDB", "Redis Cache"],
+    performance: {
+      score: "98%",
+      build: "SUCCESSFUL",
+      apiHealth: "ONLINE",
+      dbStatus: "CONNECTED",
+      responseTime: "54ms",
+      uptime: "99.98%",
+    },
+    gallery: [
+      "Booking Simulator Dashboard active",
+      "REST Route map terminal view",
+      "Authentication middleware header token check",
+    ],
   },
   {
     id: "studyloop",
     pkgName: "StudyLoop_P2P.pkg",
     title: "StudyLoop - Peer Learning Platform",
     tagline:
-      "Peer-to-peer collaboration platform for skill exchange and academic interaction.",
+      "Peer-to-peer collaboration workspace enabling bi-directional skill exchange, student search matching networks, and collaborative academic hubs.",
     coverColor: "var(--glow-purple)",
+    accentColor: "#bd00ff",
     githubUrl: "https://github.com/s-nikhil2005",
     liveUrl: "https://github.com/s-nikhil2005",
+    category: "Peer-to-Peer",
+    status: "WORK IN PROGRESS",
+    version: "v0.8.2-alpha",
+    lastUpdate: "2026-07-04",
+    deploymentStatus: "STAGING",
     techStack: ["React", "Node.js", "Express.js", "MongoDB", "Redux", "JWT"],
     features: [
-      "Developing a peer-to-peer collaboration platform for skill exchange and academic interaction.",
-      "Designed structured dashboards for 'Skills I Know' and 'Skills I Want to Learn.'",
-      "Implementing secure authentication and scalable backend APIs for future real-time features.",
-      "Focused on modular architecture and reusable React components.",
+      "Bi-directional Matches",
+      "Study Hubs",
+      "OTP Verification",
+      "Dashboard Listings",
+      "Real-Time chat",
     ],
-    architecture:
-      "React Client ➔ Redux State ➔ Express API Server ➔ MongoDB Databases",
-    challenges:
-      "Structuring peer dashboard listings for bi-directional skill matches. Solved by designing optimized MongoDB aggregation pipeline queries.",
-    performance:
-      "Highly reusable React components codebase. Seamless API integration with Redux-mediated state sync.",
+    featuresDetailed: [
+      {
+        title: "Matchmaking Algorithm",
+        desc: "Resolves bi-directional skill gaps between seeker and master.",
+      },
+      {
+        title: "Interactive Workspace",
+        desc: "Study rooms equipped with shared logs and concept progress bars.",
+      },
+    ],
+    architecture: ["React Client", "Express API", "MongoDB"],
+    performance: {
+      score: "92%",
+      build: "SUCCESSFUL",
+      apiHealth: "ONLINE",
+      dbStatus: "CONNECTED",
+      responseTime: "18ms",
+      uptime: "99.94%",
+    },
+    gallery: [
+      "Matchmaker flow terminal simulation",
+      "Bi-directional matching dashboard console",
+      "Aggregation pipeline benchmark schema",
+    ],
+  },
+  {
+    id: "quickbill",
+    pkgName: "QuickBill_Finance.pkg",
+    title: "QuickBill - Invoice System",
+    tagline:
+      "Automated billing and invoice generation system with secure payment processing workflows and instant PDF document render pipelines.",
+    coverColor: "var(--glow-green)",
+    accentColor: "#00ff88",
+    githubUrl: "https://github.com/s-nikhil2005",
+    liveUrl: "https://github.com/s-nikhil2005",
+    category: "Full-Stack",
+    status: "LIVE",
+    version: "v1.1.0",
+    lastUpdate: "2026-05-15",
+    deploymentStatus: "ONLINE",
+    techStack: [
+      "Next.js",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "Stripe",
+      "Tailwind",
+    ],
+    features: [
+      "Invoice Generation",
+      "Payment Gateway",
+      "Automated Receipts",
+      "Stripe Checkout",
+      "PDF Export",
+    ],
+    featuresDetailed: [
+      {
+        title: "Automated Billing Engine",
+        desc: "Calculates subscription rates and delivers PDF receipts automatically.",
+      },
+      {
+        title: "Stripe Secure Hooks",
+        desc: "Listens to transaction events and updates invoices instantly.",
+      },
+    ],
+    architecture: ["Next.js Core", "Express API", "MongoDB", "Stripe Gateway"],
+    performance: {
+      score: "99%",
+      build: "SUCCESSFUL",
+      apiHealth: "ONLINE",
+      dbStatus: "CONNECTED",
+      responseTime: "42ms",
+      uptime: "99.99%",
+    },
+    gallery: [
+      "Stripe billing checkout screen",
+      "Generated PDF document view",
+      "Client usage statistics",
+    ],
+  },
+  {
+    id: "nikhilos",
+    pkgName: "Nikhil_OS_Core.pkg",
+    title: "Nikhil OS Cyberpunk Portfolio",
+    tagline:
+      "A fully simulated interactive cyberpunk operating system portfolio built with 3D starfields and neural graphs.",
+    coverColor: "var(--glow-cyan)",
+    accentColor: "#ff007f",
+    githubUrl: "https://github.com/s-nikhil2005",
+    liveUrl: "https://github.com/s-nikhil2005",
+    category: "System",
+    status: "LIVE",
+    version: "v3.0.0",
+    lastUpdate: "2026-07-06",
+    deploymentStatus: "ONLINE",
+    techStack: [
+      "React",
+      "Three.js",
+      "React Three Fiber",
+      "Framer Motion",
+      "Vanilla CSS",
+    ],
+    features: [
+      "3D Starfield Scene",
+      "Skills Neural Galaxy",
+      "Communication Terminal",
+      "Projects Snapping Panels",
+      "Dock Controls",
+    ],
+    featuresDetailed: [
+      {
+        title: "R3F Orbital Shaders",
+        desc: "Calculates procedural particle positions and star movement velocities.",
+      },
+      {
+        title: "Snapping Workspace Grid",
+        desc: "Aligns CSS panels natively over scroll-snap viewport segments.",
+      },
+    ],
+    architecture: ["React Client", "R3F Canvas Engine", "CSS Variables System"],
+    performance: {
+      score: "97%",
+      build: "SUCCESSFUL",
+      apiHealth: "ONLINE",
+      dbStatus: "CONNECTED",
+      responseTime: "12ms",
+      uptime: "100%",
+    },
+    gallery: [
+      "Holographic galaxy view",
+      "Contact globe panel layout",
+      "System telemetry status card",
+    ],
+  },
+  {
+    id: "upcoming",
+    pkgName: "Secret_Core.pkg",
+    title: "Classified Database Node",
+    tagline:
+      "Locked project under active research. Node encryption key is currently unassigned.",
+    coverColor: "rgba(255, 255, 255, 0.2)",
+    accentColor: "#ffb300",
+    githubUrl: "#",
+    liveUrl: "#",
+    category: "Other",
+    status: "LOCKED",
+    version: "v0.0.1-dev",
+    lastUpdate: "PENDING",
+    deploymentStatus: "OFFLINE",
+    techStack: ["Classified"],
+    features: ["Encrypted Core"],
+    featuresDetailed: [],
+    architecture: [],
+    performance: {
+      score: "0%",
+      build: "PENDING",
+      apiHealth: "OFFLINE",
+      dbStatus: "LOCKED",
+      responseTime: "N/A",
+      uptime: "N/A",
+    },
+    gallery: [],
   },
 ];
 
-interface ProjectShowcaseProps {
-  onSelectProject: (project: ProjectData) => void;
-}
-
-export const ProjectShowcase = ({ onSelectProject }: ProjectShowcaseProps) => {
-  return (
-    <div className={styles.fileGrid}>
-      {projectsList.map((project) => (
-        <div
-          key={project.id}
-          className={styles.fileItem}
-          onDoubleClick={() => onSelectProject(project)}
-          // Single-click support for mobile/tablets
-          onClick={() => {
-            if (window.innerWidth < 768) {
-              onSelectProject(project);
-            }
-          }}
-        >
-          {/* Stylized File Package Icon */}
-          <div
-            className={styles.iconContainer}
-            style={
-              { "--neon-color": project.coverColor } as React.CSSProperties
-            }
-          >
-            <svg
-              width="40"
-              height="40"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            >
-              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-              <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-              <line x1="12" y1="22.08" x2="12" y2="12" />
-            </svg>
-            <span className={styles.badge}>PKG</span>
-          </div>
-
-          <span className={styles.fileName}>{project.pkgName}</span>
-          <span className={styles.fileSize}>
-            {(project.title.length * 1.2).toFixed(1)} KB
-          </span>
-        </div>
-      ))}
-    </div>
+export const ProjectShowcase = () => {
+  const [selectedId, setSelectedId] = React.useState("voys");
+  const [activeTab, setActiveTab] = React.useState<
+    "overview" | "architecture" | "performance" | "media"
+  >("overview");
+  const [hoveredArchNode, setHoveredArchNode] = React.useState<string | null>(
+    null,
   );
-};
+  const [activeCategory, setActiveCategory] = React.useState<string>("ALL");
+  const workspaceRef = React.useRef<HTMLDivElement>(null);
 
-interface CaseStudyModalProps {
-  project: ProjectData | null;
-  onClose: () => void;
-}
+  const filteredProjects = projectsList.filter(
+    (p) => activeCategory === "ALL" || p.category === activeCategory,
+  );
 
-const TravelBookingSimulator = () => {
-  const [destination, setDestination] = React.useState("Tokyo (HND)");
-  const [seat, setSeat] = React.useState("12A");
-  const [loading, setLoading] = React.useState(false);
-  const [ticket, setTicket] = React.useState<any>(null);
+  const selectedProject =
+    projectsList.find((p) => p.id === selectedId) || projectsList[0];
 
-  const handleBooking = () => {
-    setLoading(true);
-    setTicket(null);
-    setTimeout(() => {
-      setLoading(false);
-      setTicket({
-        id: `TKT-${Math.floor(100000 + Math.random() * 900000)}`,
-        passenger: "GUEST_USER",
-        destination,
-        seat,
-        gate: "A-12",
-        boarding: new Date().toLocaleTimeString(),
-      });
-    }, 1500);
+  // Map mouse wheel scrolling to horizontal scroll left
+  React.useEffect(() => {
+    const el = workspaceRef.current;
+    if (!el) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      // Allow vertical scroll if inside scrollable content
+      const target = e.target as HTMLElement;
+      if (target.closest(`.${styles.scrollContainer}`)) {
+        return;
+      }
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        el.scrollLeft += e.deltaY;
+      }
+    };
+
+    el.addEventListener("wheel", handleWheel, { passive: false });
+    return () => el.removeEventListener("wheel", handleWheel);
+  }, []);
+
+  const handleNodeClick = (id: string) => {
+    setSelectedId(id);
+    setActiveTab("overview");
   };
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-        padding: "20px",
-        background: "rgba(0,0,0,0.3)",
-        border: "1px solid rgba(255,255,255,0.05)",
-        borderRadius: "8px",
-        width: "100%",
-      }}
-    >
-      <div>
-        <h4
-          style={{
-            color: "var(--glow-cyan)",
-            margin: "0 0 4px 0",
-            fontSize: "1rem",
-            fontFamily: "var(--font-mono)",
-          }}
-        >
-          &gt; run_simulation --flow travel_booking
-        </h4>
-        <p
-          style={{
-            fontSize: "0.8rem",
-            color: "var(--text-secondary)",
-            margin: 0,
-          }}
-        >
-          Confirm destination booking flow in Voya Collaborative Canvas.
-        </p>
-      </div>
+  // Node Icon Helper
+  const renderNodeIcon = (id: string) => {
+    switch (id) {
+      case "voys":
+        return (
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+          </svg>
+        );
+      case "studyloop":
+        return (
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+        );
+      case "quickbill":
+        return (
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <line x1="12" y1="8" x2="12" y2="16" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+          </svg>
+        );
+      case "nikhilos":
+        return (
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <line x1="9" y1="3" x2="9" y2="21" />
+          </svg>
+        );
+      default:
+        return (
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+        );
+    }
+  };
 
-      <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-        <div style={{ flex: 1, minWidth: "160px" }}>
-          <label
-            style={{
-              display: "block",
-              fontSize: "0.7rem",
-              color: "var(--text-secondary)",
-              marginBottom: "4px",
-              fontFamily: "var(--font-mono)",
-            }}
-          >
-            ROUTE DESTINATION
-          </label>
-          <select
-            value={destination}
-            onChange={(e) => setDestination(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "8px",
-              background: "var(--bg-obsidian)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "4px",
-              color: "#fff",
-              font: "inherit",
-              fontSize: "0.8rem",
-            }}
-          >
-            <option>Tokyo (HND)</option>
-            <option>Paris (CDG)</option>
-            <option>New York (JFK)</option>
-            <option>London (LHR)</option>
-          </select>
-        </div>
-        <div style={{ width: "90px" }}>
-          <label
-            style={{
-              display: "block",
-              fontSize: "0.7rem",
-              color: "var(--text-secondary)",
-              marginBottom: "4px",
-              fontFamily: "var(--font-mono)",
-            }}
-          >
-            SEAT_ID
-          </label>
-          <input
-            value={seat}
-            onChange={(e) => setSeat(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "8px",
-              background: "var(--bg-obsidian)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "4px",
-              color: "#fff",
-              font: "inherit",
-              fontSize: "0.8rem",
-              textAlign: "center",
-            }}
-          />
-        </div>
-      </div>
-      <Button
-        variant="primary"
-        size="md"
-        onClick={handleBooking}
-        disabled={loading}
-      >
-        {loading ? "COMMITTING TRANSMISSION..." : "RESERVE FLIGHT"}
-      </Button>
-
-      {ticket && (
-        <div
-          style={{
-            border: "2px dashed var(--glow-cyan)",
-            borderRadius: "8px",
-            padding: "16px",
-            background: "rgba(0, 240, 255, 0.03)",
-            fontFamily: "var(--font-mono)",
-            animation: "modalFadeIn 0.3s ease",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              fontSize: "0.75rem",
-              color: "var(--glow-cyan)",
-              borderBottom: "1px solid rgba(0, 240, 255, 0.15)",
-              paddingBottom: "8px",
-              marginBottom: "8px",
-            }}
-          >
-            <span>BOARDING PASS</span>
-            <span>VOYA COLLABORATIVE CORE</span>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "10px",
-              fontSize: "0.8rem",
-            }}
-          >
-            <div>
-              PASSENGER:{" "}
-              <strong style={{ color: "#fff" }}>{ticket.passenger}</strong>
-            </div>
-            <div>
-              TICKET_NO: <strong style={{ color: "#fff" }}>{ticket.id}</strong>
-            </div>
-            <div>
-              DESTINATION:{" "}
-              <strong style={{ color: "#fff" }}>{ticket.destination}</strong>
-            </div>
-            <div>
-              SEAT: <strong style={{ color: "#fff" }}>{ticket.seat}</strong>
-            </div>
-            <div>
-              GATEWAY: <strong style={{ color: "#fff" }}>{ticket.gate}</strong>
-            </div>
-            <div>
-              BOARDING:{" "}
-              <strong style={{ color: "#fff" }}>{ticket.boarding}</strong>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const CRTDebuggerSimulator = () => {
-  const [soundFreq, setSoundFreq] = React.useState(880);
-
-  const testTriggerSound = () => {
-    try {
-      const ctx = new (
-        window.AudioContext || (window as any).webkitAudioContext
-      )();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.frequency.value = soundFreq;
-      gain.gain.setValueAtTime(0.08, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.26);
-    } catch (e) {
-      console.error(e);
+  // Node Description Helper for Flow Tooltips
+  const getArchTooltip = (node: string) => {
+    switch (node) {
+      case "React Client":
+      case "Next.js Core":
+        return "Frontend layer built on React, serving pre-rendered JSX elements and executing state matched queries.";
+      case "Express API":
+        return "REST gateway server running route controls, controller filters, and decipher session checkers.";
+      case "MongoDB":
+        return "NoSQL document hub managing structured user profiles, booking registries, and match indicators.";
+      case "Redis Cache":
+        return "In-memory database server checking query results to secure sub-50ms API response latency loops.";
+      case "Stripe Gateway":
+        return "Payment transaction network resolving webhooks and booking receipts automatically.";
+      default:
+        return "System controller node executing classified procedures.";
     }
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-        padding: "20px",
-        background: "rgba(0,0,0,0.3)",
-        border: "1px solid rgba(255,255,255,0.05)",
-        borderRadius: "8px",
-        width: "100%",
-      }}
-    >
-      <div>
-        <h4
-          style={{
-            color: "var(--glow-green)",
-            margin: "0 0 4px 0",
-            fontSize: "1rem",
-            fontFamily: "var(--font-mono)",
-          }}
-        >
-          &gt; run_simulation --debugger crt_controller
-        </h4>
-        <p
-          style={{
-            fontSize: "0.8rem",
-            color: "var(--text-secondary)",
-            margin: 0,
-          }}
-        >
-          Procedural chime oscillator engine tuner for NIKHIL_OS theme audio
-          clicks.
-        </p>
-      </div>
-
-      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-        <div>
-          <label
-            style={{
-              display: "block",
-              fontSize: "0.72rem",
-              color: "var(--text-secondary)",
-              marginBottom: "6px",
-              fontFamily: "var(--font-mono)",
-            }}
-          >
-            AUDIO FREQUENCY OSCILLATOR: {soundFreq}Hz
-          </label>
-          <input
-            type="range"
-            min="200"
-            max="1800"
-            value={soundFreq}
-            onChange={(e) => setSoundFreq(Number(e.target.value))}
-            style={{ width: "100%" }}
-          />
-        </div>
-        <Button variant="primary" size="md" onClick={testTriggerSound}>
-          EMIT PROCEDURAL CHIME
-        </Button>
-      </div>
-    </div>
-  );
-};
-
-const APIGatewayBenchmarker = () => {
-  const [latency, setLatency] = React.useState(12);
-  const [cpuLoad, setCpuLoad] = React.useState(8);
-  const [running, setRunning] = React.useState(false);
-
-  const runBenchmark = () => {
-    setRunning(true);
-    let count = 0;
-    const interval = setInterval(() => {
-      setLatency(Math.floor(10 + Math.random() * 28));
-      setCpuLoad(Math.floor(30 + Math.random() * 65));
-      count++;
-      if (count >= 10) {
-        clearInterval(interval);
-        setRunning(false);
-        setLatency(12);
-        setCpuLoad(8);
-      }
-    }, 200);
-  };
-
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-        padding: "20px",
-        background: "rgba(0,0,0,0.3)",
-        border: "1px solid rgba(255,255,255,0.05)",
-        borderRadius: "8px",
-        width: "100%",
-      }}
-    >
-      <div>
-        <h4
-          style={{
-            color: "var(--glow-purple)",
-            margin: "0 0 4px 0",
-            fontSize: "1rem",
-            fontFamily: "var(--font-mono)",
-          }}
-        >
-          &gt; run_simulation --bench gateway_benchmark
-        </h4>
-        <p
-          style={{
-            fontSize: "0.8rem",
-            color: "var(--text-secondary)",
-            margin: 0,
-          }}
-        >
-          Load-testing simulator testing Redis clusters cache hit rate triggers.
-        </p>
-      </div>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "12px",
-          fontFamily: "var(--font-mono)",
-          fontSize: "0.8rem",
-        }}
-      >
-        <div
-          style={{
-            border: "1px solid rgba(255,255,255,0.05)",
-            padding: "12px",
-            borderRadius: "6px",
-            textAlign: "center",
-            background: "rgba(0,0,0,0.2)",
-          }}
-        >
-          <div style={{ fontSize: "0.68rem", color: "var(--text-secondary)" }}>
-            LATENCY
+    <div className={styles.explorerMain}>
+      {/* Horizontal snapping workspace panel container */}
+      <div ref={workspaceRef} className={styles.workspaceWrapper}>
+        {/* PANEL 1: PROJECT_EXPLORER.sys (Node Tree Panel) */}
+        <div className={styles.panelExplorer}>
+          <div className={styles.panelHeader}>
+            <span className={styles.panelTitle}>PROJECT_EXPLORER.sys</span>
+            <span className={styles.panelStatus}>● INDEX: LOCATE_NODES</span>
           </div>
-          <div
-            style={{
-              fontSize: "1.2rem",
-              color: "var(--glow-cyan)",
-              fontWeight: "700",
-            }}
-          >
-            {latency} ms
-          </div>
-        </div>
-        <div
-          style={{
-            border: "1px solid rgba(255,255,255,0.05)",
-            padding: "12px",
-            borderRadius: "6px",
-            textAlign: "center",
-            background: "rgba(0,0,0,0.2)",
-          }}
-        >
-          <div style={{ fontSize: "0.68rem", color: "var(--text-secondary)" }}>
-            GATEWAY CPU
-          </div>
-          <div
-            style={{
-              fontSize: "1.2rem",
-              color: "var(--glow-green)",
-              fontWeight: "700",
-            }}
-          >
-            {cpuLoad}%
-          </div>
-        </div>
-      </div>
-      <Button
-        variant="primary"
-        size="md"
-        onClick={runBenchmark}
-        disabled={running}
-      >
-        {running
-          ? "CONCURRENCY BURSTS IN PROGRESS..."
-          : "SIMULATE 5,000 CONCURRENT REQUESTS"}
-      </Button>
-    </div>
-  );
-};
 
-export const CaseStudyModal = ({ project, onClose }: CaseStudyModalProps) => {
-  const [activeTab, setActiveTab] = React.useState<"details" | "sandbox">(
-    "details",
-  );
-
-  React.useEffect(() => {
-    // Reset tab when project changes
-    setActiveTab("details");
-  }, [project]);
-
-  if (!project) return null;
-
-  return (
-    <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-        {/* Glowing border frame header */}
-        <div
-          className={styles.modalHeader}
-          style={{ borderBottomColor: project.coverColor }}
-        >
-          <div className={styles.headerInfo}>
-            <span className={styles.hostLabel}>
-              [ PROJECT_CASE_STUDY: {project.pkgName} ]
-            </span>
-            <h2
-              className={styles.modalTitle}
-              style={{ color: project.coverColor }}
-            >
-              {project.title}
-            </h2>
-          </div>
-          <button className={styles.closeButton} onClick={onClose}>
-            ✕ CLOSE
-          </button>
-        </div>
-
-        {/* Tab Selection Bar */}
-        <div
-          style={{
-            display: "flex",
-            borderBottom: "1px solid rgba(255,255,255,0.05)",
-            background: "rgba(0,0,0,0.15)",
-          }}
-        >
-          <button
-            onClick={() => setActiveTab("details")}
-            style={{
-              padding: "12px 20px",
-              background: "none",
-              border: "none",
-              borderBottom:
-                activeTab === "details"
-                  ? `2px solid ${project.coverColor}`
-                  : "2px solid transparent",
-              color: activeTab === "details" ? "#fff" : "var(--text-secondary)",
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.78rem",
-              cursor: "pointer",
-              fontWeight: "600",
-              letterSpacing: "0.5px",
-              transition: "all 0.2s",
-            }}
-          >
-            [01] CASE_STUDY_DOCS
-          </button>
-          <button
-            onClick={() => setActiveTab("sandbox")}
-            style={{
-              padding: "12px 20px",
-              background: "none",
-              border: "none",
-              borderBottom:
-                activeTab === "sandbox"
-                  ? `2px solid ${project.coverColor}`
-                  : "2px solid transparent",
-              color: activeTab === "sandbox" ? "#fff" : "var(--text-secondary)",
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.78rem",
-              cursor: "pointer",
-              fontWeight: "600",
-              letterSpacing: "0.5px",
-              transition: "all 0.2s",
-            }}
-          >
-            [02] LIVE_SANDBOX_DEMO
-          </button>
-        </div>
-
-        <div className={styles.modalBody}>
-          {activeTab === "details" ? (
-            <>
-              {/* Left Side: Summary & Tech */}
-              <div className={styles.leftColumn}>
-                <div
-                  className={styles.heroSection}
-                  style={{
-                    background: `linear-gradient(135deg, rgba(10,11,14,0.8), rgba(0,0,0,0.9)), radial-gradient(circle, ${project.coverColor}15 0%, transparent 80%)`,
+          <div className={styles.filterSection}>
+            <div className={styles.pillsRow}>
+              {["ALL", "Cybersecurity", "AI", "Web", "Cloud"].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => {
+                    setActiveCategory(cat);
+                    const filtered = projectsList.filter(
+                      (p) => cat === "ALL" || p.category === cat,
+                    );
+                    if (
+                      filtered.length > 0 &&
+                      !filtered.find((p) => p.id === selectedId)
+                    ) {
+                      setSelectedId(filtered[0].id);
+                    }
                   }}
+                  className={`${styles.pillBtn} ${activeCategory === cat ? styles.pillBtnActive : ""}`}
                 >
-                  <p className={styles.tagline}>{project.tagline}</p>
+                  {cat}
+                </button>
+              ))}
+            </div>
+            <div className={styles.showingCount}>
+              Showing{" "}
+              <span className={styles.countNumber}>
+                {filteredProjects.length}
+              </span>{" "}
+              projects
+            </div>
+          </div>
 
-                  <div className={styles.actionsRow}>
+          <div className={styles.nodesWrapper}>
+            <div className={styles.nodesTimelineLine} />
+
+            {filteredProjects.map((project) => {
+              const isActive = project.id === selectedId;
+              const isLocked = project.status === "LOCKED";
+              return (
+                <div
+                  key={project.id}
+                  onClick={() => !isLocked && handleNodeClick(project.id)}
+                  className={`${styles.nodeItem} ${isActive ? styles.nodeActive : ""} ${
+                    isLocked ? styles.nodeLocked : ""
+                  }`}
+                  style={
+                    {
+                      "--node-glow-color": project.coverColor,
+                    } as React.CSSProperties
+                  }
+                >
+                  {/* Holographic orbital circle graphics */}
+                  <div className={styles.hologramRingContainer}>
+                    <div className={styles.hologramRingOuter} />
+                    <div className={styles.hologramRingInner} />
+                    <div className={styles.hologramIcon}>
+                      {renderNodeIcon(project.id)}
+                    </div>
+                  </div>
+
+                  <div className={styles.nodeText}>
+                    <span className={styles.nodeName}>{project.pkgName}</span>
+                    <span className={styles.nodeSubtitle}>
+                      {project.title.split(" - ")[0]}
+                    </span>
+                    <span
+                      className={styles.statusBadge}
+                      style={{
+                        color: project.coverColor,
+                        borderColor: project.coverColor,
+                      }}
+                    >
+                      {project.status}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* PANEL 2: PROJECT_DETAILS.sys (Active Details Panel) */}
+        <div className={styles.panelDetails}>
+          <div className={styles.panelHeader}>
+            <span className={styles.panelTitle}>PROJECT_DETAILS.sys</span>
+            <span
+              className={styles.panelStatus}
+              style={{ color: selectedProject.coverColor }}
+            >
+              ● FOCUS: [{selectedProject.pkgName}]
+            </span>
+          </div>
+
+          <div className={styles.detailsContentGrid}>
+            {/* Top Main Banner Card */}
+            <div
+              className={styles.bannerCard}
+              style={{ borderLeftColor: selectedProject.coverColor }}
+            >
+              <div className={styles.bannerRow}>
+                <div style={{ flex: 1 }}>
+                  <span className={styles.bannerVersion}>
+                    VERSION: {selectedProject.version} | UPDATE:{" "}
+                    {selectedProject.lastUpdate}
+                  </span>
+                  <h3
+                    className={styles.bannerTitle}
+                    style={{ color: selectedProject.coverColor }}
+                  >
+                    {selectedProject.title}
+                  </h3>
+                  <p className={styles.bannerTagline}>
+                    {selectedProject.tagline}
+                  </p>
+                </div>
+
+                <div className={styles.bannerMetaBlock}>
+                  <div className={styles.metaRow}>
+                    <span className={styles.metaLabel}>DEPLOYMENT:</span>
+                    <span
+                      className={styles.metaVal}
+                      style={{
+                        color:
+                          selectedProject.deploymentStatus === "ONLINE"
+                            ? "var(--glow-green)"
+                            : "var(--glow-cyan)",
+                      }}
+                    >
+                      {selectedProject.deploymentStatus}
+                    </span>
+                  </div>
+                  <div className={styles.metaRow}>
+                    <span className={styles.metaLabel}>TYPE:</span>
+                    <span
+                      className={styles.metaVal}
+                      style={{ color: selectedProject.coverColor }}
+                    >
+                      {selectedProject.category}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons Row */}
+              <div className={styles.actionButtonsRow}>
+                {selectedProject.id !== "upcoming" && (
+                  <>
                     <a
-                      href={project.githubUrl}
+                      href={selectedProject.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      className={styles.actionBtnLive}
+                      style={
+                        {
+                          "--btn-accent-color": selectedProject.coverColor,
+                        } as React.CSSProperties
+                      }
                     >
-                      <Button variant="primary" size="md">
-                        GitHub Code
-                      </Button>
+                      LAUNCH LIVE RUN
                     </a>
-                    <Button
-                      variant="secondary"
-                      size="md"
-                      onClick={() => setActiveTab("sandbox")}
+                    <a
+                      href={selectedProject.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.actionBtnRepo}
                     >
-                      Launch Sandbox
-                    </Button>
-                  </div>
-                </div>
-
-                <div className={styles.section}>
-                  <h4 className={styles.sectionTitle}>// TECHNOLOGY_STACK</h4>
-                  <div className={styles.tagsGrid}>
-                    {project.techStack.map((tech) => (
-                      <span
-                        key={tech}
-                        className={styles.techTag}
-                        style={{
-                          borderColor: project.coverColor,
-                          color: project.coverColor,
-                        }}
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className={styles.section}>
-                  <h4 className={styles.sectionTitle}>// ARCHITECTURE_FLOW</h4>
-                  <div className={styles.architectureBox}>
-                    <code>{project.architecture}</code>
-                  </div>
-                </div>
+                      REST CODES REPO
+                    </a>
+                  </>
+                )}
               </div>
-
-              {/* Right Side: Details */}
-              <div className={styles.rightColumn}>
-                <div className={styles.section}>
-                  <h4 className={styles.sectionTitle}>// CORE_FEATURES</h4>
-                  <ul className={styles.featuresList}>
-                    {project.features.map((feat, idx) => (
-                      <li key={idx} className={styles.featureItem}>
-                        <span
-                          className={styles.bulletSymbol}
-                          style={{ color: project.coverColor }}
-                        >
-                          ■
-                        </span>
-                        <span>{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className={styles.section}>
-                  <h4 className={styles.sectionTitle}>// CHALLENGES_FACED</h4>
-                  <p className={styles.detailText}>{project.challenges}</p>
-                </div>
-
-                <div className={styles.section}>
-                  <h4 className={styles.sectionTitle}>
-                    // PERFORMANCE_METRICS
-                  </h4>
-                  <div
-                    className={styles.performanceBox}
-                    style={{ borderLeftColor: project.coverColor }}
-                  >
-                    <p
-                      className={styles.detailText}
-                      style={{ margin: 0, fontWeight: "600", color: "#ffffff" }}
-                    >
-                      {project.performance}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </>
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                minHeight: "280px",
-              }}
-            >
-              {project.id === "voya" && <TravelBookingSimulator />}
-              {project.id === "portfolio" && <CRTDebuggerSimulator />}
-              {project.id === "server" && <APIGatewayBenchmarker />}
             </div>
-          )}
+
+            {/* Content Tabs Bar */}
+            <div className={styles.tabsRow}>
+              {(
+                ["overview", "architecture", "performance", "media"] as const
+              ).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`${styles.tabBtn} ${activeTab === tab ? styles.tabBtnActive : ""}`}
+                  style={
+                    activeTab === tab
+                      ? { borderBottomColor: selectedProject.coverColor }
+                      : {}
+                  }
+                >
+                  {tab.toUpperCase()}
+                </button>
+              ))}
+            </div>
+
+            {/* Scrollable Tab Panel Container */}
+            <div className={styles.scrollContainer}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2 }}
+                  style={{ height: "100%" }}
+                >
+                  {activeTab === "overview" && (
+                    <div className={styles.tabOverview}>
+                      {/* Tech stack badges list */}
+                      <div className={styles.sectionHeader}>
+                        // STACK_REGISTRY
+                      </div>
+                      <div className={styles.badgesGrid}>
+                        {selectedProject.techStack.map((tech) => (
+                          <span
+                            key={tech}
+                            className={styles.techBadge}
+                            style={{
+                              borderColor: selectedProject.coverColor,
+                              color: selectedProject.coverColor,
+                            }}
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Futuristic Checklist Features */}
+                      <div
+                        className={styles.sectionHeader}
+                        style={{ marginTop: "18px" }}
+                      >
+                        // REGISTERED_FEATURES
+                      </div>
+                      <div className={styles.featuresChecklistGrid}>
+                        {selectedProject.features.map((feat, i) => (
+                          <div key={i} className={styles.checkItem}>
+                            <div
+                              className={styles.checkIndicator}
+                              style={{
+                                borderColor: selectedProject.coverColor,
+                              }}
+                            >
+                              <span
+                                style={{ color: selectedProject.coverColor }}
+                              >
+                                ✓
+                              </span>
+                            </div>
+                            <span className={styles.checkText}>{feat}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {activeTab === "architecture" && (
+                    <div className={styles.tabArchitecture}>
+                      <div className={styles.sectionHeader}>
+                        // INTERACTIVE_ARCH_FLOWCHART
+                      </div>
+                      <p className={styles.tabArchIntro}>
+                        Hover over components to inspect execution pipeline
+                        protocols.
+                      </p>
+
+                      {/* SVG flowchart diagram block */}
+                      <div className={styles.flowchartContainer}>
+                        <div className={styles.flowNodesRow}>
+                          {selectedProject.architecture.map((node, i) => (
+                            <React.Fragment key={node}>
+                              <div
+                                onMouseEnter={() => setHoveredArchNode(node)}
+                                onMouseLeave={() => setHoveredArchNode(null)}
+                                className={`${styles.flowNodeBox} ${
+                                  hoveredArchNode === node
+                                    ? styles.flowNodeBoxHovered
+                                    : ""
+                                }`}
+                                style={
+                                  {
+                                    "--node-accent-color":
+                                      selectedProject.coverColor,
+                                  } as React.CSSProperties
+                                }
+                              >
+                                {node}
+                              </div>
+                              {i < selectedProject.architecture.length - 1 && (
+                                <div
+                                  className={styles.flowArrow}
+                                  style={{ color: selectedProject.coverColor }}
+                                >
+                                  ➔
+                                </div>
+                              )}
+                            </React.Fragment>
+                          ))}
+                        </div>
+
+                        {/* Interactive flowchart tooltip description box */}
+                        <div
+                          className={styles.archTooltipBox}
+                          style={{
+                            borderLeftColor: selectedProject.coverColor,
+                          }}
+                        >
+                          <span
+                            className={styles.tooltipHeading}
+                            style={{ color: selectedProject.coverColor }}
+                          >
+                            [ NODE_PROTOCOL:{" "}
+                            {hoveredArchNode || "Awaiting Hover..."} ]
+                          </span>
+                          <p className={styles.tooltipText}>
+                            {hoveredArchNode
+                              ? getArchTooltip(hoveredArchNode)
+                              : "Hover over any component block to decapsulate its operation parameters."}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeTab === "performance" && (
+                    <div className={styles.tabPerformance}>
+                      <div className={styles.sectionHeader}>
+                        // SYSTEM_ANALYTICS
+                      </div>
+
+                      <div className={styles.performanceGrid}>
+                        <div className={styles.perfItem}>
+                          <span className={styles.perfLabel}>
+                            PERFORMANCE SCORE
+                          </span>
+                          <span
+                            className={styles.perfValue}
+                            style={{ color: selectedProject.coverColor }}
+                          >
+                            {selectedProject.performance.score}
+                          </span>
+                        </div>
+                        <div className={styles.perfItem}>
+                          <span className={styles.perfLabel}>
+                            BUILD PROTOCOL
+                          </span>
+                          <span className={styles.perfValue}>
+                            {selectedProject.performance.build}
+                          </span>
+                        </div>
+                        <div className={styles.perfItem}>
+                          <span className={styles.perfLabel}>
+                            API HEALTH STATUS
+                          </span>
+                          <span
+                            className={styles.perfValue}
+                            style={{ color: "var(--glow-green)" }}
+                          >
+                            {selectedProject.performance.apiHealth}
+                          </span>
+                        </div>
+                        <div className={styles.perfItem}>
+                          <span className={styles.perfLabel}>
+                            DATABASE STATUS
+                          </span>
+                          <span className={styles.perfValue}>
+                            {selectedProject.performance.dbStatus}
+                          </span>
+                        </div>
+                        <div className={styles.perfItem}>
+                          <span className={styles.perfLabel}>
+                            AVG API RESPONSE
+                          </span>
+                          <span
+                            className={styles.perfValue}
+                            style={{ color: "var(--glow-cyan)" }}
+                          >
+                            {selectedProject.performance.responseTime}
+                          </span>
+                        </div>
+                        <div className={styles.perfItem}>
+                          <span className={styles.perfLabel}>
+                            STABLE UPTIME
+                          </span>
+                          <span className={styles.perfValue}>
+                            {selectedProject.performance.uptime}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeTab === "media" && (
+                    <div className={styles.tabMedia}>
+                      <div className={styles.sectionHeader}>
+                        // MEDIA_REGISTRIES
+                      </div>
+
+                      {selectedProject.gallery.length > 0 ? (
+                        <div className={styles.galleryGrid}>
+                          {selectedProject.gallery.map((imgName, i) => (
+                            <div key={i} className={styles.galleryItem}>
+                              <div className={styles.galleryPlaceholderBg} />
+                              <div className={styles.galleryOverlayInfo}>
+                                <span className={styles.galleryTitle}>
+                                  {imgName}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className={styles.descText}>
+                          No media attachments registered for locked core nodes.
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
         </div>
       </div>
     </div>

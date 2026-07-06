@@ -338,7 +338,13 @@ const FloatingHoloObjects = ({ introStage }: { introStage: string }) => {
 };
 
 // 6. Camera Pan Controller with Smooth LookAt Interpolations
-const CameraController = ({ activeSlide }: { activeSlide: number }) => {
+const CameraController = ({
+  activeSlide,
+  aboutSubPage = "profile",
+}: {
+  activeSlide: number;
+  aboutSubPage?: string;
+}) => {
   const lookAtTarget = React.useRef(new THREE.Vector3(0, 0, 0));
 
   useFrame((state) => {
@@ -360,12 +366,22 @@ const CameraController = ({ activeSlide }: { activeSlide: number }) => {
         targetLookZ = 0;
         break;
       case 1: // About
-        targetX = -2.2;
-        targetY = 1.8;
-        targetZ = 5.0;
-        targetLookX = 0.5;
-        targetLookY = 0.5;
-        targetLookZ = -0.5;
+        if (aboutSubPage === "profile") {
+          targetX = -2.2;
+          targetY = 1.8;
+          targetZ = 5.0;
+          targetLookX = 0.5;
+          targetLookY = 0.5;
+          targetLookZ = -0.5;
+        } else {
+          // Journey Timeline camera angle
+          targetX = -1.2;
+          targetY = 1.4;
+          targetZ = 4.8;
+          targetLookX = 0.2;
+          targetLookY = 0.2;
+          targetLookZ = -0.6;
+        }
         break;
       case 2: // Projects
         targetX = 0;
@@ -455,9 +471,11 @@ const CameraController = ({ activeSlide }: { activeSlide: number }) => {
 // Main Scene Canvas export
 export const SceneCanvas = ({
   activeSlide,
+  aboutSubPage = "profile",
   introStage = "done",
 }: {
   activeSlide: number;
+  aboutSubPage?: string;
   introStage?: string;
 }) => {
   const lightFactor =
@@ -509,7 +527,10 @@ export const SceneCanvas = ({
         <FloatingHoloObjects introStage={introStage} />
 
         {/* Camera lookAt / sweeps controller */}
-        <CameraController activeSlide={activeSlide} />
+        <CameraController
+          activeSlide={activeSlide}
+          aboutSubPage={aboutSubPage}
+        />
       </Canvas>
     </div>
   );

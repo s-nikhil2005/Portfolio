@@ -625,26 +625,6 @@ export const AboutOSProfile = () => {
             </div>
 
             {/* Glowing target node graphics */}
-            <div className="connector-group">
-              <svg
-                className="connector-line-svg"
-                viewBox="0 0 80 30"
-                fill="none"
-              >
-                <path
-                  d="M10,25 C30,25 40,5 70,5"
-                  stroke="#10b981"
-                  strokeWidth="1.5"
-                  strokeDasharray="3 3"
-                />
-                <circle cx="70" cy="5" r="3" fill="#10b981" />
-              </svg>
-              <div className="target-node-details">
-                <span>[SYS_OK]</span>
-                <span>[NODE: div.flex]</span>
-                <span>[505, 425]</span>
-              </div>
-            </div>
           </div>
 
           {/* Stats counters board with Circular Progress Rings */}

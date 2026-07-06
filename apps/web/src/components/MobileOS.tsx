@@ -10,13 +10,14 @@ import {
   SystemInfo,
   SkillsGalaxy,
   AboutOSProfile,
+  AboutOSStudyTimeline,
+  ContactHub,
+  ProjectShowcase,
 } from "@portfolio/ui";
 import { Canvas } from "@react-three/fiber";
 
 interface MobileOSProps {
   onDownloadResume: () => void;
-  onSelectProject: (project: ProjectData) => void;
-  projectsList: ProjectData[];
   contactName: string;
   setContactName: (val: string) => void;
   contactEmail: string;
@@ -32,8 +33,6 @@ interface MobileOSProps {
 
 export const MobileOS = ({
   onDownloadResume,
-  onSelectProject,
-  projectsList,
   contactName,
   setContactName,
   contactEmail,
@@ -58,9 +57,6 @@ export const MobileOS = ({
   const [skillsExpanded, setSkillsExpanded] = React.useState<string | null>(
     "languages",
   );
-
-  // Carousel index for projects
-  const [projectIndex, setProjectIndex] = React.useState(0);
 
   // Terminal modal open state
   const [terminalOpen, setTerminalOpen] = React.useState(false);
@@ -118,9 +114,9 @@ export const MobileOS = ({
       const sections = [
         "home",
         "about",
+        "timeline",
         "projects",
         "skills",
-        "experience",
         "contact",
       ];
       for (const section of sections) {
@@ -128,7 +124,11 @@ export const MobileOS = ({
         if (el) {
           const rect = el.getBoundingClientRect();
           if (rect.top <= 180 && rect.bottom >= 180) {
-            setActiveTab(section);
+            if (section === "timeline") {
+              setActiveTab("about");
+            } else {
+              setActiveTab(section);
+            }
             break;
           }
         }
@@ -711,229 +711,17 @@ export const MobileOS = ({
       {/* 2. Mobile About Section (Accordion Timeline) */}
       {/* 2. Mobile About Section (Futuristic OS Profile Redesign) */}
       <section id="mobile-about" className="mobile-section">
-        <h2 className="mobile-section-title">About & Journey</h2>
+        <h2 className="mobile-section-title">About Profile</h2>
         <AboutOSProfile />
       </section>
 
-      {/* 3. Mobile Projects Section (Swipe Swiper) */}
-      <section id="mobile-projects" className="mobile-section">
-        <h2 className="mobile-section-title">Projects Showcase</h2>
-
-        <div
-          className="projects-carousel-container"
-          style={{
-            position: "relative",
-            width: "100%",
-            maxWidth: "480px",
-            margin: "0",
-          }}
-        >
-          {projectsList.map((project, idx) => {
-            if (idx !== projectIndex) return null;
-            return (
-              <div
-                key={project.id}
-                className="mobile-card active"
-                style={{
-                  minHeight: "420px",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  borderColor: project.coverColor,
-                  boxShadow: `0 8px 24px \${project.coverColor}11`,
-                }}
-              >
-                <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      marginBottom: "12px",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "0.68rem",
-                        color: project.coverColor,
-                        fontFamily: "monospace",
-                      }}
-                    >
-                      {project.pkgName}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "0.72rem",
-                        color: "var(--text-muted)",
-                      }}
-                    >
-                      {idx + 1} / {projectsList.length}
-                    </span>
-                  </div>
-
-                  <h3
-                    style={{
-                      color: "#fff",
-                      fontSize: "1.2rem",
-                      fontWeight: "800",
-                      marginBottom: "6px",
-                    }}
-                  >
-                    {project.title}
-                  </h3>
-
-                  <p
-                    style={{
-                      fontSize: "0.8rem",
-                      color: "var(--text-secondary)",
-                      lineHeight: "1.5",
-                      marginBottom: "16px",
-                    }}
-                  >
-                    {project.tagline}
-                  </p>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "6px",
-                      marginBottom: "20px",
-                    }}
-                  >
-                    {project.techStack.map((tech, tid) => (
-                      <span
-                        key={tid}
-                        style={{
-                          fontSize: "0.65rem",
-                          padding: "2px 8px",
-                          background: "rgba(255,255,255,0.04)",
-                          border: "1px solid rgba(255,255,255,0.08)",
-                          borderRadius: "4px",
-                        }}
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div
-                    style={{
-                      borderTop: "1px solid rgba(255, 255, 255, 0.05)",
-                      paddingTop: "12px",
-                      marginBottom: "12px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: "0.72rem",
-                        fontWeight: "bold",
-                        color: "#fff",
-                        marginBottom: "6px",
-                      }}
-                    >
-                      Key Deliverables:
-                    </div>
-                    <ul
-                      style={{
-                        paddingLeft: "16px",
-                        margin: 0,
-                        fontSize: "0.75rem",
-                        color: "var(--text-secondary)",
-                        lineHeight: "1.5",
-                      }}
-                    >
-                      {project.features.slice(0, 2).map((feat, fid) => (
-                        <li key={fid} style={{ marginBottom: "4px" }}>
-                          {feat}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                <div
-                  style={{ display: "flex", gap: "10px", marginTop: "20px" }}
-                >
-                  <button
-                    onClick={() => onSelectProject(project)}
-                    style={{
-                      flex: 1,
-                      padding: "12px 0",
-                      background: project.coverColor,
-                      border: "none",
-                      borderRadius: "8px",
-                      color: "#050608",
-                      fontFamily: "inherit",
-                      fontSize: "0.8rem",
-                      fontWeight: "700",
-                      textAlign: "center",
-                      cursor: "pointer",
-                    }}
-                  >
-                    View Case Study
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-
-          {/* Carousel Left/Right controllers */}
-          <div
-            style={{
-              display: "flex",
-              gap: "12px",
-              justifyContent: "center",
-              marginTop: "16px",
-            }}
-          >
-            <button
-              onClick={() =>
-                setProjectIndex((prev) =>
-                  prev > 0 ? prev - 1 : projectsList.length - 1,
-                )
-              }
-              style={{
-                width: "44px",
-                height: "44px",
-                borderRadius: "50%",
-                background: "rgba(255, 255, 255, 0.02)",
-                border: "1px solid rgba(255, 255, 255, 0.12)",
-                color: "#fff",
-                fontSize: "1.1rem",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              &larr;
-            </button>
-            <button
-              onClick={() =>
-                setProjectIndex((prev) =>
-                  prev < projectsList.length - 1 ? prev + 1 : 0,
-                )
-              }
-              style={{
-                width: "44px",
-                height: "44px",
-                borderRadius: "50%",
-                background: "rgba(255, 255, 255, 0.02)",
-                border: "1px solid rgba(255, 255, 255, 0.12)",
-                color: "#fff",
-                fontSize: "1.1rem",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              &rarr;
-            </button>
-          </div>
-        </div>
+      {/* 2.1 Mobile Study Timeline Section */}
+      <section id="mobile-timeline" className="mobile-section">
+        <h2 className="mobile-section-title">Study Timeline</h2>
+        <AboutOSStudyTimeline />
       </section>
 
-      {/* 4. Mobile Skills Section (Expandable Categories) */}
+      {/* 3. Mobile Skills Section (Expandable Categories) */}
       <section id="mobile-skills" className="mobile-section">
         <h2 className="mobile-section-title">Skills Inventory</h2>
 
@@ -942,31 +730,11 @@ export const MobileOS = ({
         </div>
       </section>
 
-      {/* 5. Mobile Experience Section */}
-      <section id="mobile-experience" className="mobile-section">
-        <h2 className="mobile-section-title">Work Experience</h2>
-        <div
-          style={{
-            marginBottom: "20px",
-            fontSize: "0.75rem",
-            color: "var(--text-muted)",
-            width: "100%",
-            maxWidth: "560px",
-            margin: "0 0 20px 0",
-          }}
-        >
-          // SYSTEM_EMPLOYMENT_LOGS
-        </div>
-        <div
-          style={{
-            paddingLeft: "10px",
-            borderLeft: "1px solid rgba(255, 255, 255, 0.08)",
-            width: "100%",
-            maxWidth: "560px",
-            margin: "0",
-          }}
-        >
-          <WorkExperience />
+      {/* 4. Mobile Projects Section */}
+      <section id="mobile-projects" className="mobile-section">
+        <h2 className="mobile-section-title">Projects Showcase</h2>
+        <div style={{ width: "100%", maxWidth: "560px", margin: "0" }}>
+          <ProjectShowcase />
         </div>
       </section>
 
@@ -977,155 +745,8 @@ export const MobileOS = ({
         style={{ paddingBottom: "120px" }}
       >
         <h2 className="mobile-section-title">Secure Mail</h2>
-
-        <div
-          className="mobile-card"
-          style={{
-            padding: "20px",
-            width: "100%",
-            maxWidth: "480px",
-            margin: "0",
-          }}
-        >
-          <form
-            onSubmit={handleContactSubmit}
-            style={{ display: "flex", flexDirection: "column", gap: "14px" }}
-          >
-            <div>
-              <label
-                style={{
-                  fontSize: "0.72rem",
-                  color: "var(--text-muted)",
-                  display: "block",
-                  marginBottom: "6px",
-                }}
-              >
-                // INPUT_SENDER_NAME
-              </label>
-              <input
-                type="text"
-                placeholder="Your Name"
-                value={contactName}
-                onChange={(e) => setContactName(e.target.value)}
-                required
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  background: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255, 255, 255, 0.12)",
-                  borderRadius: "6px",
-                  color: "#fff",
-                  fontFamily: "inherit",
-                  fontSize: "0.8rem",
-                  outline: "none",
-                  boxSizing: "border-box",
-                }}
-              />
-            </div>
-
-            <div>
-              <label
-                style={{
-                  fontSize: "0.72rem",
-                  color: "var(--text-muted)",
-                  display: "block",
-                  marginBottom: "6px",
-                }}
-              >
-                // INPUT_SENDER_EMAIL
-              </label>
-              <input
-                type="email"
-                placeholder="Your Email"
-                value={contactEmail}
-                onChange={(e) => setContactEmail(e.target.value)}
-                required
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  background: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255, 255, 255, 0.12)",
-                  borderRadius: "6px",
-                  color: "#fff",
-                  fontFamily: "inherit",
-                  fontSize: "0.8rem",
-                  outline: "none",
-                  boxSizing: "border-box",
-                }}
-              />
-            </div>
-
-            <div>
-              <label
-                style={{
-                  fontSize: "0.72rem",
-                  color: "var(--text-muted)",
-                  display: "block",
-                  marginBottom: "6px",
-                }}
-              >
-                // INPUT_TRANSMISSION_PAYLOAD
-              </label>
-              <textarea
-                placeholder="Write your message here..."
-                value={contactMessage}
-                onChange={(e) => setContactMessage(e.target.value)}
-                required
-                rows={4}
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  background: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255, 255, 255, 0.12)",
-                  borderRadius: "6px",
-                  color: "#fff",
-                  fontFamily: "inherit",
-                  fontSize: "0.8rem",
-                  outline: "none",
-                  resize: "none",
-                  boxSizing: "border-box",
-                }}
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={contactStatus === "sending"}
-              style={{
-                width: "100%",
-                padding: "12px 0",
-                background: "rgba(0, 240, 255, 0.08)",
-                border: "1px solid var(--theme-accent)",
-                borderRadius: "8px",
-                color: "var(--theme-accent)",
-                fontFamily: "inherit",
-                fontSize: "0.8rem",
-                fontWeight: "700",
-                cursor: "pointer",
-                marginTop: "6px",
-              }}
-            >
-              {contactStatus === "sending"
-                ? "TRANSMITTING..."
-                : "SEND SECURE MESSAGE"}
-            </button>
-
-            {contactResponse && (
-              <div
-                style={{
-                  fontSize: "0.75rem",
-                  color:
-                    contactStatus === "error"
-                      ? "var(--color-danger)"
-                      : "var(--glow-green)",
-                  marginTop: "6px",
-                  paddingLeft: "4px",
-                }}
-              >
-                &gt; {contactResponse}
-              </div>
-            )}
-          </form>
+        <div style={{ width: "100%", maxWidth: "480px" }}>
+          <ContactHub />
         </div>
       </section>
 
@@ -1507,22 +1128,13 @@ export const MobileOS = ({
                 <span className="drawer-item-num">03</span> Projects
               </div>
               <div
-                className={`drawer-item ${activeTab === "experience" ? "active" : ""}`}
-                onClick={() => {
-                  scrollToSection("experience");
-                  setMenuOpen(false);
-                }}
-              >
-                <span className="drawer-item-num">04</span> Experience
-              </div>
-              <div
                 className={`drawer-item ${activeTab === "contact" ? "active" : ""}`}
                 onClick={() => {
                   scrollToSection("contact");
                   setMenuOpen(false);
                 }}
               >
-                <span className="drawer-item-num">05</span> Contact
+                <span className="drawer-item-num">04</span> Contact
               </div>
             </div>
 
