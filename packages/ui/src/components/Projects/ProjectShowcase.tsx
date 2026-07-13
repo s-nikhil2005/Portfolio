@@ -286,10 +286,17 @@ export const ProjectShowcase = () => {
   );
   const [activeCategory, setActiveCategory] = React.useState<string>("ALL");
   const workspaceRef = React.useRef<HTMLDivElement>(null);
+  const nodesWrapperRef = React.useRef<HTMLDivElement>(null);
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
   const filteredProjects = projectsList.filter(
     (p) => activeCategory === "ALL" || p.category === activeCategory,
   );
+
+  const getCategoryCount = (cat: string) => {
+    if (cat === "ALL") return projectsList.length;
+    return projectsList.filter((p) => p.category === cat).length;
+  };
 
   const selectedProject =
     projectsList.find((p) => p.id === selectedId) || projectsList[0];
@@ -302,7 +309,10 @@ export const ProjectShowcase = () => {
     const handleWheel = (e: WheelEvent) => {
       // Allow vertical scroll if inside scrollable content
       const target = e.target as HTMLElement;
-      if (target.closest(`.${styles.scrollContainer}`)) {
+      if (
+        target.closest(`.${styles.scrollContainer}`) ||
+        target.closest(`.${styles.nodesWrapper}`)
+      ) {
         return;
       }
       if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
@@ -314,6 +324,49 @@ export const ProjectShowcase = () => {
     el.addEventListener("wheel", handleWheel, { passive: false });
     return () => el.removeEventListener("wheel", handleWheel);
   }, []);
+
+  // Prevent parent scroll chaining when scroll content has overflow and can scroll
+  React.useEffect(() => {
+    const nodesEl = nodesWrapperRef.current;
+    const scrollEl = scrollContainerRef.current;
+
+    const preventOuterScroll = (e: WheelEvent) => {
+      const currentTarget = e.currentTarget as HTMLElement;
+      if (!currentTarget) return;
+
+      const scrollHeight = currentTarget.scrollHeight;
+      const clientHeight = currentTarget.clientHeight;
+      const scrollTop = currentTarget.scrollTop;
+
+      const isScrollable = scrollHeight > clientHeight;
+      if (isScrollable) {
+        const canScrollDown =
+          e.deltaY > 0 && scrollTop + clientHeight < scrollHeight - 1;
+        const canScrollUp = e.deltaY < 0 && scrollTop > 1;
+
+        if (canScrollDown || canScrollUp) {
+          // Prevent full-page slide and horizontal panels scroll
+          e.stopPropagation();
+        }
+      }
+    };
+
+    if (nodesEl) {
+      nodesEl.addEventListener("wheel", preventOuterScroll, { passive: true });
+    }
+    if (scrollEl) {
+      scrollEl.addEventListener("wheel", preventOuterScroll, { passive: true });
+    }
+
+    return () => {
+      if (nodesEl) {
+        nodesEl.removeEventListener("wheel", preventOuterScroll);
+      }
+      if (scrollEl) {
+        scrollEl.removeEventListener("wheel", preventOuterScroll);
+      }
+    };
+  }, [selectedId, activeTab, filteredProjects]);
 
   const handleNodeClick = (id: string) => {
     setSelectedId(id);
@@ -425,7 +478,13 @@ export const ProjectShowcase = () => {
         <div className={styles.panelExplorer}>
           <div className={styles.panelHeader}>
             <span className={styles.panelTitle}>PROJECT_EXPLORER.sys</span>
-            <span className={styles.panelStatus}>● INDEX: LOCATE_NODES</span>
+            <span className={styles.panelStatus}>
+              Showing{" "}
+              <span className={styles.countNumber}>
+                {filteredProjects.length}
+              </span>{" "}
+              projects
+            </span>
           </div>
 
           <div className={styles.filterSection}>
@@ -447,20 +506,13 @@ export const ProjectShowcase = () => {
                   }}
                   className={`${styles.pillBtn} ${activeCategory === cat ? styles.pillBtnActive : ""}`}
                 >
-                  {cat}
+                  {cat} ({getCategoryCount(cat)})
                 </button>
               ))}
             </div>
-            <div className={styles.showingCount}>
-              Showing{" "}
-              <span className={styles.countNumber}>
-                {filteredProjects.length}
-              </span>{" "}
-              projects
-            </div>
           </div>
 
-          <div className={styles.nodesWrapper}>
+          <div ref={nodesWrapperRef} className={styles.nodesWrapper}>
             <div className={styles.nodesTimelineLine} />
 
             {filteredProjects.map((project) => {
@@ -622,7 +674,7 @@ export const ProjectShowcase = () => {
             </div>
 
             {/* Scrollable Tab Panel Container */}
-            <div className={styles.scrollContainer}>
+            <div ref={scrollContainerRef} className={styles.scrollContainer}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab}

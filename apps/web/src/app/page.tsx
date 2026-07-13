@@ -25,6 +25,7 @@ import { CursorGlow } from "@/components/animation/CursorGlow";
 import { Magnetic } from "@/components/animation/Magnetic";
 import { SmoothScroll } from "@/components/animation/SmoothScroll";
 import { MobileOS } from "@/components/MobileOS";
+import { motion } from "framer-motion";
 
 const aboutTimelineData: TimelineItem[] = [
   {
@@ -96,7 +97,15 @@ export default function Home() {
   const [aboutSubPage, setAboutSubPage] = React.useState<
     "profile" | "timeline"
   >("profile");
-  const aboutContainerRef = React.useRef<HTMLDivElement>(null);
+
+  const currentVisualIdx =
+    activeSlide === 0
+      ? 0
+      : activeSlide === 1
+        ? aboutSubPage === "profile"
+          ? 1
+          : 2
+        : activeSlide + 1;
 
   React.useEffect(() => {
     const checkMobile = () => {
@@ -106,37 +115,6 @@ export default function Home() {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
-
-  React.useEffect(() => {
-    if (activeSlide !== 1) return;
-    const container = aboutContainerRef.current;
-    if (!container) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = entry.target.id;
-            if (id === "about-sub-profile") {
-              setAboutSubPage("profile");
-            } else if (id === "about-sub-timeline") {
-              setAboutSubPage("timeline");
-            }
-          }
-        });
-      },
-      { threshold: 0.5, root: container },
-    );
-
-    const profileEl = container.querySelector("#about-sub-profile");
-    const timelineEl = container.querySelector("#about-sub-timeline");
-    if (profileEl) observer.observe(profileEl);
-    if (timelineEl) observer.observe(timelineEl);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [activeSlide]);
 
   const goToSlide = (idx: number) => {
     if (idx < 0 || idx > 5) return;
@@ -150,31 +128,23 @@ export default function Home() {
   };
   const handleAboutSubScroll = (direction: "down" | "up"): boolean => {
     if (activeSlide !== 1) return false;
-    const container = aboutContainerRef.current;
-    if (!container) return false;
 
     if (direction === "down") {
       if (aboutSubPage === "profile") {
         isScrolling.current = true;
-        container.scrollTo({
-          top: container.clientHeight,
-          behavior: "smooth",
-        });
+        setAboutSubPage("timeline");
         setTimeout(() => {
           isScrolling.current = false;
-        }, 850);
+        }, 600);
         return true;
       }
     } else {
       if (aboutSubPage === "timeline") {
         isScrolling.current = true;
-        container.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
+        setAboutSubPage("profile");
         setTimeout(() => {
           isScrolling.current = false;
-        }, 850);
+        }, 600);
         return true;
       }
     }
@@ -956,114 +926,170 @@ export default function Home() {
           position: "absolute",
           top: 0,
           left: 0,
-          width: "500vw",
+          width: "100vw",
           height: "100vh",
-          display: "flex",
-          transform: `translate3d(-${activeSlide * 20}%, 0, 0)`,
-          transition: "transform 0.85s cubic-bezier(0.25, 1, 0.5, 1)",
           zIndex: 2,
         }}
       >
         {/* Slide 0: Profile Overview Workspace */}
-        <div style={getSlideStyle(0)}>
+        <motion.div
+          initial={false}
+          animate={{
+            x: currentVisualIdx === 0 ? 0 : currentVisualIdx > 0 ? -40 : 40,
+            opacity: currentVisualIdx === 0 ? 1 : 0,
+          }}
+          transition={{ duration: 0.55, ease: [0.25, 1, 0.5, 1] }}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxSizing: "border-box",
+            padding: "12vh 6vw 100px 6vw",
+            pointerEvents: currentVisualIdx === 0 ? "auto" : "none",
+          }}
+        >
           <ProfileOverview
             onDownloadResume={handleDownloadResume}
-            onEmailClick={() => goToSlide(5)}
+            onEmailClick={() => goToSlide(4)}
             introStage={introStage}
           />
-        </div>
+        </motion.div>
 
         {/* Slide 1: About Workspace (Futuristic OS Profile Redesign) */}
-        <div style={{ ...getSlideStyle(1), padding: 0, position: "relative" }}>
-          <style>{`
-            .about-snap-container::-webkit-scrollbar {
-              display: none;
-            }
-          `}</style>
+        <motion.div
+          initial={false}
+          animate={{
+            x: currentVisualIdx === 1 ? 0 : currentVisualIdx > 1 ? -40 : 40,
+            opacity: currentVisualIdx === 1 ? 1 : 0,
+          }}
+          transition={{ duration: 0.55, ease: [0.25, 1, 0.5, 1] }}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxSizing: "border-box",
+            padding: "8vh 6vw 80px 6vw",
+            pointerEvents: currentVisualIdx === 1 ? "auto" : "none",
+          }}
+        >
+          <AboutOSProfile />
+        </motion.div>
 
-          <div
-            ref={aboutContainerRef}
-            className="about-snap-container"
-            style={{
-              width: "100%",
-              height: "100vh",
-              overflowY: "scroll",
-              scrollSnapType: "y mandatory",
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-              position: "relative",
-            }}
-          >
-            {/* Screen 1: About Profile */}
-            <div
-              id="about-sub-profile"
-              style={{
-                width: "100%",
-                height: "100vh",
-                scrollSnapAlign: "start",
-                boxSizing: "border-box",
-                padding: "8vh 6vw 80px 6vw",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                transition:
-                  "transform 0.85s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.85s",
-                transform:
-                  aboutSubPage === "profile"
-                    ? "translateY(0) translateZ(0px)"
-                    : "translateY(-100px) translateZ(-80px)",
-                opacity: aboutSubPage === "profile" ? 1 : 0,
-              }}
-            >
-              <AboutOSProfile />
-            </div>
+        {/* Slide 2: About Journey Timeline Workspace */}
+        <motion.div
+          initial={false}
+          animate={{
+            x: currentVisualIdx === 2 ? 0 : currentVisualIdx > 2 ? -40 : 40,
+            opacity: currentVisualIdx === 2 ? 1 : 0,
+          }}
+          transition={{ duration: 0.55, ease: [0.25, 1, 0.5, 1] }}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxSizing: "border-box",
+            padding: "8vh 6vw 80px 6vw",
+            pointerEvents: currentVisualIdx === 2 ? "auto" : "none",
+          }}
+        >
+          <AboutOSStudyTimeline />
+        </motion.div>
 
-            {/* Screen 2: Journey Timeline */}
-            <div
-              id="about-sub-timeline"
-              style={{
-                width: "100%",
-                height: "100vh",
-                scrollSnapAlign: "start",
-                boxSizing: "border-box",
-                padding: "8vh 6vw 80px 6vw",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                transition:
-                  "transform 0.85s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.85s",
-                transform:
-                  aboutSubPage === "timeline"
-                    ? "translateY(0) translateZ(0px)"
-                    : "translateY(100px) translateZ(-80px)",
-                opacity: aboutSubPage === "timeline" ? 1 : 0,
-              }}
-            >
-              <AboutOSStudyTimeline />
-            </div>
-          </div>
-        </div>
-
-        {/* Slide 2: Skills Workspace */}
-        <div style={getSlideStyle(2)}>
+        {/* Slide 3: Skills Workspace */}
+        <motion.div
+          initial={false}
+          animate={{
+            x: currentVisualIdx === 3 ? 0 : currentVisualIdx > 3 ? -40 : 40,
+            opacity: currentVisualIdx === 3 ? 1 : 0,
+          }}
+          transition={{ duration: 0.55, ease: [0.25, 1, 0.5, 1] }}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxSizing: "border-box",
+            padding: "12vh 6vw 100px 6vw",
+            pointerEvents: currentVisualIdx === 3 ? "auto" : "none",
+          }}
+        >
           <div style={{ width: "100%", maxWidth: "1200px" }}>
             <SkillsGalaxy isActive={activeSlide === 2} />
           </div>
-        </div>
+        </motion.div>
 
-        {/* Slide 3: Projects Workspace */}
-        <div style={{ ...getSlideStyle(3), padding: "80px 4vw 90px 4vw" }}>
+        {/* Slide 4: Projects Workspace */}
+        <motion.div
+          initial={false}
+          animate={{
+            x: currentVisualIdx === 4 ? 0 : currentVisualIdx > 4 ? -40 : 40,
+            opacity: currentVisualIdx === 4 ? 1 : 0,
+          }}
+          transition={{ duration: 0.55, ease: [0.25, 1, 0.5, 1] }}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxSizing: "border-box",
+            padding: "80px 4vw 90px 4vw",
+            pointerEvents: currentVisualIdx === 4 ? "auto" : "none",
+          }}
+        >
           <div style={{ width: "100%", height: "100%" }}>
             <ProjectShowcase />
           </div>
-        </div>
+        </motion.div>
 
-        {/* Slide 4: Contact Workspace */}
-        <div style={getSlideStyle(4)}>
+        {/* Slide 5: Contact Workspace */}
+        <motion.div
+          initial={false}
+          animate={{
+            x: currentVisualIdx === 5 ? 0 : currentVisualIdx > 5 ? -40 : 40,
+            opacity: currentVisualIdx === 5 ? 1 : 0,
+          }}
+          transition={{ duration: 0.55, ease: [0.25, 1, 0.5, 1] }}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxSizing: "border-box",
+            padding: "12vh 6vw 100px 6vw",
+            pointerEvents: currentVisualIdx === 5 ? "auto" : "none",
+          }}
+        >
           <div style={{ width: "100%", maxWidth: "1080px" }}>
             <ContactHub />
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Top OS System Bar */}

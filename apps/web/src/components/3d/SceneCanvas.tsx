@@ -346,76 +346,49 @@ const CameraController = ({
   aboutSubPage?: string;
 }) => {
   const lookAtTarget = React.useRef(new THREE.Vector3(0, 0, 0));
+  const visualIdxRef = React.useRef(0);
+
+  const cameraPaths = [
+    { pos: [0, 1.2, 5.5], look: [0, 0, 0] }, // 0: Home
+    { pos: [-0.8, 1.4, 5.3], look: [0.15, 0.15, -0.15] }, // 1: About Profile
+    { pos: [-0.4, 1.3, 5.2], look: [0.06, 0.06, -0.18] }, // 2: About Timeline (Journey)
+    { pos: [0.6, 0.8, 5.1], look: [-0.15, 0.15, 0] }, // 3: Skills
+    { pos: [0, 1.6, 4.8], look: [0, -0.15, -0.6] }, // 4: Projects
+    { pos: [0.8, 1.3, 5.2], look: [-0.3, 0, -0.2] }, // 5: Contact
+  ];
 
   useFrame((state) => {
-    let targetX = 0;
-    let targetY = 1.2;
-    let targetZ = 5.5;
+    const targetVisualIdx =
+      activeSlide === 0
+        ? 0
+        : activeSlide === 1
+          ? aboutSubPage === "profile"
+            ? 1
+            : 2
+          : activeSlide + 1;
 
-    let targetLookX = 0;
-    let targetLookY = 0;
-    let targetLookZ = 0;
+    // Smoothly LERP visual index to handle continuous transitions
+    visualIdxRef.current = THREE.MathUtils.lerp(
+      visualIdxRef.current,
+      targetVisualIdx,
+      0.035,
+    );
 
-    switch (activeSlide) {
-      case 0: // Home
-        targetX = 0;
-        targetY = 1.2;
-        targetZ = 5.5;
-        targetLookX = 0;
-        targetLookY = 0;
-        targetLookZ = 0;
-        break;
-      case 1: // About
-        if (aboutSubPage === "profile") {
-          targetX = -2.2;
-          targetY = 1.8;
-          targetZ = 5.0;
-          targetLookX = 0.5;
-          targetLookY = 0.5;
-          targetLookZ = -0.5;
-        } else {
-          // Journey Timeline camera angle
-          targetX = -1.2;
-          targetY = 1.4;
-          targetZ = 4.8;
-          targetLookX = 0.2;
-          targetLookY = 0.2;
-          targetLookZ = -0.6;
-        }
-        break;
-      case 2: // Projects
-        targetX = 0;
-        targetY = 2.4;
-        targetZ = 3.5;
-        targetLookX = 0;
-        targetLookY = -0.5;
-        targetLookZ = -2;
-        break;
-      case 3: // Skills
-        targetX = 1.8;
-        targetY = -0.2;
-        targetZ = 4.2;
-        targetLookX = -0.5;
-        targetLookY = 0.5;
-        targetLookZ = 0;
-        break;
-      case 4: // Experience
-        targetX = -2.0;
-        targetY = 0.8;
-        targetZ = 4.5;
-        targetLookX = 0.5;
-        targetLookY = 0;
-        targetLookZ = -1;
-        break;
-      case 5: // Contact
-        targetX = 2.5;
-        targetY = 1.6;
-        targetZ = 4.8;
-        targetLookX = -1;
-        targetLookY = 0;
-        targetLookZ = -0.8;
-        break;
-    }
+    const v = visualIdxRef.current;
+    const idx1 = Math.floor(v);
+    const idx2 = Math.min(5, idx1 + 1);
+    const t = v - idx1;
+
+    const p1 = cameraPaths[idx1] || cameraPaths[0];
+    const p2 = cameraPaths[idx2] || cameraPaths[0];
+
+    let targetX = THREE.MathUtils.lerp(p1.pos[0], p2.pos[0], t);
+    let targetY = THREE.MathUtils.lerp(p1.pos[1], p2.pos[1], t);
+    let targetZ = THREE.MathUtils.lerp(p1.pos[2], p2.pos[2], t);
+
+    let targetLookX = THREE.MathUtils.lerp(p1.look[0], p2.look[0], t);
+    let targetLookY = THREE.MathUtils.lerp(p1.look[1], p2.look[1], t);
+    let targetLookZ = THREE.MathUtils.lerp(p1.look[2], p2.look[2], t);
 
     // Responsive portrait composition override for mobile screens
     const aspect = state.viewport.aspect;
@@ -428,40 +401,8 @@ const CameraController = ({
       targetLookZ = -0.5;
     }
 
-    // Smoothly LERP camera position
-    state.camera.position.x = THREE.MathUtils.lerp(
-      state.camera.position.x,
-      targetX,
-      0.035,
-    );
-    state.camera.position.y = THREE.MathUtils.lerp(
-      state.camera.position.y,
-      targetY,
-      0.035,
-    );
-    state.camera.position.z = THREE.MathUtils.lerp(
-      state.camera.position.z,
-      targetZ,
-      0.035,
-    );
-
-    // Smoothly LERP camera lookAt target vector
-    lookAtTarget.current.x = THREE.MathUtils.lerp(
-      lookAtTarget.current.x,
-      targetLookX,
-      0.035,
-    );
-    lookAtTarget.current.y = THREE.MathUtils.lerp(
-      lookAtTarget.current.y,
-      targetLookY,
-      0.035,
-    );
-    lookAtTarget.current.z = THREE.MathUtils.lerp(
-      lookAtTarget.current.z,
-      targetLookZ,
-      0.035,
-    );
-
+    state.camera.position.set(targetX, targetY, targetZ);
+    lookAtTarget.current.set(targetLookX, targetLookY, targetLookZ);
     state.camera.lookAt(lookAtTarget.current);
   });
 
