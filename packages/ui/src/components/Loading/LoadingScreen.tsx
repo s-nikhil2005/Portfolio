@@ -126,19 +126,30 @@ export const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
     "Connecting neural_net_assistant.sys...",
   ];
 
-  const skipBoot = () => {
+  const skipBoot = React.useCallback(() => {
     setIsFadingOut(true);
     setTimeout(() => {
       onComplete?.();
-    }, 600);
-  };
+    }, 400);
+  }, [onComplete]);
+
+  // Listen for ESC key to skip boot
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        skipBoot();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [skipBoot]);
 
   React.useEffect(() => {
     if (stage === 0) {
       // Blinking cursor block
       const timer = setTimeout(() => {
         setStage(1);
-      }, 1000);
+      }, 350);
       return () => clearTimeout(timer);
     }
 
@@ -154,7 +165,7 @@ export const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
           clearInterval(interval);
           setStage(2);
         }
-      }, 120);
+      }, 40);
       return () => clearInterval(interval);
     }
 
@@ -194,7 +205,7 @@ export const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
           sound.current?.playBeep(900, 0.1);
           setStage(3);
         }
-      }, 350);
+      }, 120);
       return () => clearInterval(interval);
     }
 
@@ -211,7 +222,7 @@ export const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
           clearInterval(interval);
           setStage(4);
         }
-      }, 60);
+      }, 25);
       return () => clearInterval(interval);
     }
 
@@ -227,7 +238,7 @@ export const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
         ]);
         sound.current?.playBootChime();
         setStage(5);
-      }, 600);
+      }, 200);
       return () => clearTimeout(timer);
     }
 
@@ -237,12 +248,12 @@ export const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
         setIsFadingOut(true);
         const completeTimer = setTimeout(() => {
           onComplete?.();
-        }, 800);
+        }, 400);
         return () => clearTimeout(completeTimer);
-      }, 1000);
+      }, 300);
       return () => clearTimeout(timer);
     }
-  }, [stage]);
+  }, [stage, skipBoot]);
 
   // Create loading bar graphical representation
   const renderProgressBar = () => {
