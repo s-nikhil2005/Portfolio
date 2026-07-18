@@ -1,10 +1,11 @@
 # Dependencies
-node_modules          
+**/node_modules
+.npm
 
 # Build output
-dist 
-.next
-.turbo
+**/dist
+**/.next
+**/.turbo
 
 # Version Control
 .git
