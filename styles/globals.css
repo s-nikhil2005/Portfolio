@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0B0C0E;
+  --surface: #141519;
+  --surface-hover: #1A1C22;
+  --text-primary: #EDEDEF;
+  --text-secondary: #8A8D93;
+  --hairline: rgba(255, 255, 255, 0.08);
+  --hairline-hover: rgba(255, 255, 255, 0.16);
+  --accent: #3DDC84;
+  --accent-tint: rgba(61, 220, 132, 0.10);
+  --accent-tint-hover: rgba(61, 220, 132, 0.16);
+}
+
+.light {
+  --bg: #FAFAF8;
+  --surface: #FFFFFF;
+  --surface-hover: #F2F2EF;
+  --text-primary: #121316;
+  --text-secondary: #6C6F76;
+  --hairline: rgba(0, 0, 0, 0.08);
+  --hairline-hover: rgba(0, 0, 0, 0.16);
+  --accent: #1CA45C;
+  --accent-tint: rgba(28, 164, 92, 0.10);
+  --accent-tint-hover: rgba(28, 164, 92, 0.16);
+}
+
+html {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Accessible focus styling */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Hairline borders */
+.border-hairline {
+  border-color: var(--hairline);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
