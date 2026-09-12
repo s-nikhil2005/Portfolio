@@ -24,15 +24,16 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
         className
       )}
     >
-      <div className="inline-flex items-center gap-2">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#3DDC84]" />
+      <div className="inline-flex items-center">
         <span className="font-mono text-xs uppercase tracking-widest text-[#3DDC84] font-medium">
           {overline}
         </span>
       </div>
+
       <h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[var(--text-primary)]">
         {title}
       </h2>
+
       {description && (
         <p className="font-sans text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed max-w-2xl">
           {description}

@@ -43,17 +43,17 @@ export const profileData: Profile = {
   tagline:
     "Building resilient backend architectures, real-time distributed applications, and full-stack systems with modern web technologies — actively bridging software engineering into AI/ML.",
   bio: [
-    "I am a software developer with a strong focus on backend systems, real-time distributed architectures, and scalable full-stack products. I enjoy designing clean API boundaries, managing concurrency, and ensuring system reliability.",
-    "My technical journey began with core computer science and database theory at Mumbai University, evolving into architecting production-ready applications with React, Node.js, Express, Redis, WebSockets, and WebRTC.",
-    "Looking forward, I am channeling my systems engineering background into applied AI/ML — exploring LLM orchestration, structured document pipelines, vector embeddings, and retrieval-augmented systems.",
-  ],
+     "I’m a software developer who enjoys building reliable backend and full-stack systems. I enjoy solving problems with DSA and working with APIs, databases, and real-time systems while understanding how things work behind the interface.",
+
+     "I completed my B.Sc. in Information Technology from Mumbai University, building a foundation in computer science, databases, and software development. I’m now exploring DevOps with AWS and system design.",
+      ],
   education: {
     degree: "B.Sc. Information Technology",
-    institution: "Mumbai University",
+    institution: "Sheth NKTT College",
     score: "CGPA 8.7",
-    period: "2021 – 2024",
+    period: "2023 – 2026",
     details:
-      "Core coursework in Database Management Systems (relational schema design & normalization), Data Structures & Algorithms, Computer Networks, Operating Systems, and Distributed Computing.",
+      "Built a foundation in databases, data structures, computer networks, operating systems, and software development",
   },
   principles: [
     {

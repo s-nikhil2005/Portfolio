@@ -6,6 +6,7 @@ import { profileData } from "@/data/profile";
 import { Button } from "@/components/ui/Button";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 
+
 import {
   ArrowDown,
   Sparkles,
@@ -151,8 +152,8 @@ export const Hero: React.FC = () => {
         pt-20
         sm:pt-24
         md:pt-28
-        pb-20
-        md:pb-28
+        pb-4
+        md:pb-6
         w-full
       "
     >
