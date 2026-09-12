@@ -5,19 +5,12 @@ export interface Education {
   period: string;
   details: string;
 }
-
-export interface Principle {
-  title: string;
-  description: string;
-}
-
 export interface Profile {
   name: string;
   roles: string[];
   tagline: string;
   bio: string[];
   education: Education;
-  principles: Principle[];
   email: string;
   socials: {
     github: string;
@@ -55,28 +48,6 @@ export const profileData: Profile = {
     details:
       "Built a foundation in databases, data structures, computer networks, operating systems, and software development",
   },
-  principles: [
-    {
-      title: "Build before overengineering",
-      description:
-        "Start with straightforward, robust data flows and explicit API contracts before adding speculative abstractions, caching layers, or microservices.",
-    },
-    {
-      title: "Understand the system, not just syntax",
-      description:
-        "True reliability comes from understanding the Node.js event loop, network latency profiles, transaction isolation levels, and failure modes.",
-    },
-    {
-      title: "Debug systematically",
-      description:
-        "Isolate variables, inspect database slow-query logs and network traces, and diagnose root causes rather than patching symptoms.",
-    },
-    {
-      title: "Keep learning through real projects",
-      description:
-        "The fastest and most honest way to evaluate modern technologies — whether Redis Pub/Sub, WebRTC, or generative AI APIs — is by designing and shipping working systems.",
-    },
-  ],
   email: "nikhilsingh76666@gmail.com",
   socials: {
     github: "https://github.com/s-nikhil2005",

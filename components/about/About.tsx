@@ -5,7 +5,7 @@ import { profileData } from "@/data/profile";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Journey } from "@/components/about/Journey";
 import { AboutStats } from "@/components/about/AboutStats";
-import { GraduationCap, ShieldCheck, Compass, Lightbulb } from "lucide-react";
+import { GraduationCap, ShieldCheck, Compass } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 
 export const About: React.FC = () => {
@@ -15,7 +15,7 @@ export const About: React.FC = () => {
     <section
       id="about"
       aria-label="About Nikhil Singh"
-      className="py-20 md:py-28 w-full border-b border-[var(--hairline)]"
+      className="pt-20 md:pt-28 pb-8 md:pb-12 w-full"
     >
       <div className="max-w-container mx-auto px-6 sm:px-8 space-y-16">
         {/* Section Heading */}
@@ -96,37 +96,6 @@ export const About: React.FC = () => {
 
         {/* Development Journey Timeline */}
         <Journey />
-
-        {/* Engineering Mindset / Operating Principles */}
-        <div className="space-y-6 text-left">
-          <div className="flex items-center justify-between border-b border-[var(--hairline)] pb-3">
-            <h3 className="font-sans text-xl font-bold tracking-tight text-[var(--text-primary)]">
-              Engineering Mindset & Principles
-            </h3>
-            <span className="font-mono text-xs text-[var(--text-secondary)]">
-              HOW I THINK & OPERATE
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {profileData.principles.map((principle, idx) => (
-              <div
-                key={principle.title}
-                className="p-5 rounded-control border border-[var(--hairline)] bg-[var(--surface)] space-y-2 hover:border-[#3DDC84]/40 transition-colors"
-              >
-                <div className="flex items-center gap-2 text-[#3DDC84]">
-                  <Lightbulb size={15} />
-                  <h4 className="font-sans font-bold text-base text-[var(--text-primary)]">
-                    {principle.title}
-                  </h4>
-                </div>
-                <p className="font-sans text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed pl-6">
-                  {principle.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );
