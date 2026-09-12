@@ -35,10 +35,15 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
       </h2>
 
       {description && (
-        <p className="font-sans text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed max-w-2xl">
-          {description}
-        </p>
-      )}
+  <p
+    className={cn(
+      "font-sans text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed max-w-2xl",
+      centered && "mx-auto"
+    )}
+  >
+    {description}
+  </p>
+)}
     </div>
   );
 };
