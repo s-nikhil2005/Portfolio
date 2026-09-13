@@ -1,17 +1,16 @@
+"use client";
+
 import React from "react";
+import Image from "next/image";
 import { Project } from "@/data/projects";
-import { ProjectVisual } from "@/components/projects/ProjectVisual";
 import { ArrowUpRight, CheckCircle2, Github } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface ProjectShowcaseProps {
   project: Project;
-  reversed?: boolean;
 }
 
 export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
   project,
-  reversed = false,
 }) => {
   const isDemoPlaceholder = project.links.live.startsWith("[ADD");
   const isGithubPlaceholder = project.links.github.startsWith("[ADD");
@@ -19,65 +18,77 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
   return (
     <article
       aria-labelledby={`project-title-${project.id}`}
-      className="py-12 sm:py-16 border-b border-[var(--hairline)] last:border-b-0"
+      className="w-full"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center text-left">
-        {/* Visual Column */}
-        <div
-          className={cn(
-            "lg:col-span-6 w-full",
-            reversed ? "lg:order-2" : "lg:order-1"
-          )}
-        >
-          <ProjectVisual project={project} />
+      {/* Project Header */}
+      <div className="mb-8 text-center">
+        <div className="flex items-center justify-center gap-3">
+          <span className="font-mono text-xs font-bold text-[#3DDC84] bg-[#3DDC84]/10 border border-[#3DDC84]/25 px-2.5 py-0.5 rounded-control">
+            PROJECT {project.number}
+          </span>
+
+          <span className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider">
+            Full-Stack Architecture
+          </span>
         </div>
 
-        {/* Content Column */}
-        <div
-          className={cn(
-            "lg:col-span-6 space-y-6",
-            reversed ? "lg:order-1" : "lg:order-2"
-          )}
+        <h3
+          id={`project-title-${project.id}`}
+          className="mt-3 font-sans text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[var(--text-primary)]"
         >
-          {/* Project Number & Hook */}
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-3">
-              <span className="font-mono text-xs font-bold text-[#3DDC84] bg-[#3DDC84]/10 border border-[#3DDC84]/25 px-2.5 py-0.5 rounded-control">
-                PROJECT {project.number}
-              </span>
-              <span className="font-mono text-xs text-[var(--text-secondary)] uppercase tracking-wider">
-                Full-Stack Architecture
-              </span>
-            </div>
+          {project.title}
+        </h3>
 
-            <h3
-              id={`project-title-${project.id}`}
-              className="font-sans text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[var(--text-primary)]"
-            >
-              {project.title}
-            </h3>
+        <p className="mt-2 font-sans text-base text-[#3DDC84] font-medium">
+          {project.hook}
+        </p>
+      </div>
 
-            <p className="font-sans text-base text-[#3DDC84] font-medium">
-              {project.hook}
+      {/* Project Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start text-left">
+        {/* Project Image */}
+        <div className="lg:col-span-6 w-full">
+          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-[var(--hairline)] bg-[var(--surface)]">
+            <Image
+              src={project.image}
+              alt={`${project.title} project preview`}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover"
+            />
+          </div>
+        </div>
+
+        {/* Project Details */}
+        <div className="lg:col-span-6 space-y-6">
+          {/* Description */}
+          <div>
+            <h4 className="mb-2 font-mono text-xs uppercase tracking-wider text-[var(--text-primary)] font-semibold">
+              // PROJECT DETAILS
+            </h4>
+
+            <p className="font-sans text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
+              {project.description}
             </p>
           </div>
 
-          <p className="font-sans text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
-            {project.description}
-          </p>
-
-          {/* What I Built Highlights */}
+          {/* Architectural Highlights */}
           <div className="space-y-2.5 pt-1">
             <h4 className="font-mono text-xs uppercase tracking-wider text-[var(--text-primary)] font-semibold">
               // ARCHITECTURAL HIGHLIGHTS
             </h4>
+
             <ul className="space-y-2">
               {project.builtHighlights.map((highlight, idx) => (
                 <li
                   key={idx}
                   className="font-sans text-xs sm:text-sm text-[var(--text-secondary)] flex items-start gap-2 leading-relaxed"
                 >
-                  <CheckCircle2 size={14} className="text-[#3DDC84] shrink-0 mt-0.5" />
+                  <CheckCircle2
+                    size={14}
+                    className="text-[#3DDC84] shrink-0 mt-0.5"
+                  />
+
                   <span>{highlight}</span>
                 </li>
               ))}
@@ -86,6 +97,10 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
 
           {/* Technologies */}
           <div className="space-y-2 pt-1">
+            <h4 className="font-mono text-xs uppercase tracking-wider text-[var(--text-primary)] font-semibold">
+              // TECHNOLOGIES
+            </h4>
+
             <div className="flex flex-wrap items-center gap-1.5">
               {project.technologies.map((tech) => (
                 <span
@@ -144,3 +159,5 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
     </article>
   );
 };
+
+export default ProjectShowcase;
