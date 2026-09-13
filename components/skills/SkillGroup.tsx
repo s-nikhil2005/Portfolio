@@ -42,7 +42,7 @@ const SkillBar: React.FC<{ skill: SkillItem }> = ({ skill }) => {
   return (
     <div className="group space-y-2">
       <div className="flex items-center justify-between gap-4">
-        <span className="font-mono text-xs sm:text-sm text-[var(--text-primary)]">
+        <span className="font-mono text-xs text-[var(--text-primary)] sm:text-sm">
           {skill.name}
         </span>
 
@@ -122,7 +122,7 @@ export const SkillGroup: React.FC<SkillGroupProps> = ({
   return (
     <div className="w-full space-y-5">
       {/* Category Navigation */}
-      <div className="flex w-full gap-2 overflow-x-auto pb-2 scrollbar-none">
+      <div className="flex w-full flex-wrap items-center justify-center gap-2">
         {categories.map((category, index) => {
           const CategoryIcon =
             categoryIcons[category.title] ?? Code2;
@@ -142,13 +142,15 @@ export const SkillGroup: React.FC<SkillGroupProps> = ({
                 gap-2
                 rounded-lg
                 border
-                px-4
+                px-3
                 py-2.5
                 font-sans
-                text-sm
+                text-xs
                 font-medium
                 transition-all
                 duration-200
+                sm:px-4
+                sm:text-sm
                 ${
                   isActive
                     ? "border-[#3DDC84] bg-[#3DDC84] text-black shadow-[0_0_20px_rgba(61,220,132,0.08)]"

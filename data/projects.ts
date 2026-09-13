@@ -5,12 +5,19 @@ export interface Project {
   hook: string;
   description: string;
   image: string;
+
+  // Three screenshots used in the ProjectStack section
+  gallery: string[];
+
   builtHighlights: string[];
   technologies: string[];
+
   links: {
     live: string;
     github: string;
   };
+
+  // Only featured projects appear in ProjectStack
   featured?: boolean;
 }
 
@@ -23,7 +30,16 @@ export const projectsData: Project[] = [
     description:
       "A real-time collaborative workspace engineered for academic peers to discover study partners, chat with sub-50ms latency, conduct WebRTC video sessions, and manage paid tutoring bookings.",
 
+    // Used by ProjectMarquee
     image: "/projectImage/studyLoop.avif",
+
+    // Used by ProjectStack
+    // Replace these with your 3 actual StudyLoop screenshots later.
+    gallery: [
+      "/projectImage/studyLoop.avif",
+      "/projectImage/studyLoop.avif",
+      "/projectImage/studyLoop.avif",
+    ],
 
     builtHighlights: [
       "Engineered a bidirectional WebSocket signaling gateway handling real-time chat broadcasts and SDP/ICE peer handshakes.",
@@ -49,6 +65,7 @@ export const projectsData: Project[] = [
       github: "[ADD: GitHub URL]",
     },
 
+    // Show in ProjectStack
     featured: true,
   },
 
@@ -60,7 +77,16 @@ export const projectsData: Project[] = [
     description:
       "A modern full-stack document analysis platform that extracts unstructured career data from multi-column PDFs, evaluates semantic alignment against job specifications, and generates structured recommendations.",
 
+    // Used by ProjectMarquee
     image: "/projectImage/AiResume.jpg",
+
+    // Used by ProjectStack
+    // Replace these with your 3 actual AI Resume screenshots later.
+    gallery: [
+      "/projectImage/AiResume.jpg",
+      "/projectImage/AiResume.jpg",
+      "/projectImage/AiResume.jpg",
+    ],
 
     builtHighlights: [
       "Built a spatial PDF extraction pipeline using bounding-box grouping, resolving text garbling across multi-column resumes.",
@@ -86,6 +112,7 @@ export const projectsData: Project[] = [
       github: "[ADD: GitHub URL]",
     },
 
+    // Currently selected as one of the 3 stack projects
     featured: true,
   },
 
@@ -97,7 +124,16 @@ export const projectsData: Project[] = [
     description:
       "An end-to-end reservation and itinerary curation platform featuring instant multi-city travel search, Redis query caching, PCI-compliant Stripe checkout, and automated PDF itinerary exports.",
 
+    // Used by ProjectMarquee
     image: "/projectImage/Voya.jpg",
+
+    // Used by ProjectStack
+    // Replace these with your 3 actual Voya screenshots later.
+    gallery: [
+      "/projectImage/Voya.jpg",
+      "/projectImage/Voya.jpg",
+      "/projectImage/Voya.jpg",
+    ],
 
     builtHighlights: [
       "Integrated tiered Redis caching with stale-while-revalidate background refresh, dropping average holiday destination search latency from 480ms to 42ms.",
@@ -121,6 +157,7 @@ export const projectsData: Project[] = [
       github: "[ADD: GitHub URL]",
     },
 
+    // Show in ProjectStack
     featured: true,
   },
 
@@ -132,7 +169,16 @@ export const projectsData: Project[] = [
     description:
       "A high-reliability backend billing service built on Node.js and MySQL, prioritizing strict relational schema constraints, ACID transactions, and deterministic financial calculations.",
 
+    // Used by ProjectMarquee
     image: "/projectImage/QuickBill.avif",
+
+    // Used by ProjectStack
+    // Replace these with your 3 actual QuickBill screenshots later.
+    gallery: [
+      "/projectImage/QuickBill.avif",
+      "/projectImage/QuickBill.avif",
+      "/projectImage/QuickBill.avif",
+    ],
 
     builtHighlights: [
       "Standardized all internal currency math to integer minor units (cents/paise), eliminating IEEE-754 floating-point rounding discrepancies in multi-item taxes.",
@@ -148,12 +194,12 @@ export const projectsData: Project[] = [
       "HTML5/CSS3",
     ],
 
-
     links: {
       live: "[ADD: Live URL]",
       github: "[ADD: GitHub URL]",
     },
 
+    // Not shown in ProjectStack
     featured: false,
   },
 ];

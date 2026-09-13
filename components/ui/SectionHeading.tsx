@@ -2,7 +2,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 
 interface SectionHeadingProps {
-  overline: string;
+  overline?: string;
   title: string;
   description?: string;
   className?: string;
@@ -24,11 +24,13 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
         className
       )}
     >
-      <div className="inline-flex items-center">
-        <span className="font-mono text-xs uppercase tracking-widest text-[#3DDC84] font-medium">
-          {overline}
-        </span>
-      </div>
+      {overline && (
+  <div className="inline-flex items-center">
+    <span className="font-mono text-xs uppercase tracking-widest text-[#3DDC84] font-medium">
+      {overline}
+    </span>
+  </div>
+)}
 
       <h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[var(--text-primary)]">
         {title}
