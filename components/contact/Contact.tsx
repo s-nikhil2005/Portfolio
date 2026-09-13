@@ -3,48 +3,54 @@
 import React, { useState } from "react";
 import { profileData } from "@/data/profile";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Check, Copy, Mail, ArrowUpRight, Github, Linkedin, FileText, Send, CheckCircle2 } from "lucide-react";
+import { ContactForm } from "@/components/contact/ContactForm";
+import { ContactTerminal } from "@/components/contact/ContactTerminal";
+import {
+  Check,
+  Copy,
+  Mail,
+  ArrowUpRight,
+  Github,
+  Linkedin,
+  FileText,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Contact: React.FC = () => {
   const [copied, setCopied] = useState(false);
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
 
   const handleCopyEmail = async () => {
     try {
       await navigator.clipboard.writeText(profileData.email);
       setCopied(true);
+
       setTimeout(() => setCopied(false), 1600);
     } catch {
       const textarea = document.createElement("textarea");
+
       textarea.value = profileData.email;
       document.body.appendChild(textarea);
       textarea.select();
       document.execCommand("copy");
       document.body.removeChild(textarea);
+
       setCopied(true);
+
       setTimeout(() => setCopied(false), 1600);
     }
-  };
-
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
-    setFormSubmitted(true);
   };
 
   return (
     <section
       id="contact"
       aria-label="Contact Nikhil Singh"
-      className="py-20 md:py-28 w-full"
+      className="pt-20 md:pt-24 pb-6 md:pb-8 w-full"
     >
       <div className="max-w-container mx-auto px-6 sm:px-8 space-y-12 text-left">
         <SectionHeading
-          overline="Get in Touch"
-          title="Let's Build Something"
-          description="I am actively open to opportunities involving backend engineering, full-stack development, and software systems. Whether you have a specific role or an interesting project, I'd like to hear from you."
+          overline="--Contact Me--"
+          title="Get in Touch"
+          centered
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
@@ -54,6 +60,7 @@ export const Contact: React.FC = () => {
             <div className="p-6 rounded-xl border border-[var(--hairline)] bg-[var(--surface)] space-y-4 hover:border-[#3DDC84]/40 transition-all shadow-sm">
               <div className="flex items-center gap-2 text-[#3DDC84]">
                 <Mail size={18} />
+
                 <span className="font-mono text-xs font-semibold uppercase tracking-wider">
                   DIRECT EMAIL
                 </span>
@@ -63,8 +70,10 @@ export const Contact: React.FC = () => {
                 <p className="font-sans text-xl sm:text-2xl font-bold text-[var(--text-primary)] break-all">
                   {profileData.email}
                 </p>
+
                 <p className="font-sans text-xs sm:text-sm text-[var(--text-secondary)]">
-                  Preferred channel for hiring inquiries, technical conversations, and collaborations.
+                  Preferred channel for hiring inquiries, technical
+                  conversations, and collaborations.
                 </p>
               </div>
 
@@ -111,6 +120,7 @@ export const Contact: React.FC = () => {
                   <Github size={14} />
                   GitHub
                 </span>
+
                 {profileData.socials.github.startsWith("[ADD") ? (
                   <span className="font-mono text-xs text-[var(--text-secondary)] opacity-60">
                     {profileData.socials.github}
@@ -134,6 +144,7 @@ export const Contact: React.FC = () => {
                   <Linkedin size={14} />
                   LinkedIn
                 </span>
+
                 {profileData.socials.linkedin.startsWith("[ADD") ? (
                   <span className="font-mono text-xs text-[var(--text-secondary)] opacity-60">
                     {profileData.socials.linkedin}
@@ -157,6 +168,7 @@ export const Contact: React.FC = () => {
                   <FileText size={14} />
                   Resume
                 </span>
+
                 {profileData.socials.resume.startsWith("[ADD") ? (
                   <span className="font-mono text-xs text-[var(--text-secondary)] opacity-60">
                     {profileData.socials.resume}
@@ -174,94 +186,22 @@ export const Contact: React.FC = () => {
                 )}
               </div>
             </div>
+             <ContactTerminal />
           </div>
-
-          {/* Right Column: Clean Quick Contact Form */}
+          {/* Right Column: Contact Form */}
           <div className="lg:col-span-6">
             <div className="p-6 rounded-xl border border-[var(--hairline)] bg-[var(--surface)] shadow-sm">
-              <h3 className="font-sans font-bold text-lg text-[var(--text-primary)] mb-1">
-                Send a Message
-              </h3>
-              <p className="font-sans text-xs sm:text-sm text-[var(--text-secondary)] mb-5">
-                Have an inquiry or role? Leave a note and I will get back to you promptly.
-              </p>
+              <div className="mb-10">
+                <p className="font-mono text-m uppercase tracking-[0.18em] text-[#3DDC84]">
+                  SEND A MESSAGE
+                </p>
 
-              {formSubmitted ? (
-                <div className="p-6 rounded-control border border-[#3DDC84]/30 bg-[#3DDC84]/5 space-y-2">
-                  <div className="flex items-center gap-2 text-[#3DDC84]">
-                    <CheckCircle2 size={18} />
-                    <span className="font-sans font-bold text-sm">Message Sent</span>
-                  </div>
-                  <p className="font-sans text-xs sm:text-sm text-[var(--text-secondary)]">
-                    Thank you for reaching out! You can also contact directly via{" "}
-                    <strong className="text-[var(--text-primary)]">{profileData.email}</strong>.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleFormSubmit} className="space-y-4">
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="contact-form-name"
-                      className="block font-sans text-xs font-medium text-[var(--text-secondary)]"
-                    >
-                      Your Name
-                    </label>
-                    <input
-                      id="contact-form-name"
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="e.g. Alex Morgan"
-                      className="w-full px-3.5 py-2.5 rounded-control font-sans text-sm bg-[var(--bg)] border border-[var(--hairline)] text-[var(--text-primary)] hover:border-[var(--hairline-hover)] focus-visible:border-[#3DDC84] transition-colors min-h-[44px]"
-                    />
-                  </div>
+                <h3 className="mt-3 font-sans  text-sm text-[var(--text-primary)]">
+                  Have an inquiry or role? Leave a note and i will get back to you promptly
+                </h3>
+              </div>
 
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="contact-form-email"
-                      className="block font-sans text-xs font-medium text-[var(--text-secondary)]"
-                    >
-                      Your Email Address
-                    </label>
-                    <input
-                      id="contact-form-email"
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="alex@company.com"
-                      className="w-full px-3.5 py-2.5 rounded-control font-sans text-sm bg-[var(--bg)] border border-[var(--hairline)] text-[var(--text-primary)] hover:border-[var(--hairline-hover)] focus-visible:border-[#3DDC84] transition-colors min-h-[44px]"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="contact-form-message"
-                      className="block font-sans text-xs font-medium text-[var(--text-secondary)]"
-                    >
-                      Message
-                    </label>
-                    <textarea
-                      id="contact-form-message"
-                      rows={4}
-                      required
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder="Details about your engineering team, project scope, or opportunity..."
-                      className="w-full px-3.5 py-2.5 rounded-control font-sans text-sm bg-[var(--bg)] border border-[var(--hairline)] text-[var(--text-primary)] hover:border-[var(--hairline-hover)] focus-visible:border-[#3DDC84] transition-colors resize-y min-h-[100px]"
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-control bg-[#3DDC84] text-[#0B0C0E] font-sans font-semibold text-sm hover:bg-[#34C776] transition-colors min-h-[44px] cursor-pointer"
-                  >
-                    <Send size={15} />
-                    <span>Send Message</span>
-                  </button>
-                </form>
-              )}
+              <ContactForm />
             </div>
           </div>
         </div>
@@ -269,3 +209,5 @@ export const Contact: React.FC = () => {
     </section>
   );
 };
+
+export default Contact;
