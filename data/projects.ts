@@ -120,12 +120,12 @@ export const projectsData: Project[] = [
     id: "voya",
     number: "03",
     title: "Voya",
-    hook: "MERN travel booking platform with verified itineraries",
+    hook: "MERN travel booking platform with Redis session management and PDF voucher generation",
     description:
-      "An end-to-end reservation and itinerary curation platform featuring instant multi-city travel search, Redis query caching, PCI-compliant Stripe checkout, and automated PDF itinerary exports.",
+      "Voya is an end-to-end travel booking platform built with React, Node.js, Express, and MongoDB. It enables users to explore international destinations, browse hotels and flights, and complete multi-step reservations. Redis Cloud manages temporary booking sessions with automatic expiration, while Stripe handles card payments and PDFKit generates booking vouchers delivered through automated emails.",
 
     // Used by ProjectMarquee
-    image: "/projectImage/Voya.jpg",
+    image: "/projectImage/Voya.png",
 
     // Used by ProjectStack
     // Replace these with your 3 actual Voya screenshots later.
@@ -136,9 +136,10 @@ export const projectsData: Project[] = [
     ],
 
     builtHighlights: [
-      "Integrated tiered Redis caching with stale-while-revalidate background refresh, dropping average holiday destination search latency from 480ms to 42ms.",
-      "Built asynchronous Stripe webhook handlers verifying cryptographic event signatures to ensure payment fulfillment persists even if users close browser tabs.",
-      "Engineered a server-side PDF document compiler streaming verified booking confirmations with dynamic QR verification codes.",
+      "Implemented Redis-based transient booking sessions using UUID transaction IDs and 15-minute TTL expiration, keeping abandoned reservations out of persistent MongoDB storage",
+      "Engineered server-side PDF voucher generation using PDFKit and Node.js streams, creating dynamically formatted travel itineraries and invoices in memory and delivering them through automated email attachments.",
+      "Developed email OTP verification using Redis with 10-minute expiration, alongside bcrypt password hashing and JWT-based authentication.",
+      "Developed email OTP verification using Redis with 10-minute expiration, alongside bcrypt password hashing and JWT-based authentication.",
     ],
 
     technologies: [
@@ -146,15 +147,19 @@ export const projectsData: Project[] = [
       "Node.js",
       "Express",
       "MongoDB",
+      "Mongoose",
       "Redis",
       "Stripe",
+      "PDFKit",
+      "Nodemailer",
+      "JWT",
       "Tailwind CSS",
       "PDF Generation",
     ],
 
     links: {
-      live: "[ADD: Live URL]",
-      github: "[ADD: GitHub URL]",
+      live: "https://voya-six-bay.vercel.app/",
+      github: "https://github.com/s-nikhil2005/Voya",
     },
 
     // Show in ProjectStack
